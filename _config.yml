@@ -2,16 +2,16 @@
 #
 # This is the configuration file for your blog, please change these items after forked.
 
-title: Your title
-email: your-email@example.com
-name: Your name
+title: yieryi
+email: kang_wang163@163.com
+name: 
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here.
-keywords: [Your keywords]
+  focus on webgis.that's about map data process, 3d render, webgl
+keywords: [cesium yieryi]
 baseurl: '' # the subpath of your site, e.g. /`blog
 url: '' # the base hostname & protocol for your site, e.g. http://example.com
 domain: 'example.com' # the domain name for your site, e.g. example.com
-language: en
+language: zh
 # Supported languages list:
 # en: English
 # de: Deutsche (German)
@@ -22,9 +22,9 @@ language: en
 # zh-cn: 简体中文 (Simplified Chinese)
 # zh-tw: 繁體中文 (Traditional Chinese)
 
-analytics: # the Google Analytics property ID, e.g. UA-XXXXX-Y
+analytics:'G-YRXTC6QPHC' # the Google Analytics property ID, e.g. UA-XXXXX-Y
 
-comments: false # enable comments
+comments: true # enable comments
 disqus: # disqus account
 
 mathjax: true # Math support
