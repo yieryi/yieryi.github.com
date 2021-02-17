@@ -22,9 +22,9 @@ language: zh
 # zh-cn: 简体中文 (Simplified Chinese)
 # zh-tw: 繁體中文 (Traditional Chinese)
 
-analytics:'G-YRXTC6QPHC' # the Google Analytics property ID, e.g. UA-XXXXX-Y
+analytics: # the Google Analytics property ID, e.g. UA-XXXXX-Y
 
-comments: true # enable comments
+comments: false # enable comments
 disqus: # disqus account
 
 mathjax: true # Math support
