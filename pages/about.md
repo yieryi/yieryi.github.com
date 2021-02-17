@@ -1,16 +1,18 @@
 ---
 layout: page
-title: About
+title: About Me
 permalink: /about/
 ---
 
-Jekyll Paper is a simple Jekyll theme, and it is aim to helping you to create your own blog by the easiest way.
+### 简介
 
-You can find more information in [Jekyll Paper][jekyll-paper] or [Jekyll Paper for Github][jekyll-paper-github]. If you have any questions or suggestions, you can contact me in [Jekyll Paper Issues][jekyll-paper-issues], [Jekyll Paper for Github Issues][jekyll-paper-github-issues] or send email to [me](mailto:i@ghosind.com). 
+王康，男，2017届测绘工程本科毕业，毕业后从事开发工作。目前主要使用Cesium （web端三维地球渲染库）底层研发，webgl相关。上家公司在苏州中科图新网络科技公司，C++做三维地球引擎功能研发和维护。编程兴趣广泛多有涉及。建此博客主要梳理知识，技术交流、学习交友。错误、不足和应当补充之处，望不吝赐教。
 
-Wish you enjoying your blog life!
+### 联系方式
 
-[jekyll-paper]: https://github.com/ghosind/Jekyll-Paper
-[jekyll-paper-github]: https://github.com/ghosind/Jekyll-Paper-Github
-[jekyll-paper-issues]: https://github.com/ghosind/Jekyll-Paper/issues
-[jekyll-paper-github-issues]: https://github.com/ghosind/Jekyll-Paper-Github/issues
+邮箱:[kang_wang163@163.com](mailto:kang_wang163@163.com)
+
+Github留言板：https://github.com/yieryi/yieryi.github.com/issues
+
+主页:https://github.com/yieryi
+
