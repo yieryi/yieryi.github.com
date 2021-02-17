@@ -1,37 +1,91 @@
-## Welcome to GitHub Pages
+# Jekyll Paper for Github
 
-You can use the [editor on GitHub](https://github.com/yieryi/yieryi.github.com/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+![Jekyll Paper](./favicon.ico)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Jekyll Paper is a simple Jekyll theme, and it is aim to helping you to create your own blog by the easiest way. Jekyll Paper was designed as a paper book style, giving the reader a sense of what it looked like to read a paper book.
 
-### Markdown
+Jekyll Paper for Github is the sub-project for [Jekyll Paper][jekyll-paper], it only contains Github Pages environment supported plugins.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+This is a [demo website](https://www.ghosind.com) for Jekyll Paper for Github.
 
-```markdown
-Syntax highlighted code block
+## Screenshots
 
-# Header 1
-## Header 2
-### Header 3
+![Index Screenshot](./assets/images/index-screenshot.png)
 
-- Bulleted
-- List
+![Post Screenshot](./assets/images/post-screenshot.png)
 
-1. Numbered
-2. List
+![Category Screenshot](./assets/images/category-screenshot.png)
 
-**Bold** and _Italic_ and `Code` text
+## Features
 
-[Link](url) and ![Image](src)
+- Responsive
+- Paginate
+- RSS
+- Sitemap
+- Custom 404 page
+- SASS
+- Multiple languages support
+- Configurable navigation menu
+- SEO optimization
+- Comments
+- Category Index
+- Mathematics
+- Diagrams
+
+## Getting Start
+
+Jekyll Paper for Github is easy to create your own blog. You can create your blog by four steps only!
+
+1. Fork your own copy of [Jekyll Paper for Github][jekyll-paper-github] repository to your Github account.
+2. Open setting page of your repository.
+3. Change repository name to your_github_username.github.io.
+4. Enter your_github_name.github.io.
+
+## Add New Posts
+
+You can add new posts at any time after you had your own blog. Create a new post need to add a new file in "_posts" directory, and the file name must follow the convention `YYYY-MM-DD-name-of-post.md`.
+
+## Custom Navigation Menu
+
+You can add or update navigation menu items in `_data/menus.yml` file. In the configuration file, you need set title and URL for every navigation menu item.
+
+### Example
+
+```yml
+- title: "Index"
+  url:   ""
+
+- title: "About"
+  url:   "about"
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+## Supported Languages
 
-### Jekyll Themes
+This list order by language codes alphabets.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/yieryi/yieryi.github.com/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+- English
+- Deutsche (German)
+- Español (Spanish)
+- Français (French)
+- 日本語 (Japanese)
+- Português (Portuguese)
+- 简体中文 (Simplified Chinese)
+- 繁體中文 (Traditional Chinese)
 
-### Support or Contact
+## License
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Jekyll Paper for Github was released under MIT license.
+
+## Contributing
+
+If you would like to make Jekyll Paper for Github better, you can create a new pull request in [Jekyll Paper Github Page][jekyll-paper-github].
+
+If you have any questions or suggestions, you can create an issue on [Jekyll Paper for Github Issues][jekyll-paper-github-issues] or send email to [me](mailto:i@ghosind.com).
+
+## Chinese Version
+
+Jekyll Paper for Github项目提供了中文版的[使用介绍](https://github.com/ghosind/Jekyll-Paper-Github/wiki/%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8Jekyll-Paper-for-Github)及[文档](https://github.com/ghosind/Jekyll-Paper-Github/wiki#%E4%B8%AD%E6%96%87%E7%89%88%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8Cchinese-version)。
+
+[jekyll-paper]: https://github.com/ghosind/Jekyll-Paper
+[jekyll-paper-github]: https://github.com/ghosind/Jekyll-Paper-Github
+[jekyll-paper-github-issues]: https://github.com/ghosind/Jekyll-Paper-Github/issues

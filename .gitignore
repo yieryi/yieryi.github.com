@@ -1,24 +1,12 @@
-# Compiled Object files
-*.o
-*.obj
+# Output
+_site
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+# Cache
+.sass-cache
+.jekyll-metadata
 
-# Compiled Static libraries
-*.a
-*.lib
+# Gem lock file
+Gemfile.lock
 
-# Executables
-*.exe
-
-# DUB
-.dub
-docs.json
-__dummy.html
-docs/
-
-# Code coverage
-*.lst
+# Mac OSX
+.DS_store
