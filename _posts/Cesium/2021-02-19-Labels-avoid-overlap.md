@@ -21,3 +21,7 @@ typora-root-url: ./
 
 <img src="/../../assets/images/Cesium/LabelsAvoidOverlap.png" style="zoom:50%;" />
 
+### 结果演示录屏
+
+<video id="video" controls preload>       <source id="mp4" src="/../../assets/videos/Cesium/avoidLabelOverlap.mp4" type="video/mp4">       </video>
+
