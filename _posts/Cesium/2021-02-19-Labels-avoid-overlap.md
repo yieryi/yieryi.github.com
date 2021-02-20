@@ -13,15 +13,17 @@ typora-root-url: ./
 
 ### 问题
 
-在Cesium中，大场景小比例尺情况下POI进行标注会有前后重叠遮盖的问题。如下所示：
+在Cesium中，大场景小比例尺情况下POI进行文字标注时，会发生前后(上下)重叠遮盖的问题。如下所示：
 
-<img src="/../../assets/images/Cesium/LabelsOverlap.png" style="zoom:50%;" />
+<img src="/../../assets/images/Cesium/LabelsOverlap.png"/>
 
-这样密密麻麻的文字标注又重叠，显示效果很不好，如果我们给这些数据进行一个遮挡检测计算，达到更靠近相机的Label优先显示，优先显示的Label遮挡住的文字标注不显示，应当是一个较为合适的效果。此处提出一种cpu通过R树实现遮挡检测的算法。得到效果如下所示：
+文字标注过于密集，显示上重叠，难以清晰显示内容。如果我们给这些数据进行一个重叠遮挡检测计算，使得靠近相机的Label优先显示，被遮挡住的文字标注不显示，可以得到如下的清晰显示效果：
 
-<img src="/../../assets/images/Cesium/LabelsAvoidOverlap.png" style="zoom:50%;" />
+<img src="/../../assets/images/Cesium/LabelsAvoidOverlap.png"/>
 
 ### 结果演示录屏
 
-<video id="video" controls preload>       <source id="mp4" src="/../../assets/videos/Cesium/avoidLabelOverlap.mp4" type="video/mp4">       </video>
+<video id="video" controls preload style=" width: 100%;">
+<source id="mp4" src="/../../assets/videos/Cesium/avoidLabelOverlap.mp4" type="video/mp4">
+</video>
 
