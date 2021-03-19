@@ -1,0 +1,431 @@
+---
+layout: post
+title:  "CommonJS.AMD.CMD.UMD.ES6模块规范"
+date:   2021-03-219
+last_modified_at: 2021-03-219
+categories: [javascript]
+tags: [javascript, CommonJS, AMD, CMD, UMD, ES6, node.js, require, require.js, export, exports, import, '模块化']
+excerpt: 
+typora-root-url: ./
+---
+
+
+[参考地址]: https://segmentfault.com/a/1190000022599809	"javascript规范详解"
+
+现在`Javascript`模块规范有这样几种：`CommonJS`、`AMD` ,`CMD`,`UMD` `ES6` 模块规范
+
+
+
+## 模块化原始写法
+
+在没有`CommonJS`和`ES6`的时候，我们想要达到模块化的效果可能有这么三种：
+
+#### 1、一个函数就是一个模块
+
+#### 2、一个对象就是一个模块
+
+#### 3、 立即执行函数为一个模块
+
+
+
+## `CommonJS`规范
+
+
+
+#### 1、暴露定义模块
+
+```javascript
+// 1. 正确  
+module.exports = {  
+    name: 'lindaidai',  
+    sex: 'boy'  
+}  
+  
+// 2. 正确  
+exports.name = 'lindaidai';  
+exports.sex = 'boy'  
+  
+// 3. 正确  
+module.exports.name = 'lindaidai';  
+module.exports.sex = 'boy'  
+  
+// 4. 无效  
+exports = {  
+    name: 'lindaidai',  
+    sex: 'boy'  
+}  
+```
+
+#### 2、引用（引入）模块
+
+对于模块的引用使用全局方法 `require()` 。这个全局方法是 `node` 中的方法，不是 `window` 下面的。 `require()` 它是 `Node.js` 中的一个全局方法，并不是`CommonJS`独有的，`CommonJS`只是众多规范中的其中一种.
+
+- 使用 `module.exports = {}` 或者 `exports.name = xxx` 导出模块
+- 使用 `const m1 = require('./m1')` 引入模块
+
+ `require()` 的参数是一个表达式。
+
+```javascript
+var m1Url = './m1.js';  
+var m1 = require(m1Url);  
+  
+// 甚至做一些字符串拼接：  
+var m1 = require('./m' + '1.js'); 
+```
+
+#### 3、模块标识符（标识）
+
+模块标识符其实就是你在引入模块时调用 `require()` 函数的参数。
+
+```javascript
+// 直接导入  
+const path = require('path');  
+// 相对路径  
+const m1 = require('./m1.js');  
+// 直接导入  
+const lodash = require('lodash');  
+```
+
+我们引入的模块会有不同的分类，像`path`这种它是`Node.js`就自带的模块，`m1`是路径模块，`lodash`是我们使用`npm i lodash`下载到`node_modules`里的模块。
+
+引入的模块分为以下三类：
+
+- 核心模块(`Node.js`自带的模块)
+- 路径模块(相对或绝对定位开始的模块)
+- 自定义模块(`node_modules`里的模块)
+
+三种模块的查找方式：
+
+- 核心模块，直接跳过路径分析和文件定位
+- 路径模块，直接得出相对路径就好了
+- 自定义模块，先在当前目录的`node_modules`里找这个模块，如果没有，它会往上一级目录查找，查找上一级的`node_modules`，依次往上，直到根目录下都没有, 就抛出错误。
+
+**自定义模块的查找过程：**
+
+这个过程其实也叫做**路径分析**。
+
+**文件定位：**
+
+导入的模块它的后缀(扩展名)是可以省略的啊，那`Node`怎么知道我们是导入了一个`js`还是一个`json`呢？这其实就涉及到了文件定位。
+
+在`NodeJS`中, 省略了扩展名的文件, 会依次补充上.`js`, .`node`, `.json`来尝试, 如果传入的是一个目录, 那么`NodeJS`会把它当成一个包来看待, 会采用以下方式确定文件名
+
+第一步, 找出目录下的`package.json`, 用`JSON.parse()`解析出`main`字段
+
+第二步, 如果`main`字段指定的文件还是省略了扩展, 那么会依次补充`.js`, .`node`, `.json`尝试.
+
+第三步, 如果`main`字段制定的文件不存在, 或者根本就不存在`package.json`, 那么会默认加载这个目录下的`index.js`,` index.node`, `index.json`文件.
+
+#### 4、`CommonJS` 规范特点
+
+- 所有代码都运行在模块作用域，不会污染全局作用域；
+- 模块是同步加载的，即只有加载完成，才能执行后面的操作；
+- 模块在首次执行后就会缓存，再次加载只返回缓存结果，如果想要再次执行，可清除缓存；
+- `CommonJS`输出是值的拷贝(即，`require`返回的值是被输出的值的拷贝，模块内部的变化也不会影响这个值)。
+
+
+
+## `AMD` 规范
+
+模块化这种概念不仅仅适用于服务器端，客户端同样也适用。而`CommonJS`规范就不太适合用在客户端(浏览器)环境。`AMD`它的产生很大一部分原因就是为了能让我们采用**异步的方式加载模块**。AMD`是`Asynchronous Module Definition`的缩写，也就是`"异步模块定义"
+
+#### 1、 定义并暴漏模块
+
+它采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。
+
+此时就需要另一个重要的方法来定义我们的模块：`define()`。
+
+它其实是会有三个参数：
+
+```javascript
+define(id?, dependencies?, factory)
+```
+
+- id: 一个字符串，表示模块的名称，但是是可选的
+- dependencies: 一个数组，是我们当前定义的模块要依赖于哪些模块，数组中的每一项表示的是要依赖模块的相对路径，且这个参数也是可选的
+- factory: 工厂方法，一个函数，这里面就是具体的模块内容了
+
+`define`并不是`Node.js`自带的方法啊，它只是名义上规定的这样一个方法，但是你真的想要去用还是得使用对应的`JavaScript`库，也就是我们常常听到的：
+
+> 目前，主要有两个`Javascript`库实现了`AMD`规范：`require.js`和`curl.js`
+
+`nodejs`环境下使用，在项目根目录下执行
+
+```javascript
+npm i requirejs
+```
+
+示例模块文件写成( 补充注意：对象同名属性简写是`ES6`才出来的)：
+
+```javascript
+define(function () {  
+  var add = function (a, b) {  
+    return a + b;  
+  }  
+  return {  
+    add: add  
+  }  
+})  
+```
+
+#### 2、引用模块
+
+```javascript
+var requirejs = require("requirejs"); //引入requirejs模块  
+  
+requirejs(['math'],function(math) {  
+  console.log(math)  
+  console.log(math.add(1, 2));  
+})  
+```
+
+#### 3、依赖其他模块的define
+
+`math.js`文件内代码依赖`m1.js`模块
+
+```javascript
+define(['m1'], function (m1) {  
+  console.log('我是math, 我被加载了...')  
+  var add = function (a, b) {  
+    return a + b;  
+  }  
+  var print = function () {  
+    console.log(m1.name)  
+  }  
+  return {  
+    add: add,  
+    print: print  
+  }  
+})  
+```
+
+既然是使用`AMD`的规范，那我们肯定是要一统到底了，`m1.js`中用的还是`CommonJS`的规范，当然不行了。也应该改写成`AMD`规范
+
+```javascript
+define(function () {  
+  console.log('我是m1, 我被加载了...')  
+  return {  
+    name: 'lindaidai',  
+    sex: 'boy'  
+  }  
+})  
+```
+
+
+
+## `CMD`规范 
+
+`CMD` (Common Module Definition)被`seajs`推崇,依赖就近，用的时候再`require`。
+
+```javascript
+define(function(require, exports, module) {  
+  var math = require('./math');  
+  math.print()  
+})  
+```
+
+和`AMD`类似，其中`define()`参数相同，都是`define(id?, dependencies?, factory)`,区别在最后一个`factory`参数
+
+`factory`函数中是会接收三个参数：
+
+- `require`
+
+- `exports`
+
+- `module`
+
+  这三个很好理解，对应着之前的`CommonJS`那不就是：
+
+- `require`：引入某个模块
+
+- `exports`：当前模块的`exports`，也就是`module.exports`的简写
+
+- `module`：当前这个模块
+
+现在再来说说`AMD`和`CMD`的区别。
+
+虽然它们的`define()`方法的参数都相同，但是:
+
+- `AMD`中会把当前模块的依赖模块放到`dependencies`中加载，并在`factory`回调中拿到加载成功的依赖
+- `CMD`一般不在`dependencies`中加载，而是写在`factory`中，使用`require`加载某个依赖模块
+
+因此才有了我们常常看到的一句话：
+
+> AMD和CMD最大的区别是对依赖模块的执行时机处理不同，注意不是加载的时机或者方式不同，二者皆为异步加载模块。
+
+```javascript
+// 所有模块都通过 define 来定义  
+define(function(require, exports, module) {  
+  
+  // 通过 require 引入依赖  
+  var $ = require('jquery');  
+  var Spinning = require('./spinning');  
+  
+  // 通过 exports 对外提供接口  
+  exports.doSomething = ...  
+  
+  // 或者通过 module.exports 提供整个接口  
+  module.exports = ...  
+  
+});  
+```
+
+
+
+## `AMD`和`CMD`的区别
+
+**1、`AMD`推崇依赖前置，在定义模块的时候就要声明其依赖的模块**
+
+**2、`CMD`推崇就近依赖，只有在用到某个模块的时候再去require**
+
+>`AMD`和`CMD`最大的区别是对依赖模块的执行时机处理不同，注意不是加载的时机或者方式不同，二者皆为异步加载模块。
+
+
+
+## `UMD` 
+
+`Universal Module Definition`  即通用模块定义。`UMD` 是`AMD` 和 `CommonJS`的糅合.
+
+`AMD` 模块以浏览器第一的原则发展，异步加载模块。
+`CommonJS` 模块以服务器第一原则发展，选择同步加载。它的模块无需包装(unwrapped modules)。
+这迫使人们又想出另一个更通用的模式 `UMD`（Universal Module Definition)，实现跨平台的解决方案。
+
+- `UMD` 先判断是否支持 `Node.js` 的模块（`exports`）是否存在，存在则使用 `Node.js` 模块模式。再判断是否支持 `AMD`（`define` 是否存在），存在则使用 `AMD` 方式加载模块。
+
+```javascript
+(function (window, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {     
+        window.eventUtil = factory();
+    }
+})(this, function () {
+    //module ...
+});
+```
+
+
+
+## `ES6 Modules`规范
+
+`ES6`标准出来后，`ES6 Modules`规范算是成为了前端的主流吧，以`import`引入模块，`export`导出接口被越来越多的人使用。
+
+#### 1、`export` 导出模块
+
+###### 命名式导出
+
+```javascript
+// 以下两种为错误  
+// 1.  
+export 1;  
+// 2.  
+const a = 1;  
+export a;  
+  
+// 以下为正确  
+// 3.  
+const a = 1;  
+export { a };  
+  
+// 4. 接口名与模块内部变量之间，建立了一一对应的关系  
+export const a = 1, b = 2;  
+  
+// 5. 接口名与模块内部变量之间，建立了一一对应的关系  
+export const a = 1;  
+export const b = 2;  
+  
+// 或者用 as 来命名  
+const a = 1;  
+export { a as outA };  
+  
+const a = 1;  
+const b = 2;  
+export { a as outA, b as outB };  
+```
+
+###### 默认导出
+
+```javascript
+// 1.  
+const a = 1;  
+export default a;  
+  
+// 2.  
+const a = 1;  
+export default { a };  
+  
+// 3.  
+export default function() {}; // 可以导出一个函数  
+export default class(){}; // 也可以出一个类  
+```
+
+#### 2、`import` 导入模块
+
+```javascript
+// 某个模块的导出 moudule.js  
+export const a = 1;  
+  
+// 模块导入  
+// 1. 这里的a得和被加载的模块输出的接口名对应  
+import { a } from './module'  
+  
+// 2. 使用 as 换名  
+import { a as myA } from './module'  
+  
+// 3. 若是只想要运行被加载的模块可以这样写，但是即使加载2次也只是运行一次  
+import './module'  
+  
+// 4. 整体加载  
+import * as module from './module'  
+// 第四种写法会获取到module中所有导出的东西，并且赋值到module这个变量下，这样我们就可以用module.a这种方式来引用a了
+// Cesium的源码方式加载
+  
+// 5. default接口和具名接口  
+import module, { a } from './module'  
+```
+
+#### 3、`export`...`from`...
+
+我有三个模块`a、b、c`。`c`模块现在想要引入`a`模块，但是它不直接引用`a`，而是通过`b`模块来引用，`b`模块可以写成如下:
+
+`export { someVariable } from './a';`
+
+需要注意: 
+
+> 这样的方式不会将数据添加到该聚合模块的作用域, 也就是说, 你无法在该模块(也就是`b`)中使用`someVariable`。
+
+#### 4、 `ES6 Modules` 规范特点
+
+- 输出使用`export`
+- 输入使用`import`
+- 可以使用`export...from...`这种写法来达到一个`"中转"`的效果
+- 输入的模块变量是不可重新赋值的，它只是个可读引用，不过却可以改写属性
+- `export`命令和`import`命令可以出现在模块的任何位置，只要处于模块顶层就可以。如果处于块级作用域内，就会报错，这是因为处于条件代码块之中，就没法做静态优化了，违背了`ES6`模块的设计初衷。
+- `import`命令具有提升效果，会提升到整个模块的头部，首先执行。
+
+#### 5、`Bable`下的`ES6`模块转换
+
+使用一些`ES6`的`Babel`时，你会发现当使用`export/import`的时候，`Babel`也会把它转换为`exports/require`的形式。
+
+因为这种转换关系，才能让我们把`exports`和`import`结合起来用
+
+```javascript
+// 输出模块 m1.js  
+exports.count = 0;  
+// index.js中引入  
+import {count} from './m1.js'  
+console.log(count)  
+```
+
+## `CommonJS`和`ES6 Modules`规范的区别
+
+- `CommonJS`模块是运行时加载，`ES6 Modules`是编译时输出接口
+- `CommonJS输出是值的浅拷贝`；`ES6 Modules`输出的是值的引用，被输出模块的内部的改变会影响引用的改变
+- `CommonJs`导入的模块路径可以是一个表达式，因为它使用的是`require()`方法；而`ES6 Modules`只能是字符串
+- `CommonJS`this指向当前模块，`ES6 Modules` `this`指向`undefined`
+- 且`ES6 Modules`中没有这些顶层变量：`arguments`、`require`、`module`、`exports`、`__filename`、`__dirname`
+
+
+
