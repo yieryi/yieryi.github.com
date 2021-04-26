@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Cesium中Label的遮挡检测"
-date:   2020-02-20
+date:   2021-02-20
 last_modified_at: 2020-02-20
 categories: [Cesium]
 tags: [Cesium, Label, Billboard, overlap, '遮盖']
@@ -26,4 +26,3 @@ typora-root-url: ./
 <video id="video" controls preload style=" width: 100%;">
 <source id="mp4" src="/../../assets/videos/Cesium/avoidLabelOverlap.mp4" type="video/mp4">
 </video>
-
