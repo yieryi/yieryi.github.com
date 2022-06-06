@@ -18,4 +18,4 @@ Github留言板：[https://github.com/yieryi/yieryi.github.com/issues](https://g
 
 主页:[https://github.com/yieryi](https://github.com/yieryi)
 
-QQ交流群:725096464
+QQ实名交流群群:725096464
