@@ -1,38 +1,21 @@
-第一人称视角交互漫游
-http://zydlxx.cn:1234/examples/index.html#FirstPersonController
-地形、模型的遮罩和反遮罩着色
-http://zydlxx.cn:1234/examples/index.html#SceneForLayerMasking
-模型要素的交并差框选
-http://zydlxx.cn:1234/examples/index.html#GeoObjecsForPickByRect
-立体建筑的绘制
-http://zydlxx.cn:1234/examples/index.html#GeoObjectsForBuildingDrawer
-几何编辑
-http://zydlxx.cn:1234/examples/index.html#GeoObjectsForGeometryEditer
-布告板（给CESIUM的PR)
-模型编辑
-http://zydlxx.cn:1234/examples/index.html#ModelForGltf
-天际线（我做的，怎么做的来着）
-http://zydlxx.cn:1234/examples/index.html#SpatialAnalysisForSkyline
-火焰和喷泉（参考的超图的
-http://zydlxx.cn:1234/examples/index.html#ParticleEffectForFire
-http://zydlxx.cn:1234/examples/index.html#ParticleEffectForFountain
-夜光灯呼吸效果
-http://zydlxx.cn:1234/examples/index.html#SpeEffectForPointsSupportEDGE
-抛物线动效
-http://zydlxx.cn:1234/examples/index.html#SpeEffectForPolylineParabolaSegmentFlow
-3D过渡动画到全景交互
-http://zydlxx.cn:1234/examples/index.html#SpeEffectForPanorama
-行政区划体块效果
-http://zydlxx.cn:1234/examples/index.html#Material_RadialAlpha
-http://zydlxx.cn:1234/examples/index.html#primitive-StripeRectPrimitive
-建筑物（局部）积雪效果
-http://zydlxx.cn:1234/examples/index.html#PostProcessForAccumulatedSnow
-地下管线开挖
-http://zydlxx.cn:1234/examples/index.html#PipelineForExcavation
-管线流向可视化过渡模型
-http://zydlxx.cn:1234/examples/index.html#Pipeline-VCTR-ArrowStyle
-城市内涝模拟
-http://zydlxx.cn:1234/examples/index.html#HydrologyForSimulationHeatMap
-http://zydlxx.cn:1234/examples/index.html#HydrologyForRainRiver
-北斗卫星运行轨迹展示
-http://zydlxx.cn:1234/examples/index.html#SatelliteForBEIDOU
+一直想整理整理以前在做Cesium.js（三维地球引擎)相关的知识点，但是一直拖着没做。想整理的时候发现以前做的东西都忘了，知识点整理怕是更加不可能了。列个暂时想到的自研功能的清单
+
+- [ ] 第一人称3D视角交互漫游
+- [ ] 交并差框选
+- [ ] 立体建筑的绘制
+- [ ] 几何编辑
+- [ ] 模型编辑
+- [ ] 天际线效果
+- [ ] 抛物线动效
+- [ ] 夜光灯呼吸效果
+- [ ] 3D地球帧动画无缝过渡到全景交互
+- [ ] 在地形、模型上的任意多边形GPU计算实现开挖、遮罩着色和反遮罩等
+- [ ] 城市内涝模拟的时空数据调度渲染
+- [ ] 航天器时空运行轨迹预测计算和显示
+- [ ] 地下管线的流向渲染和模型的显示调度与过渡
+- [ ] billboard和label的边框线效果实现
+- [ ] 模型描边的bloom后处理实现
+- [ ] 一些常见的动效、可视化效果的实现手段和原理拆解。
+- [ ] 天地图地形、超图S3M国产数据服务厂商数据接入一些技术方法和问题
+- [ ] 基于***的shader函数调试、drawcall的检查、调试优化手段
+
