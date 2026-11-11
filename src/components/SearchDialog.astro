@@ -1,0 +1,184 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog class="search-dialog" id="search-dialog" aria-label="站内搜索">
+  <div class="search-input-row">
+    <Icon name="search" size={18} />
+    <input
+      id="search-input"
+      type="search"
+      placeholder="搜索文章、项目、标签…"
+      autocomplete="off"
+      spellcheck="false"
+      aria-label="搜索关键词"
+    />
+    <kbd>ESC</kbd>
+  </div>
+  <div class="search-results" id="search-results" role="listbox" aria-label="搜索结果"></div>
+  <div class="search-hint">
+    <span>↑↓ 浏览</span>
+    <span>↵ 打开</span>
+    <span>ESC 关闭</span>
+  </div>
+</dialog>
+
+<script>
+  type SearchItem = {
+    title: string;
+    description: string;
+    href: string;
+    type: '文章' | '项目' | '页面';
+    date?: string;
+    tags?: string[];
+  };
+
+  const dialog = document.querySelector<HTMLDialogElement>('#search-dialog');
+  const input = document.querySelector<HTMLInputElement>('#search-input');
+  const results = document.querySelector<HTMLElement>('#search-results');
+  let items: SearchItem[] | null = null;
+  let loading = false;
+  let activeIndex = -1;
+  let current: SearchItem[] = [];
+
+  const typeLabel = (item: SearchItem) => {
+    const parts: string[] = [item.type];
+    if (item.date) parts.push(item.date);
+    if (item.tags?.length) parts.push(item.tags.slice(0, 2).join(' / '));
+    return parts.join(' · ');
+  };
+
+  const render = (query: string) => {
+    if (!results) return;
+    const q = query.trim().toLowerCase();
+    const all = items ?? [];
+    current = q
+      ? all.filter((item) => {
+          const haystack = [item.title, item.description, item.type, ...(item.tags ?? [])]
+            .join(' ')
+            .toLowerCase();
+          return haystack.includes(q);
+        })
+      : all.slice(0, 8);
+
+    activeIndex = current.length ? 0 : -1;
+    results.replaceChildren();
+
+    if (loading) {
+      const p = document.createElement('p');
+      p.className = 'search-empty';
+      p.textContent = '正在加载索引…';
+      results.append(p);
+      return;
+    }
+
+    if (!current.length) {
+      const p = document.createElement('p');
+      p.className = 'search-empty';
+      p.textContent = q ? `没有找到与“${query}”相关的内容。` : '暂无内容。';
+      results.append(p);
+      return;
+    }
+
+    current.forEach((item, index) => {
+      const link = document.createElement('a');
+      link.className = 'search-result';
+      link.href = item.href;
+      link.setAttribute('role', 'option');
+      link.dataset.index = String(index);
+
+      const title = document.createElement('span');
+      title.className = 'search-result-title';
+      title.textContent = item.title;
+
+      const meta = document.createElement('span');
+      meta.className = 'search-result-meta';
+      meta.textContent = typeLabel(item);
+
+      link.append(title, meta);
+      results.append(link);
+    });
+
+    updateActive();
+  };
+
+  const updateActive = () => {
+    if (!results) return;
+    results.querySelectorAll<HTMLElement>('.search-result').forEach((el, index) => {
+      el.classList.toggle('is-active', index === activeIndex);
+      el.setAttribute('aria-selected', String(index === activeIndex));
+    });
+  };
+
+  const load = async () => {
+    if (items || loading) return;
+    loading = true;
+    render(input?.value ?? '');
+    try {
+      const response = await fetch('/search.json');
+      if (!response.ok) throw new Error('search index failed');
+      items = (await response.json()) as SearchItem[];
+    } catch {
+      items = [];
+    } finally {
+      loading = false;
+      render(input?.value ?? '');
+    }
+  };
+
+  const open = () => {
+    if (!dialog) return;
+    if (!dialog.open) dialog.showModal();
+    input?.focus();
+    load();
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-search-open]').forEach((button) => {
+    button.addEventListener('click', open);
+  });
+
+  input?.addEventListener('input', () => render(input.value));
+
+  input?.addEventListener('keydown', (event) => {
+    if (!current.length) return;
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      activeIndex = (activeIndex + 1) % current.length;
+      updateActive();
+      results?.querySelectorAll<HTMLElement>('.search-result')[activeIndex]?.scrollIntoView({ block: 'nearest' });
+    }
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      activeIndex = (activeIndex - 1 + current.length) % current.length;
+      updateActive();
+      results?.querySelectorAll<HTMLElement>('.search-result')[activeIndex]?.scrollIntoView({ block: 'nearest' });
+    }
+    if (event.key === 'Enter' && activeIndex >= 0) {
+      event.preventDefault();
+      window.location.href = current[activeIndex].href;
+    }
+  });
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  window.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement;
+    const isTyping =
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.isContentEditable;
+
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      open();
+      return;
+    }
+
+    if (event.key === '/' && !isTyping) {
+      event.preventDefault();
+      open();
+    }
+  });
+</script>

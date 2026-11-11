@@ -1,0 +1,69 @@
+{
+  "type": "FeatureCollection",
+  "name": "sample-buildings",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B001",
+        "name": "示例建筑 A",
+        "height": 36,
+        "floors": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [116.3901, 39.9071],
+            [116.3907, 39.9071],
+            [116.3907, 39.9075],
+            [116.3901, 39.9075],
+            [116.3901, 39.9071]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B002",
+        "name": "示例建筑 B",
+        "height": 52,
+        "floors": 13
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [116.3910, 39.9072],
+            [116.3918, 39.9072],
+            [116.3918, 39.9077],
+            [116.3910, 39.9077],
+            [116.3910, 39.9072]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B003",
+        "name": "示例建筑 C",
+        "height": 24,
+        "floors": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [116.3903, 39.9078],
+            [116.3912, 39.9078],
+            [116.3912, 39.9082],
+            [116.3903, 39.9082],
+            [116.3903, 39.9078]
+          ]
+        ]
+      }
+    }
+  ]
+}

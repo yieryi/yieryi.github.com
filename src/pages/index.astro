@@ -1,0 +1,261 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroGlobe from '../components/HeroGlobe.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import WritingRow from '../components/WritingRow.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const latestPosts = posts.slice(0, 3);
+
+const capabilities = [
+  {
+    icon: 'cube',
+    title: '3D 渲染引擎',
+    desc: '从 C++ 桌面端到 WebGL 浏览器端，处理材质、光照、后处理与大规模场景性能。',
+    items: ['WebGL / GLSL', 'C++ / OpenGL', '材质与后处理', '性能优化'],
+  },
+  {
+    icon: 'compass',
+    title: 'GIS 几何计算',
+    desc: '把空间查询、几何编辑、剖面与叠加分析，变成稳定可复用的引擎能力。',
+    items: ['空间分析', '几何编辑', '坐标与瓦片', '管线 / 内涝'],
+  },
+  {
+    icon: 'map',
+    title: '高精地图与三维重建',
+    desc: '面向规模化数据生产，建设编辑器工具链与三维模型半自动生产流程。',
+    items: ['高精地图', '三维建模', '半自动生产', '质量校验'],
+  },
+  {
+    icon: 'code',
+    title: '全栈交付',
+    desc: '从数据生产工具到前端展示，把技术方案落到真实项目和团队协作里。',
+    items: ['TypeScript', 'Node.js', '工具链', '工程化'],
+  },
+];
+
+const tools = [
+  {
+    kicker: 'Coordinate',
+    title: '坐标转换',
+    desc: 'WGS84 / GCJ02 / BD09 互转，纯前端计算。',
+    href: '/lab/#coordinate',
+  },
+  {
+    kicker: 'Tile',
+    title: '瓦片计算',
+    desc: '经纬度与 XYZ / TMS 瓦片号互算。',
+    href: '/lab/#tile',
+  },
+  {
+    kicker: 'Index',
+    title: 'Cesium 示例索引',
+    desc: '早期三维引擎示例的结构化索引。',
+    href: '/lab/#demos',
+  },
+];
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="hero-eyebrow">WANGKANG · 3D GEO-ENGINEER</span>
+          <h1 class="hero-title">
+            <span class="line">把真实世界，</span>
+            <span class="line">变成<span class="accent">可计算、</span></span>
+            <span class="line"><span class="accent">可渲染</span>的三维地图。</span>
+          </h1>
+          <p class="hero-desc">
+            我是王康，一名<strong>三维地理空间工程师</strong>。
+            做过数字地球引擎、WebGL 渲染、GIS 几何计算，也在做高精地图与三维模型的规模化生产。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/work/">
+              查看项目案例
+              <Icon name="arrow-right" size={16} />
+            </a>
+            <a class="btn btn-ghost" href="/writing/">
+              阅读技术文章
+              <Icon name="arrow-up-right" size={15} />
+            </a>
+          </div>
+          <div class="hero-stats">
+            {site.stats.map((stat) => (
+              <div>
+                <div class="hero-stat-value">{stat.value}</div>
+                <div class="hero-stat-label">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <HeroGlobe />
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <section class="section section-light" id="capabilities">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">01 · Capabilities</span>
+          <h2 class="section-title">三维空间里的四个问题域</h2>
+          <p class="section-desc">
+            渲染、几何、数据与工程交付。不是技术栈罗列，而是我在真实项目里反复处理的问题。
+          </p>
+        </div>
+        <a class="text-link" href="/about/">
+          了解完整履历
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+
+      <div class="cap-grid">
+        {capabilities.map((item, index) => (
+          <article class="cap-card reveal">
+            <span class="cap-num">0{index + 1}</span>
+            <span class="cap-icon"><Icon name={item.icon} size={22} /></span>
+            <h3 class="cap-title">{item.title}</h3>
+            <p class="cap-desc">{item.desc}</p>
+            <div class="cap-list">
+              {item.items.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="work">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">02 · Selected Work</span>
+          <h2 class="section-title">三个阶段，三种空间计算问题</h2>
+          <p class="section-desc">
+            从桌面端数字地球，到 WebGL 引擎，再到高精地图与三维模型生产。每个案例都写清楚背景、角色、关键设计和复盘。
+          </p>
+        </div>
+        <a class="text-link" href="/work/">
+          全部项目
+          <Icon name="arrow-right" size={14} />
+        </a>
+      </div>
+
+      <div class="work-grid">
+        {projects.map((project) => (
+          <div class="reveal"><ProjectCard project={project} /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="writing">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">03 · Writing</span>
+          <h2 class="section-title">把踩过的坑写下来</h2>
+          <p class="section-desc">
+            Cesium、WebGL、GIS 数据与前端工程。尽量写清楚问题、方案和取舍，而不只是贴代码。
+          </p>
+        </div>
+        <a class="text-link" href="/writing/">
+          全部文章
+          <Icon name="arrow-right" size={14} />
+        </a>
+      </div>
+
+      <div class="writing-list reveal">
+        {latestPosts.map((post) => <WritingRow post={post} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="lab">
+    <div class="container lab-band">
+      <div class="lab-copy reveal">
+        <span class="eyebrow">04 · Lab</span>
+        <h2 class="section-title">把常用的空间计算，做成顺手的小工具</h2>
+        <p class="section-desc">
+          一些不需要后端的小功能。既是给自己用，也顺手展示一下工程实现。
+        </p>
+        <div class="lab-points">
+          <span class="lab-point">坐标转换、瓦片计算，纯浏览器端完成</span>
+          <span class="lab-point">Cesium / GClient 示例索引，持续补充</span>
+          <span class="lab-point">后续会加 GeoJSON 校验、模型查看器等</span>
+        </div>
+        <a class="btn btn-ghost" href="/lab/" style="margin-top: 28px;">
+          进入 Lab
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+
+      <div class="tool-preview-grid reveal">
+        {tools.map((tool) => (
+          <a class="tool-preview" href={tool.href}>
+            <span class="tool-preview-kicker">{tool.kicker}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+            <span class="tool-preview-arrow">打开工具 →</span>
+          </a>
+        ))}
+        <div class="tool-preview">
+          <span class="tool-preview-kicker">More</span>
+          <h3>持续补充</h3>
+          <p>更多空间计算与数据生产相关的小工具，会陆续放到这里。</p>
+          <span class="tool-preview-arrow">Stay tuned</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="about">
+    <div class="container about-strip">
+      <div class="reveal">
+        <span class="eyebrow">05 · About</span>
+        <p class="about-quote">
+          从桌面端数字地球，到 WebGL 引擎，再到
+          <em>高精地图与三维重建</em>。
+          一直在做同一件事：让真实世界在计算机里变得可计算、可表达。
+        </p>
+        <a class="text-link" href="/about/" style="margin-top: 28px;">
+          关于我
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+
+      <div class="about-meta reveal">
+        <p>
+          8 年三维 GIS 经验，做过引擎、写过工具、支撑过项目，也带过跨团队的技术协调。
+          喜欢把复杂问题拆成可落地的小系统。
+        </p>
+        <div class="about-mini-timeline">
+          {site.timeline.map((item) => (
+            <div class="about-mini-item">
+              <div class="about-mini-period">{item.period}</div>
+              <div class="about-mini-title">{item.company} · {item.title}</div>
+            </div>
+          ))}
+        </div>
+        <a class="btn btn-outline" href="/resume/">
+          查看简历
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

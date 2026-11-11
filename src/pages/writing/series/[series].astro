@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WritingRow from '../../../components/WritingRow.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const series = [...new Set(posts.map((post) => post.data.series).filter(Boolean))] as string[];
+  return series.map((name) => ({
+    params: { series: name },
+    props: { series: name },
+  }));
+}
+
+interface Props {
+  series: string;
+}
+
+const { series } = Astro.props;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((post) => post.data.series === series)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout
+  title={`系列：${series}`}
+  description={`${series} 系列文章，共 ${posts.length} 篇。`}
+>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb breadcrumb-dark">
+        <a href="/writing/">Writing</a>
+        <span>/</span>
+        <span>Series</span>
+      </div>
+      <span class="eyebrow">Series</span>
+      <h1>{series}</h1>
+      <p>同一主题下的文章集合，共 {posts.length} 篇。</p>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="container">
+      <div class="writing-list">
+        {posts.map((post) => <WritingRow post={post} />)}
+      </div>
+      <div style="margin-top: 32px;">
+        <a class="text-link" href="/writing/">← 返回全部文章</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

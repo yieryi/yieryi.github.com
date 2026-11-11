@@ -1,0 +1,26 @@
+{
+  "name": "Cesium / GClient 示例索引",
+  "version": "2026.11",
+  "updated": "2026-11-11",
+  "note": "原演示部署在内部环境，已不可访问。本文件仅保留示例方向，方便后续重做在线 Demo。",
+  "items": [
+    { "id": "FirstPersonController", "title": "第一人称视角交互漫游", "group": "交互与场景", "status": "offline" },
+    { "id": "SceneForLayerMasking", "title": "地形、模型的遮罩和反遮罩着色", "group": "交互与场景", "status": "offline" },
+    { "id": "GeoObjecsForPickByRect", "title": "模型要素的交并差框选", "group": "交互与场景", "status": "offline" },
+    { "id": "GeoObjectsForBuildingDrawer", "title": "立体建筑的绘制", "group": "交互与场景", "status": "offline" },
+    { "id": "GeoObjectsForGeometryEditer", "title": "几何编辑", "group": "交互与场景", "status": "offline" },
+    { "id": "ModelForGltf", "title": "模型编辑", "group": "交互与场景", "status": "offline" },
+    { "id": "Billboard", "title": "布告板", "group": "渲染与特效", "status": "offline", "note": "向 Cesium 提交过 PR" },
+    { "id": "SpatialAnalysisForSkyline", "title": "天际线", "group": "渲染与特效", "status": "offline", "note": "个人实现" },
+    { "id": "ParticleEffectForFire", "title": "火焰与喷泉", "group": "渲染与特效", "status": "offline", "note": "参考超图实现" },
+    { "id": "SpeEffectForPointsSupportEDGE", "title": "夜光灯呼吸效果", "group": "渲染与特效", "status": "offline" },
+    { "id": "SpeEffectForPolylineParabolaSegmentFlow", "title": "抛物线动效", "group": "渲染与特效", "status": "offline" },
+    { "id": "SpeEffectForPanorama", "title": "3D 过渡动画到全景", "group": "渲染与特效", "status": "offline" },
+    { "id": "Material_RadialAlpha", "title": "行政区划体块", "group": "渲染与特效", "status": "offline" },
+    { "id": "PostProcessForAccumulatedSnow", "title": "建筑物局部积雪", "group": "渲染与特效", "status": "offline" },
+    { "id": "PipelineForExcavation", "title": "地下管线开挖", "group": "业务管线", "status": "offline" },
+    { "id": "Pipeline-VCTR-ArrowStyle", "title": "管线流向可视化", "group": "业务管线", "status": "offline" },
+    { "id": "HydrologyForSimulationHeatMap", "title": "城市内涝模拟", "group": "业务管线", "status": "offline" },
+    { "id": "SatelliteForBEIDOU", "title": "北斗卫星运行轨迹", "group": "业务管线", "status": "offline" }
+  ]
+}

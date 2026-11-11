@@ -1,0 +1,182 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/content.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noIndex?: boolean;
+  bodyClass?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = site.description,
+  image = '/og/default.png',
+  type = 'website',
+  noIndex = false,
+  bodyClass = '',
+  schema,
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL(site.url);
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const canonical = new URL(Astro.url.pathname, siteUrl);
+const ogImage = new URL(image, siteUrl);
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.nameZh,
+  alternateName: site.name,
+  url: site.url,
+  jobTitle: site.role,
+  description: site.description,
+  email: `mailto:${site.email}`,
+  sameAs: [site.github],
+  knowsAbout: [
+    '3D Rendering Engine',
+    'WebGL',
+    'Cesium',
+    'GIS Geometry',
+    'HD Map',
+    '3D Reconstruction',
+  ],
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: `${site.name} · ${site.role}`,
+  url: site.url,
+  description: site.description,
+  inLanguage: 'zh-CN',
+};
+
+const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ? schema : schema ? [schema] : [])];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#070b12" />
+    <script is:inline>document.documentElement.classList.add('has-js');</script>
+    <noscript>
+      <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
+    </noscript>
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.nameZh} />
+    <meta name="keywords" content={site.keywords.join(',')} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${site.name} · RSS`}
+      href="/rss.xml"
+    />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={`${site.name} · ${site.role}`} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <SearchDialog />
+
+    <script>
+      // Reveal sections on scroll.
+      const revealItems = document.querySelectorAll<HTMLElement>('.reveal');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        revealItems.forEach((item) => item.classList.add('is-visible'));
+      } else {
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        revealItems.forEach((item) => revealObserver.observe(item));
+      }
+
+      // Add copy buttons to code blocks.
+      document.querySelectorAll<HTMLElement>('.prose pre').forEach((pre) => {
+        if (pre.parentElement?.classList.contains('code-wrap')) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'code-wrap';
+        pre.parentNode?.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'copy-code';
+        button.textContent = '复制';
+        button.setAttribute('aria-label', '复制代码');
+        wrap.appendChild(button);
+
+        button.addEventListener('click', async () => {
+          const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
+          try {
+            await navigator.clipboard.writeText(code);
+            button.textContent = '已复制';
+          } catch {
+            button.textContent = '复制失败';
+          }
+          window.setTimeout(() => {
+            button.textContent = '复制';
+          }, 1600);
+        });
+      });
+
+      // Mark external links so they open safely in a new tab.
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="http"]').forEach((link) => {
+        try {
+          const url = new URL(link.href);
+          if (url.hostname === window.location.hostname) return;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+        } catch {
+          // Ignore malformed links.
+        }
+      });
+    </script>
+  </body>
+</html>

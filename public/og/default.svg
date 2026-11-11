@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="35%" r="55%">
+      <stop offset="0" stop-color="#38e8c6" stop-opacity=".18"/>
+      <stop offset=".45" stop-color="#4c8dff" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#070b12" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M72 0H0V72" fill="none" stroke="#94a3b8" stroke-opacity=".12" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#070b12"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g fill="none" stroke="#38e8c6">
+    <circle cx="900" cy="300" r="190" stroke-opacity=".28"/>
+    <ellipse cx="900" cy="300" rx="190" ry="66" stroke-opacity=".2" transform="rotate(-18 900 300)"/>
+    <ellipse cx="900" cy="300" rx="66" ry="190" stroke-opacity=".14" transform="rotate(-18 900 300)"/>
+    <circle cx="900" cy="300" r="250" stroke-opacity=".1"/>
+  </g>
+  <g fill="#9ff9e8">
+    <circle cx="760" cy="190" r="3"/><circle cx="980" cy="220" r="3"/>
+    <circle cx="1040" cy="360" r="3"/><circle cx="820" cy="420" r="3"/>
+    <circle cx="930" cy="300" r="4"/>
+  </g>
+  <g fill="#e6edf7" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
+    <text x="80" y="150" fill="#38e8c6" font-family="SFMono-Regular, Menlo, monospace" font-size="18" letter-spacing="4">WANGKANG · 3D GEO-ENGINEER</text>
+    <text x="78" y="278" font-size="70" font-weight="600" letter-spacing="-2">把真实世界，</text>
+    <text x="78" y="372" font-size="70" font-weight="600" letter-spacing="-2">变成<tspan fill="#38e8c6">可计算、可渲染</tspan></text>
+    <text x="78" y="466" font-size="70" font-weight="600" letter-spacing="-2">的三维地图。</text>
+    <text x="80" y="560" fill="#9fb0c9" font-family="SFMono-Regular, Menlo, monospace" font-size="18">GIS Geometry · 3D Rendering · HD Map</text>
+  </g>
+</svg>

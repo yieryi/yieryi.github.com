@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout title="404" description="页面不存在。" noIndex>
+  <section class="not-found">
+    <div class="container not-found-inner">
+      <span class="not-found-code">ERROR / 404</span>
+      <h1>走丢了。</h1>
+      <p>
+        这个地址不存在，可能是旧链接、拼写错误，或者内容已经迁移。
+        你可以回首页，或者用搜索找找看。
+      </p>
+      <div class="not-found-actions">
+        <a class="btn btn-primary" href="/">
+          回到首页
+          <Icon name="arrow-right" size={15} />
+        </a>
+        <button class="btn btn-ghost" type="button" data-search-open>
+          搜索内容
+          <Icon name="search" size={15} />
+        </button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

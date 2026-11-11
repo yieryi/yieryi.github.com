@@ -1,0 +1,112 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+
+const pathname = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(href);
+}
+---
+
+<header class="site-header" data-open="false">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label={`${site.name} 首页`}>
+      <span class="brand-mark" aria-hidden="true"><span>WK</span></span>
+      <span class="brand-text">
+        <span class="brand-name">{site.name}</span>
+        <span class="brand-sub">{site.role}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="site-navigation" aria-label="主导航">
+      {site.nav.map((item) => (
+        <a
+          class="nav-link"
+          href={item.href}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="header-actions">
+      <button
+        class="icon-btn search-trigger"
+        type="button"
+        data-search-open
+        aria-label="搜索文章和项目"
+      >
+        <Icon name="search" size={17} />
+        <span>搜索</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      <a
+        class="icon-btn"
+        href={site.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+      >
+        <Icon name="github" size={17} />
+      </a>
+
+      <button
+        class="icon-btn menu-toggle"
+        type="button"
+        data-menu-toggle
+        aria-label="打开菜单"
+        aria-expanded="false"
+        aria-controls="site-navigation"
+      >
+        <span class="menu-icon-open"><Icon name="menu" size={18} /></span>
+        <span class="menu-icon-close"><Icon name="close" size={18} /></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = header?.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const nav = header?.querySelector<HTMLElement>('.site-nav');
+
+  const closeMenu = () => {
+    if (!header || !toggle) return;
+    header.dataset.open = 'false';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', '打开菜单');
+    document.body.classList.remove('menu-open');
+  };
+
+  const onScroll = () => {
+    header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  };
+
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  toggle?.addEventListener('click', () => {
+    if (!header) return;
+    const next = header.dataset.open !== 'true';
+    header.dataset.open = String(next);
+    toggle.setAttribute('aria-expanded', String(next));
+    toggle.setAttribute('aria-label', next ? '关闭菜单' : '打开菜单');
+    document.body.classList.toggle('menu-open', next);
+  });
+
+  nav?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) closeMenu();
+  });
+</script>

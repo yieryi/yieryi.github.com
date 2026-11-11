@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const skills = [
+  { label: '3D / Graphics', value: 'WebGL, GLSL, C++, OpenGL, Cesium, 3D Tiles' },
+  { label: 'GIS', value: '空间分析, 几何编辑, 坐标/瓦片, 管线, 内涝模拟' },
+  { label: 'Data', value: '高精地图, 三维重建, 数据生产, 质量校验' },
+  { label: 'Engineering', value: 'TypeScript, Node.js, 工具链, 跨团队协调' },
+];
+
+const highlights = [
+  'GClient WebGL 数字地球引擎底层研发，建设渲染、数据接入、空间分析与业务渲染管线。',
+  '高德高精地图生产编辑器提效，三维模型半自动生产流程建设，部分成果上线高德地图 App。',
+  'LocaSpace Viewer 数字地球引擎功能研发，支撑交通规划、工程建设等行业项目。',
+];
+---
+
+<BaseLayout
+  title="Resume"
+  description="王康（WANGKANG）的个人简历：三维渲染引擎、GIS 几何计算、高精地图与三维重建。"
+  bodyClass="resume-body"
+>
+  <div class="resume-page">
+    <div class="resume-actions no-print">
+      <p>提示：点击右侧按钮，在浏览器打印对话框中选择“另存为 PDF”。</p>
+      <button class="btn btn-dark" type="button" id="print-resume">
+        打印 / 保存为 PDF
+        <Icon name="printer" size={15} />
+      </button>
+    </div>
+
+    <article class="resume-sheet">
+      <header class="resume-header">
+        <div>
+          <h1 class="resume-name">王康 · WANGKANG</h1>
+          <p class="resume-role">三维地理空间工程师 · 3D Geo-Engineer</p>
+        </div>
+        <div class="resume-contact">
+          <span>{site.email}</span>
+          <span>github.com/yieryi</span>
+          <span>WeChat: {site.wechat}</span>
+          <span>yieryi.github.io</span>
+        </div>
+      </header>
+
+      <p class="resume-summary">
+        8 年三维 GIS 经验，覆盖桌面端数字地球引擎、WebGL 引擎底层、GIS 几何计算、
+        高精地图与三维模型生产。擅长把渲染、几何与数据生产问题拆解成可落地的系统。
+      </p>
+
+      <section class="resume-section">
+        <h2>Experience</h2>
+        {site.timeline.map((item) => (
+          <div class="resume-item">
+            <div class="resume-item-period">{item.period}</div>
+            <div>
+              <h3>{item.title}</h3>
+              <div class="resume-item-company">{item.company}</div>
+              <p>{item.description}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <section class="resume-section">
+        <h2>Selected Work</h2>
+        {highlights.map((item) => (
+          <div class="resume-item">
+            <div class="resume-item-period">Project</div>
+            <p>{item}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="resume-section">
+        <h2>Skills</h2>
+        <div class="resume-skills">
+          {skills.map((skill) => (
+            <div>
+              <strong>{skill.label}</strong><br />
+              <span>{skill.value}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <h2>Writing & Open Source</h2>
+        <div class="resume-skills">
+          <div>
+            <strong>技术写作</strong><br />
+            <span>Cesium、WebGL、GIS 数据与三维引擎实践</span>
+          </div>
+          <div>
+            <strong>开源贡献</strong><br />
+            <span>Cesium Billboard 相关 PR，三维示例与工具</span>
+          </div>
+        </div>
+      </section>
+    </article>
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelector<HTMLButtonElement>('#print-resume')?.addEventListener('click', () => {
+    window.print();
+  });
+</script>

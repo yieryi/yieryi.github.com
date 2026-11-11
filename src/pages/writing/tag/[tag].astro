@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import WritingRow from '../../../components/WritingRow.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((post) => post.data.tags.includes(tag))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout
+  title={`标签：${tag}`}
+  description={`与 ${tag} 相关的技术文章。`}
+  noIndex={posts.length < 2}
+>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb breadcrumb-dark">
+        <a href="/writing/">Writing</a>
+        <span>/</span>
+        <span>Tag</span>
+      </div>
+      <span class="eyebrow">Tag</span>
+      <h1>#{tag}</h1>
+      <p>与「{tag}」相关的文章，共 {posts.length} 篇。</p>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="container">
+      <div class="writing-list">
+        {posts.map((post) => <WritingRow post={post} />)}
+      </div>
+      <div style="margin-top: 32px;">
+        <a class="text-link" href="/writing/">← 返回全部文章</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

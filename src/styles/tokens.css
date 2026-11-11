@@ -1,0 +1,70 @@
+:root {
+  /* Dark surfaces */
+  --bg-deep: #070b12;
+  --bg-deep-2: #0b1220;
+  --bg-deep-3: #101a2b;
+  --bg-deep-4: #16233a;
+
+  /* Light surfaces */
+  --paper: #f7f8fa;
+  --paper-2: #eef1f5;
+  --paper-3: #e5e9f0;
+  --white: #ffffff;
+
+  /* Text */
+  --ink: #111827;
+  --ink-soft: #4b5563;
+  --ink-mute: #6b7280;
+  --text-on-dark: #e6edf7;
+  --text-on-dark-soft: #9fb0c9;
+  --text-on-dark-mute: #73849d;
+
+  /* Lines */
+  --line-dark: rgba(148, 163, 184, 0.16);
+  --line-dark-strong: rgba(148, 163, 184, 0.28);
+  --line-light: rgba(17, 24, 39, 0.11);
+  --line-light-strong: rgba(17, 24, 39, 0.2);
+
+  /* Accents */
+  --accent: #38e8c6;
+  --accent-soft: rgba(56, 232, 198, 0.14);
+  --accent-ink: #0c8574;
+  --accent-2: #4c8dff;
+  --accent-2-soft: rgba(76, 141, 255, 0.14);
+  --warm: #ffb86b;
+  --danger: #e5484d;
+
+  /* Type */
+  --font-display: "Avenir Next", "Futura", "Helvetica Neue", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  /* Layout */
+  --max-width: 1200px;
+  --content-width: 760px;
+  --header-height: 72px;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow-soft: 0 14px 40px rgba(7, 11, 18, 0.08);
+  --shadow-dark: 0 24px 80px rgba(0, 0, 0, 0.35);
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --fast: 160ms;
+  --base: 260ms;
+  --slow: 420ms;
+
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fast: 0ms;
+    --base: 0ms;
+    --slow: 0ms;
+  }
+}

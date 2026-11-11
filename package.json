@@ -1,0 +1,26 @@
+{
+  "name": "wangkang-site",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "new:post": "bun run scripts/new-post.ts",
+    "new:project": "bun run scripts/new-project.ts"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.1.4",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.4.10",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/three": "^0.187.0",
+    "typescript": "5.9.3"
+  }
+}

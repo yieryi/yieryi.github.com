@@ -1,91 +1,70 @@
-# Jekyll Paper for Github
+# WANGKANG · 三维地理空间工程师
 
-![Jekyll Paper](./favicon.ico)
+个人技术主页，记录三维渲染引擎、GIS 几何计算、三维建模与高精地图数据生产的工程实践。
 
-Jekyll Paper is a simple Jekyll theme, and it is aim to helping you to create your own blog by the easiest way. Jekyll Paper was designed as a paper book style, giving the reader a sense of what it looked like to read a paper book.
+- 线上地址：<https://yieryi.github.io>
+- 技术栈：Astro + MDX + 原生 CSS + Three.js（首屏按需加载）
+- 部署：GitHub Actions → GitHub Pages
 
-Jekyll Paper for Github is the sub-project for [Jekyll Paper][jekyll-paper], it only contains Github Pages environment supported plugins.
+## 本地开发
 
-This is a [demo website](https://www.ghosind.com) for Jekyll Paper for Github.
+需要 [Bun](https://bun.sh/) 1.1+。
 
-## Screenshots
-
-![Index Screenshot](./assets/images/index-screenshot.png)
-
-![Post Screenshot](./assets/images/post-screenshot.png)
-
-![Category Screenshot](./assets/images/category-screenshot.png)
-
-## Features
-
-- Responsive
-- Paginate
-- RSS
-- Sitemap
-- Custom 404 page
-- SASS
-- Multiple languages support
-- Configurable navigation menu
-- SEO optimization
-- Comments
-- Category Index
-- Mathematics
-- Diagrams
-
-## Getting Start
-
-Jekyll Paper for Github is easy to create your own blog. You can create your blog by four steps only!
-
-1. Fork your own copy of [Jekyll Paper for Github][jekyll-paper-github] repository to your Github account.
-2. Open setting page of your repository.
-3. Change repository name to your_github_username.github.io.
-4. Enter your_github_name.github.io.
-
-## Add New Posts
-
-You can add new posts at any time after you had your own blog. Create a new post need to add a new file in "_posts" directory, and the file name must follow the convention `YYYY-MM-DD-name-of-post.md`.
-
-## Custom Navigation Menu
-
-You can add or update navigation menu items in `_data/menus.yml` file. In the configuration file, you need set title and URL for every navigation menu item.
-
-### Example
-
-```yml
-- title: "Index"
-  url:   ""
-
-- title: "About"
-  url:   "about"
+```bash
+bun install
+bun run dev        # http://localhost:4321
+bun run build      # 构建到 dist/
+bun run preview    # 预览构建结果
+bun run check      # 类型与内容校验
 ```
 
-## Supported Languages
+## 内容维护
 
-This list order by language codes alphabets.
+```bash
+bun run new:post     # 新建文章
+bun run new:project  # 新建项目案例
+```
 
-- English
-- Deutsche (German)
-- Español (Spanish)
-- Français (French)
-- 日本語 (Japanese)
-- Português (Portuguese)
-- 简体中文 (Simplified Chinese)
-- 繁體中文 (Traditional Chinese)
+- 文章：`src/content/blog/*.md`
+- 项目：`src/content/projects/*.mdx`
+- 下载资源：`src/data/downloads.ts` + `public/downloads/`
+- 站点信息/导航：`src/data/site.ts`
+- 图片：`public/assets/images/`
+- 视频：`public/assets/videos/`
+
+详细操作见：
+
+- [重构方案](./docs/REFACTOR_PLAN.md)
+- [使用说明](./docs/USAGE.md)
+
+## 目录
+
+```
+docs/                  方案与使用说明
+public/                静态资源、下载文件、favicon、OG 图
+scripts/               新建内容脚本
+src/
+  components/          组件
+  content/             文章与项目内容
+  data/                站点信息、下载注册表、旧链接
+  layouts/             布局
+  pages/               路由
+  scripts/             首屏 3D 等客户端逻辑
+  styles/              设计 tokens 与全局样式
+  utils/               内容工具函数
+.github/workflows/     GitHub Pages 自动部署
+```
+
+## 部署
+
+推送到 `main` 分支后，GitHub Actions 自动构建并发布到 GitHub Pages。
+
+首次切换需要在仓库 **Settings → Pages → Build and deployment** 中把 Source 设为 **GitHub Actions**。
+
+## 旧站
+
+旧 Jekyll 站点保留在 `main` 分支历史中。新站稳定前不要删除旧分支，出问题可以直接回滚。
 
 ## License
 
-Jekyll Paper for Github was released under MIT license.
-
-## Contributing
-
-If you would like to make Jekyll Paper for Github better, you can create a new pull request in [Jekyll Paper Github Page][jekyll-paper-github].
-
-If you have any questions or suggestions, you can create an issue on [Jekyll Paper for Github Issues][jekyll-paper-github-issues] or send email to [me](mailto:i@ghosind.com).
-
-## Chinese Version
-
-Jekyll Paper for Github项目提供了中文版的[使用介绍](https://github.com/ghosind/Jekyll-Paper-Github/wiki/%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8Jekyll-Paper-for-Github)及[文档](https://github.com/ghosind/Jekyll-Paper-Github/wiki#%E4%B8%AD%E6%96%87%E7%89%88%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8Cchinese-version)。
-
-[jekyll-paper]: https://github.com/ghosind/Jekyll-Paper
-[jekyll-paper-github]: https://github.com/ghosind/Jekyll-Paper-Github
-[jekyll-paper-github-issues]: https://github.com/ghosind/Jekyll-Paper-Github/issues
+代码 MIT。文章与图片内容版权归王康所有，转载请联系。

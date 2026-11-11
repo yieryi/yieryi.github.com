@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import { legacyRedirects } from '../data/legacy';
+import { site } from '../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const fromPosts = posts
+    .filter((post) => post.data.legacy)
+    .map((post) => ({
+      from: post.data.legacy as string,
+      to: `/writing/${post.id}/`,
+    }));
+
+  const seen = new Set<string>();
+  const redirects = [...fromPosts, ...legacyRedirects].filter((item) => {
+    if (seen.has(item.from)) return false;
+    seen.add(item.from);
+    return true;
+  });
+
+  return redirects.map((item) => ({
+    params: { legacy: item.from.replace(/^\//, '') },
+    props: { to: item.to },
+  }));
+}
+
+interface Props {
+  to: string;
+}
+
+const { to } = Astro.props;
+const target = new URL(to, Astro.site ?? site.url);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={target} />
+    <title>页面已迁移</title>
+    <script is:inline set:html={`window.location.replace(${JSON.stringify(to)});`}></script>
+    <style>
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background: #070b12;
+        color: #e6edf7;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      }
+      a {
+        color: #38e8c6;
+      }
+    </style>
+  </head>
+  <body>
+    <p>页面已迁移到 <a href={to}>{to}</a>。</p>
+  </body>
+</html>

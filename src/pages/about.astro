@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+const focus = [
+  { label: '当前方向', value: '三维重建 / 高精地图 / 数据生产' },
+  { label: '常用技术', value: 'C++ / TypeScript / WebGL / Cesium' },
+  { label: '协作方向', value: '技术交流 / 项目合作 / 内推' },
+  { label: '联系邮箱', value: site.email },
+];
+
+const capabilities = [
+  {
+    title: '3D Rendering',
+    desc: 'WebGL / GLSL / C++ / OpenGL，材质、光照、后处理、粒子与大规模场景性能。',
+  },
+  {
+    title: 'GIS Geometry',
+    desc: '空间分析、几何编辑、交并差、天际线、剖面、管线与内涝模拟。',
+  },
+  {
+    title: 'HD Map & 3D',
+    desc: '高精地图生产编辑器、三维模型半自动生产、质量校验与工具链。',
+  },
+  {
+    title: 'Engineering',
+    desc: 'TypeScript / Node.js / 数据生产系统 / 跨团队技术协调。',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="王康（WANGKANG），三维地理空间工程师。8 年三维 GIS 经验，做过数字地球引擎、WebGL 渲染、GIS 几何计算与高精地图数据生产。"
+>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <span class="eyebrow">About · WANGKANG</span>
+      <h1>王康<br />三维地理空间工程师</h1>
+      <p>
+        把真实世界，变成可计算、可渲染的三维地图。
+        8 年时间，从桌面端数字地球走到 WebGL 引擎，再走到高精地图与三维重建。
+      </p>
+      <div class="page-hero-meta">
+        <span class="tag tag-dark">3D Engine</span>
+        <span class="tag tag-dark">GIS Geometry</span>
+        <span class="tag tag-dark">HD Map</span>
+        <span class="tag tag-dark">3D Reconstruction</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="container about-intro reveal">
+      <div class="about-intro-text">
+        <p>
+          我是王康，一名<strong>三维地理空间工程师</strong>。2018 年入行做数字地球引擎，
+          从 C++ 桌面端开始，接触真实 GIS 数据、地形影像、矢量与模型加载。
+        </p>
+        <p>
+          2020 年加入正元地信，参与 GClient WebGL 数字地球引擎的底层研发。
+          那段时间深入图形学，做数据格式接入、性能优化、空间分析，也把城市内涝、
+          地下管线、数字孪生等业务需求拆成可复用的引擎能力。
+        </p>
+        <p>
+          2023 年 11 月加入高德数据中心，先做高精地图生产人工编辑器的研发提效，
+          现在在模型平台参与高质量三维模型半自动生产流程，负责技术研发与跨团队协调。
+          部分数据成果已经上线高德地图 App。
+        </p>
+        <p>
+          我喜欢把复杂问题拆成可落地的小系统：<strong>渲染管线、几何算法、数据工具、生产流程</strong>。
+          这个站点用来记录工程实践，也放一些空间计算的小工具。
+        </p>
+      </div>
+
+      <aside class="about-side">
+        <h2>At a glance</h2>
+        <ul>
+          {focus.map((item) => (
+            <li>
+              <span>{item.label}</span>
+              <span>{item.value}</span>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">01 · Experience</span>
+          <h2 class="section-title">履历</h2>
+          <p class="section-desc">
+            三个阶段，分别对应桌面端引擎、WebGL 引擎和高精地图/三维重建。
+          </p>
+        </div>
+        <a class="btn btn-outline" href="/resume/">
+          打印版简历
+          <Icon name="printer" size={15} />
+        </a>
+      </div>
+
+      <div class="timeline reveal">
+        {site.timeline.map((item) => (
+          <div class="timeline-item">
+            <div class="timeline-period">{item.period}</div>
+            <div class="timeline-content">
+              <h3>{item.title}</h3>
+              <div class="timeline-company">{item.company}</div>
+              <p class="timeline-desc">{item.description}</p>
+              <div class="timeline-tags">
+                {item.tags.map((tag) => <span class="tag">{tag}</span>)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">02 · Capabilities</span>
+          <h2 class="section-title">能力边界</h2>
+          <p class="section-desc">
+            不追求“什么都会”，更在意能不能把一个问题从数据、算法、渲染到交付串起来。
+          </p>
+        </div>
+      </div>
+
+      <div class="cap-grid reveal">
+        {capabilities.map((item, index) => (
+          <article class="cap-card">
+            <span class="cap-num">0{index + 1}</span>
+            <h3 class="cap-title" style="margin-top: 22px;">{item.title}</h3>
+            <p class="cap-desc">{item.desc}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="contact" style="padding-top: 0;">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">03 · Contact</span>
+          <h2 class="section-title">聊聊三维、GIS，或者别的</h2>
+          <p class="section-desc">
+            技术交流、项目合作、招聘内推，都欢迎。邮件通常回复更快。
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-grid reveal">
+        <div>
+          <div class="contact-list">
+            <div class="contact-item">
+              <span>Email</span>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </div>
+            <div class="contact-item">
+              <span>GitHub</span>
+              <a href={site.github} target="_blank" rel="noopener noreferrer">@yieryi</a>
+            </div>
+            <div class="contact-item">
+              <span>留言板</span>
+              <a href={site.githubIssues} target="_blank" rel="noopener noreferrer">
+                GitHub Issues
+              </a>
+            </div>
+            <div class="contact-item">
+              <span>WeChat</span>
+              <strong>{site.wechat}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="wechat-card">
+          <img src="/assets/images/wechat.webp" alt="微信二维码" width="132" height="132" loading="lazy" />
+          <div>
+            <h3>微信</h3>
+            <p>扫码添加，请备注来意。</p>
+            <p style="margin-top: 8px;">微信号：{site.wechat}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

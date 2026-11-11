@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import CoverArt from './CoverArt.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+---
+
+<article class="project-card">
+  <a href={`/work/${project.id}/`} aria-label={`查看项目：${data.title}`}>
+    <CoverArt variant={data.cover} label={`${data.period} / ${data.role}`} />
+    <div class="project-card-body">
+      <div class="project-meta">
+        <span>{data.role}</span>
+        <span>{data.period}</span>
+      </div>
+      <h3 class="project-title">{data.title}</h3>
+      <p class="project-summary">{data.summary}</p>
+      <div class="project-stack">
+        {data.stack.slice(0, 4).map((item) => <span class="tag">{item}</span>)}
+      </div>
+      <span class="project-arrow">
+        查看案例
+        <Icon name="arrow-up-right" size={14} />
+      </span>
+    </div>
+  </a>
+</article>
