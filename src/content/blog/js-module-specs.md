@@ -1,10 +1,14 @@
 ---
 title: CommonJS、AMD、CMD、UMD 与 ES6 模块规范
+titleEn: "CommonJS, AMD, CMD, UMD and ES Modules"
 description: 梳理 JavaScript 几种模块规范的加载机制、写法差异与适用场景，理解前端模块化的演进。
+descriptionEn: "How JavaScript module systems load, differ and fit different use cases."
 date: 2021-03-19
 updated: 2021-03-19
 category: 前端工程
+categoryEn: "Frontend Engineering"
 series: 前端基础
+seriesEn: "Frontend Fundamentals"
 tags: [JavaScript, CommonJS, AMD, CMD, UMD, ES6]
 draft: false
 featured: false

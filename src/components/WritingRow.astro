@@ -1,45 +1,51 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Icon from './Icon.astro';
-import { formatDate, isoDate, readingTime, tagHref } from '../utils/content';
+import { formatDate, isoDate, readingTime, tagHref, postTitle, postDescription, postCategory } from '../utils/content';
+import { localizePath, type Lang } from '../i18n/utils';
+import { tagLabel } from '../i18n/tags';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  lang: Lang;
 }
 
-const { post } = Astro.props;
-const { data } = post;
+const { post, lang } = Astro.props;
+const title = postTitle(post, lang);
+const description = postDescription(post, lang);
+const category = postCategory(post, lang);
 const minutes = readingTime(post.body);
+const href = localizePath(`/writing/${post.id}/`, lang);
 ---
 
 <article
   class="writing-row"
-  data-title={data.title.toLowerCase()}
-  data-description={data.description.toLowerCase()}
-  data-category={data.category}
-  data-tags={data.tags.join(' ')}
+  data-title={title.toLowerCase()}
+  data-description={description.toLowerCase()}
+  data-category={category}
+  data-tags={post.data.tags.join(' ')}
 >
-  <time class="writing-date" datetime={isoDate(data.date)}>{formatDate(data.date)}</time>
+  <time class="writing-date" datetime={isoDate(post.data.date)}>{formatDate(post.data.date, 'short', lang)}</time>
 
   <div class="writing-main">
-    <a href={`/writing/${post.id}/`}>
-      <h3 class="writing-title">{data.title}</h3>
+    <a href={href}>
+      <h3 class="writing-title">{title}</h3>
     </a>
-    <p class="writing-desc">{data.description}</p>
+    <p class="writing-desc">{description}</p>
     <div class="writing-tags">
-      <span class="tag tag-accent">{data.category}</span>
-      {data.tags
-        .filter((tag) => tag !== data.category)
+      <span class="tag tag-accent">{category}</span>
+      {post.data.tags
+        .filter((tag) => tag !== post.data.category)
         .slice(0, 3)
         .map((tag) => (
-          <a class="tag" href={tagHref(tag)}>{tag}</a>
+          <a class="tag" href={tagHref(tag, lang)}>{tagLabel(tag, lang)}</a>
         ))}
     </div>
   </div>
 
   <div class="writing-side">
     <span>{minutes} min</span>
-    <a class="writing-arrow" href={`/writing/${post.id}/`} aria-label={`阅读：${data.title}`}>
+    <a class="writing-arrow" href={href} aria-label={`${lang === 'zh' ? '阅读' : 'Read'}: ${title}`}>
       <Icon name="arrow-right" size={14} />
     </a>
   </div>

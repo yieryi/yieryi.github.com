@@ -4,6 +4,8 @@
 
 - 线上地址：<https://yieryi.github.io>
 - 技术栈：Astro + MDX + 原生 CSS + Three.js（首屏按需加载）
+- 双语：中文默认 `/`，英文 `/en/`，Header 可切换
+- 主题：日间 / 夜间切换，首次跟随系统，选择持久化
 - 部署：GitHub Actions → GitHub Pages
 
 ## 本地开发
@@ -26,8 +28,10 @@ bun run new:post     # 新建文章
 bun run new:project  # 新建项目案例
 ```
 
-- 文章：`src/content/blog/*.md`
-- 项目：`src/content/projects/*.mdx`
+- 文章：`src/content/blog/*.md`（含英文标题/摘要）
+- 中文项目：`src/content/projects/*.mdx`
+- 英文项目：`src/content/projects-en/*.mdx`
+- 界面翻译：`src/i18n/`
 - 下载资源：`src/data/downloads.ts` + `public/downloads/`
 - 站点信息/导航：`src/data/site.ts`
 - 图片：`public/assets/images/`
@@ -46,12 +50,13 @@ public/                静态资源、下载文件、favicon、OG 图
 scripts/               新建内容脚本
 src/
   components/          组件
-  content/             文章与项目内容
+  content/             文章与项目内容（中/英）
+  i18n/                界面文案、语言路径、标签翻译
   data/                站点信息、下载注册表、旧链接
   layouts/             布局
   pages/               路由
   scripts/             首屏 3D 等客户端逻辑
-  styles/              设计 tokens 与全局样式
+  styles/              设计 tokens（日/夜）与全局样式
   utils/               内容工具函数
 .github/workflows/     GitHub Pages 自动部署
 ```

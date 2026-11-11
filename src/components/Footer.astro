@@ -1,77 +1,90 @@
 ---
 import Icon from './Icon.astro';
 import { site } from '../data/site';
+import { useTranslations, localizePath, type Lang } from '../i18n/utils';
 
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const role = lang === 'zh' ? site.role : site.roleEn;
 const year = new Date().getFullYear();
+
+const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.downloads' | 'nav.about'> = {
+  '/work/': 'nav.work',
+  '/writing/': 'nav.writing',
+  '/lab/': 'nav.lab',
+  '/downloads/': 'nav.downloads',
+  '/about/': 'nav.about',
+};
 ---
 
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-cta">
       <h2 class="footer-title">
-        一起做点<br />
-        <a href={`mailto:${site.email}`}>空间计算</a>的事。
+        {t('footer.cta1')}<br />
+        <a href={`mailto:${site.email}`}>{t('footer.cta2')}</a>{t('footer.cta3')}
       </h2>
       <a class="btn btn-primary" href={`mailto:${site.email}`}>
-        发邮件
+        {t('footer.email')}
         <Icon name="arrow-up-right" size={16} />
       </a>
     </div>
 
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="brand" href="/">
+        <a class="brand" href={localizePath('/', lang)}>
           <span class="brand-mark" aria-hidden="true"><span>WK</span></span>
           <span class="brand-text">
             <span class="brand-name">{site.name}</span>
-            <span class="brand-sub">{site.role}</span>
+            <span class="brand-sub">{role}</span>
           </span>
         </a>
-        <p>
-          三维渲染引擎、GIS 几何计算、三维建模与高精地图数据生产。
-          记录工程实践，也做一些空间计算的小工具。
-        </p>
+        <p>{t('footer.desc')}</p>
       </div>
 
       <div class="footer-col">
-        <h3>Explore</h3>
+        <h3>{t('footer.explore')}</h3>
         <ul>
           {site.nav.map((item) => (
-            <li><a href={item.href}>{item.label}</a></li>
+            <li><a href={localizePath(item.href, lang)}>{t(navKeys[item.href])}</a></li>
           ))}
         </ul>
       </div>
 
       <div class="footer-col">
-        <h3>Elsewhere</h3>
+        <h3>{t('footer.elsewhere')}</h3>
         <ul>
           <li>
             <a href={site.github} target="_blank" rel="noopener noreferrer">
-              GitHub
+              {t('footer.github')}
             </a>
           </li>
           <li>
             <a href={site.githubIssues} target="_blank" rel="noopener noreferrer">
-              留言板
+              {t('footer.guestbook')}
             </a>
           </li>
-          <li><a href="/rss.xml">RSS</a></li>
+          <li><a href={localizePath('/rss.xml', lang)}>RSS</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h3>Contact</h3>
+        <h3>{t('footer.contact')}</h3>
         <ul>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li><span>微信：{site.wechat}</span></li>
-          <li><span>GitHub：@yieryi</span></li>
+          <li><span>{t('footer.wechat')}: {site.wechat}</span></li>
+          <li><span>GitHub: @yieryi</span></li>
         </ul>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <span>© {year} {site.name}. Built with Astro.</span>
-      <span>Hosted on GitHub Pages · 内容仅代表个人观点</span>
+      <span>© {year} {site.name}. {t('footer.copyright')}</span>
+      <span>{t('footer.built')}</span>
     </div>
   </div>
 </footer>

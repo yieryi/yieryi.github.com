@@ -8,6 +8,7 @@ import {
   Line,
   LineBasicMaterial,
   Mesh,
+  NormalBlending,
   PerspectiveCamera,
   Points,
   PointsMaterial,
@@ -22,6 +23,9 @@ import {
   WebGLRenderer,
 } from 'three';
 
+type ArcColorKey = 'arc1' | 'arc2' | 'arc3';
+type OrbitColorKey = 'orbit1' | 'orbit2';
+
 type Comet = {
   curve: QuadraticBezierCurve3;
   head: Sprite;
@@ -29,8 +33,11 @@ type Comet = {
   tailGeometry: BufferGeometry;
   tailPositions: Float32Array;
   tailMaterial: LineBasicMaterial;
+  colorKey: ArcColorKey;
   offset: number;
   speed: number;
+  tailOpacity: number;
+  headOpacity: number;
 };
 
 type OrbitNode = {
@@ -38,9 +45,63 @@ type OrbitNode = {
   radius: number;
   speed: number;
   offset: number;
+  colorKey: OrbitColorKey;
 };
 
 const TAIL_SEGMENTS = 16;
+
+const palette = {
+  dark: {
+    grid: 0x38e8c6,
+    gridOpacity: 0.055,
+    equator: 0x38e8c6,
+    equatorOpacity: 0.18,
+    point: 0xd6fff8,
+    pointOpacity: 0.62,
+    spark: 0xffffff,
+    sparkOpacity: 0.9,
+    arc1: 0x38e8c6,
+    arc2: 0xd6fff8,
+    arc3: 0xffb86b,
+    arcOpacity: 0.24,
+    tailOpacity: 0.7,
+    headOpacity: 0.9,
+    orbit1: 0x38e8c6,
+    orbit2: 0xffb86b,
+    orbit1Opacity: 0.13,
+    orbit2Opacity: 0.08,
+    atmosphere: 0x38e8c6,
+    atmosphereOpacity: 0.24,
+    atmosphereBase: 0.012,
+    blending: AdditiveBlending,
+    sparkTwinkle: 0.18,
+  },
+  light: {
+    grid: 0x066f62,
+    gridOpacity: 0.32,
+    equator: 0x055247,
+    equatorOpacity: 0.55,
+    point: 0x055247,
+    pointOpacity: 0.85,
+    spark: 0x054a68,
+    sparkOpacity: 0.95,
+    arc1: 0x066f62,
+    arc2: 0x24557f,
+    arc3: 0xa65f18,
+    arcOpacity: 0.7,
+    tailOpacity: 0.95,
+    headOpacity: 0.98,
+    orbit1: 0x066f62,
+    orbit2: 0xa65f18,
+    orbit1Opacity: 0.42,
+    orbit2Opacity: 0.32,
+    atmosphere: 0x066f62,
+    atmosphereOpacity: 0.28,
+    atmosphereBase: 0.025,
+    blending: NormalBlending,
+    sparkTwinkle: 0.08,
+  },
+} as const;
 
 export function initGlobe(canvas: HTMLCanvasElement): void {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -64,10 +125,6 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
   scene.add(group);
 
   const radius = 1.75;
-  const baseColor = 0x38e8c6;
-  const lightColor = 0xd6fff8;
-  const warmColor = 0xffb86b;
-
   const glowTexture = createGlowTexture();
 
   const makeGlowMaterial = (color: number) =>
@@ -83,9 +140,9 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
   // Sparse latitude / longitude surface grid.
   const grid = new Group();
   const gridMaterial = new LineBasicMaterial({
-    color: baseColor,
+    color: palette.dark.grid,
     transparent: true,
-    opacity: 0.055,
+    opacity: palette.dark.gridOpacity,
     depthWrite: false,
   });
   const latitudeCount = isMobile ? 6 : 9;
@@ -128,17 +185,13 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
       new Vector3(Math.cos(angle) * radius * 1.002, 0, Math.sin(angle) * radius * 1.002),
     );
   }
-  group.add(
-    new Line(
-      new BufferGeometry().setFromPoints(equatorPoints),
-      new LineBasicMaterial({
-        color: baseColor,
-        transparent: true,
-        opacity: 0.18,
-        depthWrite: false,
-      }),
-    ),
-  );
+  const equatorMaterial = new LineBasicMaterial({
+    color: palette.dark.equator,
+    transparent: true,
+    opacity: palette.dark.equatorOpacity,
+    depthWrite: false,
+  });
+  group.add(new Line(new BufferGeometry().setFromPoints(equatorPoints), equatorMaterial));
 
   // Sparse point cloud — deliberately small and quiet.
   const pointCount = isMobile ? 320 : 680;
@@ -158,10 +211,10 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
   const pointGeometry = new BufferGeometry();
   pointGeometry.setAttribute('position', new BufferAttribute(positions, 3));
   const pointMaterial = new PointsMaterial({
-    color: lightColor,
+    color: palette.dark.point,
     size: isMobile ? 0.018 : 0.014,
     transparent: true,
-    opacity: 0.62,
+    opacity: palette.dark.pointOpacity,
     depthWrite: false,
     blending: AdditiveBlending,
     sizeAttenuation: true,
@@ -181,10 +234,10 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
   const sparkGeometry = new BufferGeometry();
   sparkGeometry.setAttribute('position', new BufferAttribute(sparkPositions, 3));
   const sparkMaterial = new PointsMaterial({
-    color: 0xffffff,
+    color: palette.dark.spark,
     size: isMobile ? 0.03 : 0.026,
     transparent: true,
-    opacity: 0.9,
+    opacity: palette.dark.sparkOpacity,
     depthWrite: false,
     blending: AdditiveBlending,
     sizeAttenuation: true,
@@ -206,7 +259,7 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
     {
       start: [-12, -40],
       end: [35, 82],
-      color: baseColor,
+      colorKey: 'arc1',
       lift: 0.18,
       speed: 0.055,
       offset: 0.04,
@@ -214,7 +267,7 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
     {
       start: [56, 18],
       end: [-26, 148],
-      color: lightColor,
+      colorKey: 'arc2',
       lift: 0.32,
       speed: 0.044,
       offset: 0.36,
@@ -222,7 +275,7 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
     {
       start: [-46, -98],
       end: [22, 32],
-      color: warmColor,
+      colorKey: 'arc3',
       lift: 0.4,
       speed: 0.062,
       offset: 0.7,
@@ -230,6 +283,7 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
   ] as const;
 
   const comets: Comet[] = [];
+  const arcBaseMaterials: Array<{ material: LineBasicMaterial; key: ArcColorKey }> = [];
 
   for (const spec of arcSpecs) {
     const start = pointOnSphere(spec.start[0], spec.start[1]);
@@ -241,15 +295,17 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
       .multiplyScalar(radius + spec.lift);
     const curve = new QuadraticBezierCurve3(start, mid, end);
 
+    const arcMaterial = new LineBasicMaterial({
+      color: palette.dark[spec.colorKey],
+      transparent: true,
+      opacity: palette.dark.arcOpacity,
+      depthWrite: false,
+    });
+    arcBaseMaterials.push({ material: arcMaterial, key: spec.colorKey });
     group.add(
       new Line(
         new BufferGeometry().setFromPoints(curve.getPoints(isMobile ? 36 : 56)),
-        new LineBasicMaterial({
-          color: spec.color,
-          transparent: true,
-          opacity: 0.24,
-          depthWrite: false,
-        }),
+        arcMaterial,
       ),
     );
 
@@ -257,16 +313,16 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
     const tailGeometry = new BufferGeometry();
     tailGeometry.setAttribute('position', new BufferAttribute(tailPositions, 3));
     const tailMaterial = new LineBasicMaterial({
-      color: spec.color,
+      color: palette.dark[spec.colorKey],
       transparent: true,
-      opacity: 0.7,
+      opacity: palette.dark.tailOpacity,
       blending: AdditiveBlending,
       depthWrite: false,
     });
     const tail = new Line(tailGeometry, tailMaterial);
     group.add(tail);
 
-    const head = new Sprite(makeGlowMaterial(spec.color));
+    const head = new Sprite(makeGlowMaterial(palette.dark[spec.colorKey]));
     head.scale.set(0.11, 0.11, 1);
     group.add(head);
 
@@ -277,15 +333,19 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
       tailGeometry,
       tailPositions,
       tailMaterial,
+      colorKey: spec.colorKey,
       offset: spec.offset,
       speed: spec.speed,
+      tailOpacity: palette.dark.tailOpacity,
+      headOpacity: palette.dark.headOpacity,
     });
   }
 
   // Thin orbital rings with a single moving node each.
   const orbitNodes: OrbitNode[] = [];
+  const orbitMaterials: Array<{ material: LineBasicMaterial; key: OrbitColorKey }> = [];
 
-  const addOrbit = (orbitRadius: number, color: number, opacity: number, speed: number, tilt: number) => {
+  const addOrbit = (orbitRadius: number, colorKey: OrbitColorKey, speed: number, tilt: number) => {
     const orbit = new Group();
     orbit.rotation.x = tilt;
     orbit.rotation.z = 0.24;
@@ -297,36 +357,38 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
         new Vector3(Math.cos(angle) * orbitRadius, Math.sin(angle) * orbitRadius, 0),
       );
     }
-    orbit.add(
-      new Line(
-        new BufferGeometry().setFromPoints(ringPoints),
-        new LineBasicMaterial({
-          color,
-          transparent: true,
-          opacity,
-          depthWrite: false,
-        }),
-      ),
-    );
+    const ringMaterial = new LineBasicMaterial({
+      color: palette.dark[colorKey],
+      transparent: true,
+      opacity: colorKey === 'orbit1' ? palette.dark.orbit1Opacity : palette.dark.orbit2Opacity,
+      depthWrite: false,
+    });
+    orbitMaterials.push({ material: ringMaterial, key: colorKey });
+    orbit.add(new Line(new BufferGeometry().setFromPoints(ringPoints), ringMaterial));
 
-    const node = new Sprite(makeGlowMaterial(color));
+    const node = new Sprite(makeGlowMaterial(palette.dark[colorKey]));
     node.scale.set(0.075, 0.075, 1);
     orbit.add(node);
     group.add(orbit);
 
-    orbitNodes.push({ node, radius: orbitRadius, speed, offset: Math.random() * Math.PI * 2 });
+    orbitNodes.push({
+      node,
+      radius: orbitRadius,
+      speed,
+      offset: Math.random() * Math.PI * 2,
+      colorKey,
+    });
   };
 
-  addOrbit(radius * 1.18, baseColor, 0.13, 0.16, Math.PI / 2.35);
-  addOrbit(radius * 1.3, warmColor, 0.08, -0.11, Math.PI / 1.95);
+  addOrbit(radius * 1.18, 'orbit1', 0.16, Math.PI / 2.35);
+  addOrbit(radius * 1.3, 'orbit2', -0.11, Math.PI / 1.95);
 
   // Fresnel atmosphere: a clean rim light instead of a flat transparent shell.
-  group.add(
-    new Mesh(
-      new SphereGeometry(radius * 1.025, isMobile ? 48 : 72, isMobile ? 32 : 48),
-      new ShaderMaterial({
+  const atmosphereMaterial = new ShaderMaterial({
         uniforms: {
-          uColor: { value: new Color(baseColor) },
+          uColor: { value: new Color(palette.dark.atmosphere) },
+          uOpacity: { value: palette.dark.atmosphereOpacity },
+          uBase: { value: palette.dark.atmosphereBase },
         },
         vertexShader: `
           varying vec3 vNormal;
@@ -340,19 +402,93 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
         `,
         fragmentShader: `
           uniform vec3 uColor;
+          uniform float uOpacity;
+          uniform float uBase;
           varying vec3 vNormal;
           varying vec3 vView;
           void main() {
             float rim = pow(1.0 - max(dot(vNormal, vView), 0.0), 2.6);
-            gl_FragColor = vec4(uColor, rim * 0.24);
+            gl_FragColor = vec4(uColor, uBase + rim * uOpacity);
           }
         `,
-        transparent: true,
-        blending: AdditiveBlending,
-        depthWrite: false,
-      }),
+    transparent: true,
+    blending: AdditiveBlending,
+    depthWrite: false,
+  });
+  group.add(
+    new Mesh(
+      new SphereGeometry(radius * 1.025, isMobile ? 48 : 72, isMobile ? 32 : 48),
+      atmosphereMaterial,
     ),
   );
+
+  let sparkBaseOpacity: number = palette.dark.sparkOpacity;
+  let sparkTwinkle: number = palette.dark.sparkTwinkle;
+
+  const applyTheme = () => {
+    const theme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    const p = palette[theme];
+    const blending = p.blending;
+
+    gridMaterial.color.setHex(p.grid);
+    gridMaterial.opacity = p.gridOpacity;
+
+    equatorMaterial.color.setHex(p.equator);
+    equatorMaterial.opacity = p.equatorOpacity;
+
+    pointMaterial.color.setHex(p.point);
+    pointMaterial.opacity = p.pointOpacity;
+    pointMaterial.size = theme === 'light' ? (isMobile ? 0.026 : 0.021) : (isMobile ? 0.018 : 0.014);
+    pointMaterial.blending = blending;
+    pointMaterial.needsUpdate = true;
+
+    sparkMaterial.color.setHex(p.spark);
+    sparkMaterial.size = theme === 'light' ? (isMobile ? 0.04 : 0.034) : (isMobile ? 0.03 : 0.026);
+    sparkBaseOpacity = p.sparkOpacity;
+    sparkTwinkle = p.sparkTwinkle;
+    sparkMaterial.blending = blending;
+    sparkMaterial.needsUpdate = true;
+
+    arcBaseMaterials.forEach(({ material, key }) => {
+      material.color.setHex(p[key]);
+      material.opacity = p.arcOpacity;
+      material.blending = blending;
+      material.needsUpdate = true;
+    });
+
+    comets.forEach((comet) => {
+      const color = p[comet.colorKey];
+      comet.tailMaterial.color.setHex(color);
+      comet.tailMaterial.blending = blending;
+      comet.tailMaterial.needsUpdate = true;
+      comet.head.material.color.setHex(color);
+      comet.head.material.blending = blending;
+      comet.head.material.needsUpdate = true;
+      comet.tailOpacity = p.tailOpacity;
+      comet.headOpacity = p.headOpacity;
+    });
+
+    orbitMaterials.forEach(({ material, key }) => {
+      material.color.setHex(p[key]);
+      material.opacity = key === 'orbit1' ? p.orbit1Opacity : p.orbit2Opacity;
+      material.blending = blending;
+      material.needsUpdate = true;
+    });
+
+    orbitNodes.forEach((orbit) => {
+      orbit.node.material.color.setHex(p[orbit.colorKey]);
+      orbit.node.material.blending = blending;
+      orbit.node.material.needsUpdate = true;
+    });
+
+    atmosphereMaterial.uniforms.uColor.value.setHex(p.atmosphere);
+    atmosphereMaterial.uniforms.uOpacity.value = p.atmosphereOpacity;
+    atmosphereMaterial.uniforms.uBase.value = p.atmosphereBase;
+    atmosphereMaterial.blending = blending;
+    atmosphereMaterial.needsUpdate = true;
+
+    if (reduceMotion) renderer.render(scene, camera);
+  };
 
   const targetPointer = { x: 0, y: 0 };
   const pointer = { x: 0, y: 0 };
@@ -420,7 +556,7 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
     group.rotation.z = -0.04 + pointer.x * 0.045;
     group.position.y = Math.sin(elapsed * 0.32) * 0.012;
 
-    sparkMaterial.opacity = 0.72 + Math.sin(elapsed * 1.35) * 0.18;
+    sparkMaterial.opacity = sparkBaseOpacity + Math.sin(elapsed * 1.35) * sparkTwinkle;
 
     for (const comet of comets) {
       const progress = 0.07 + ((elapsed * comet.speed + comet.offset) % 0.86);
@@ -434,13 +570,13 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
         comet.tailPositions[i * 3 + 2] = temp.z;
       }
       comet.tailGeometry.attributes.position.needsUpdate = true;
-      comet.tailMaterial.opacity = 0.12 + edge * 0.62;
+      comet.tailMaterial.opacity = comet.tailOpacity * (0.17 + edge * 0.83);
 
       comet.curve.getPointAt(progress, temp);
       comet.head.position.copy(temp);
       const headScale = 0.065 + edge * 0.065;
       comet.head.scale.set(headScale, headScale, 1);
-      comet.head.material.opacity = 0.35 + edge * 0.65;
+      comet.head.material.opacity = comet.headOpacity * (0.4 + edge * 0.6);
     }
 
     for (const orbit of orbitNodes) {
@@ -463,6 +599,13 @@ export function initGlobe(canvas: HTMLCanvasElement): void {
       frame = requestAnimationFrame(draw);
     }
   };
+
+  applyTheme();
+  const themeObserver = new MutationObserver(applyTheme);
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
 
   resize();
   draw();

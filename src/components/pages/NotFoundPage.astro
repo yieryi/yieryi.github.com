@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
+import { useTranslations, localizePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<BaseLayout lang={lang} title="404" description={t('notFound.desc')} noIndex>
+  <section class="not-found">
+    <div class="container not-found-inner">
+      <span class="not-found-code">{t('notFound.code')}</span>
+      <h1>{t('notFound.title')}</h1>
+      <p>{t('notFound.desc')}</p>
+      <div class="not-found-actions">
+        <a class="btn btn-primary" href={localizePath('/', lang)}>
+          {t('notFound.home')}
+          <Icon name="arrow-right" size={15} />
+        </a>
+        <button class="btn btn-ghost" type="button" data-search-open>
+          {t('notFound.search')}
+          <Icon name="search" size={15} />
+        </button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

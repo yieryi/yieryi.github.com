@@ -1,10 +1,14 @@
 ---
 title: Cesium 三维地球融合全景效果
+titleEn: "Cesium Globe + Panorama Integration"
 description: 不依赖第三方库，复用 Cesium 的 WebGL 渲染流程，实现三维地球与全景视图的无缝融合。
+descriptionEn: "Reusing Cesium's WebGL render pipeline to blend a 3D globe with a panoramic view, without third-party libraries."
 date: 2021-09-06
 updated: 2021-12-12
 category: Cesium
+categoryEn: "Cesium"
 series: Cesium 实战
+seriesEn: "Cesium in Practice"
 tags: [Cesium, 全景, WebGL, Three.js]
 draft: false
 featured: true

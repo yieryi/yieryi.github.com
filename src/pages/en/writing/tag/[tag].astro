@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import TagPage from '../../../../components/pages/TagPage.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((post) => post.data.tags.includes(tag))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<TagPage tag={tag} posts={posts} lang="en" />

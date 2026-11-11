@@ -1,6 +1,6 @@
 # WANGKANG 个人站重构方案
 
-> 状态：MVP 已完成，等待切换上线
+> 状态：MVP + 中英双语 + 日夜主题已完成，等待切换上线
 > 开始日期：2026-11-11
 > 当前分支：`astro`
 > 线上旧站：`main` 分支（Jekyll Paper 模板，保持不动，直到新站验收）
@@ -31,34 +31,37 @@
 | 首屏 3D | 直接上，但保持简单：低面数线框/点云地球 + 缓慢旋转，懒加载 + 静态兜底 |
 | 技术栈 | Astro 7 + MDX + 原生 CSS + Three.js（仅首屏按需加载） |
 | 部署 | GitHub Actions 构建，GitHub Pages 托管 |
-| 内容语言 | 中文为主，代码/术语保留英文 |
+| 内容语言 | 中文为主（默认 `/`），英文为辅（`/en/`），支持切换 |
 | 旧站 | 保留在 `main` 分支，`astro` 分支完成后切换 |
+| 主题 | 日夜切换，首次跟随系统，手动选择写入 localStorage |
 
 ## 2.1 当前进度
 
 - 已完成：工程骨架、设计系统、首页 3D 与全部内容页、6 篇文章迁移、3 个项目案例、标签/系列、搜索、下载中心、Lab 小工具、简历页、RSS/Sitemap/OG、GitHub Actions 配置、内部链接检查。
-- 质量：Lighthouse 桌面/移动端首页与主要内页均为 Performance 100 / Accessibility 100 / Best Practices 100 / SEO 100。
+- 质量：Lighthouse 桌面/移动端首页与主要内页均为 Performance 100 / Accessibility 100 / Best Practices 100 / SEO 100；axe WCAG A/AA 扫描通过。
 - 待完成：合并到 `main`、在 GitHub 仓库设置里把 Pages Source 切到 GitHub Actions、接 Lighthouse CI 实测、提交搜索引擎。
 - 旧站：`main` 分支仍保留 Jekyll 版本，可随时回滚。
 
 ## 3. 信息架构
 
 ```
-/                    首页
-/work/               项目案例列表
-/work/<slug>/        项目案例详情
-/writing/            文章列表（搜索、标签、系列）
-/writing/<slug>/     文章详情
-/writing/tag/<tag>/  标签聚合
-/writing/series/<s>/ 系列聚合
-/lab/                实验与小工具
-/downloads/          资源下载
-/about/              关于 / 履历 / 联系方式
-/resume/             打印友好简历（可另存为 PDF）
+/                    中文首页（默认）
+/work/               中文项目案例列表
+/work/<slug>/        中文项目案例详情
+/writing/            中文文章列表（搜索、标签、系列）
+/writing/<slug>/     中文文章详情
+/writing/tag/<tag>/  中文标签聚合
+/writing/series/<s>/ 中文系列聚合
+/lab/                中文实验与小工具
+/downloads/          中文资源下载
+/about/              中文关于 / 履历 / 联系方式
+/resume/             中文打印友好简历
+/en/...              英文对应页面
 /404                 自定义 404
-/rss.xml             RSS
+/rss.xml             中文 RSS
+/en/rss.xml          英文 RSS
 /sitemap-index.xml   Sitemap
-/search.json         站内搜索数据
+/search.json         中英双语搜索数据
 ```
 
 ### 导航
@@ -79,6 +82,8 @@
 
 ### 4.1 色彩
 
+日间 / 夜间通过 `html[data-theme]` 切换。日间使用浅色纸面 + 深色文字，夜间使用深空墨蓝 + 浅色文字；首屏和页面 Hero 使用独立的 `--hero-*` 令牌，日间为浅色技术图，夜间为深色数字地球。
+
 | Token | 值 | 用途 |
 |---|---|---|
 | `--bg-deep` | `#070b12` | 深色首屏、页脚 |
@@ -93,14 +98,22 @@
 | `--accent-2` | `#4c8dff` | 次强调（Cesium 蓝） |
 | `--warm` | `#ffb86b` | 少量暖色提示 |
 
-### 4.2 字体
+### 4.2 主题
+
+- 首次访问：跟随 `prefers-color-scheme`。
+- 手动切换：写入 `localStorage`，刷新后保持。
+- 切换按钮在 Header：日间显示月亮，夜间显示太阳。
+- 3D 场景通过 `MutationObserver` 监听 `data-theme`，同步点云、网格、曲线与 Fresnel 边缘光的颜色和混合模式。
+- 文章/项目正文背景、卡片、表格、代码、标签、按钮都使用主题令牌，不写死颜色。
+
+### 4.3 字体
 
 - 展示字体：`"Avenir Next", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif`
 - 正文字体：`-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif`
 - 等宽字体：`"JetBrains Mono", "SFMono-Regular", Consolas, monospace`
 - 不加载完整中文字体包，避免首屏被字体拖慢。
 
-### 4.3 版式
+### 4.4 版式
 
 - 内容最大宽度：`1200px`
 - 长文正文宽度：`720px`
@@ -109,18 +122,19 @@
 - 圆角：`12px`（卡片）/ `999px`（标签）
 - 边框：`1px` 细线为主，少用阴影
 
-### 4.4 视觉母题
+### 4.5 视觉母题
 
 - 等高线、三角网、坐标刻度、图幅编号
 - 深色区域使用细网格 + 微弱噪点
 - 浅色区域使用大留白 + 细边框
 - 动效克制：200–400ms，尊重 `prefers-reduced-motion`
 
-### 4.5 首屏 3D
+### 4.6 首屏 3D
 
 - 内容：稀疏点云 + 经纬网曲面 + 三条曲线/彗尾 + 轨道节点 + Fresnel 边缘光
 - 动效：缓慢自转、曲线彗尾流动、轨道节点移动、镜头推拉（约 2.4s 入场）与呼吸缩放
-- 色彩：以地表青 + 浅青白为主，少量暖橙做点缀，避免大面积蓝色点云
+- 色彩：夜间以地表青 + 浅青白为主，少量暖橙做点缀；日间转为深青/深蓝/琥珀的技术图配色，避免大面积蓝色点云
+- 主题：通过 `data-theme` 自动切换材质颜色与混合模式
 - 技术：Three.js，动态 `import()`，首屏 HTML 先渲染文字和静态兜底
 - 性能：
   - DPR 上限 `1.5`
@@ -138,7 +152,8 @@ Astro 7
 ├── MDX（项目详情，文章可逐步升级）
 ├── 原生 CSS + Design Tokens
 ├── Three.js（仅首页 Hero 动态加载）
-├── 客户端原生 JS（搜索、筛选、坐标工具）
+├── 客户端原生 JS（搜索、筛选、坐标工具、主题切换）
+├── i18n 字典（`src/i18n`）
 ├── @astrojs/rss
 ├── @astrojs/sitemap
 └── GitHub Actions → GitHub Pages
@@ -161,8 +176,10 @@ scripts/                 新建文章等维护脚本
 src/
   components/            页面组件
   content/
-    blog/                文章 Markdown
-    projects/            项目案例 MDX
+    blog/                中文文章 Markdown（含英文标题/摘要）
+    projects/            中文项目案例 MDX
+    projects-en/         英文项目案例 MDX
+  i18n/                  界面文案、语言与路径工具
   data/                  站点信息、下载注册表、旧链接
   layouts/               基础布局 / 文章布局 / 项目布局
   pages/                 路由
@@ -180,11 +197,15 @@ package.json
 
 ```yaml
 title: 标题
+titleEn: 英文标题（可选）
 description: 列表和 SEO 用的一句话摘要
+descriptionEn: 英文摘要（可选）
 date: 2021-09-06
 updated: 2025-05-18
 category: Cesium
+categoryEn: Cesium
 series: Cesium 实战
+seriesEn: Cesium in Practice
 tags: [Cesium, WebGL]
 cover: /assets/images/...   # 可选
 draft: false
@@ -254,6 +275,8 @@ cover: engine
 - [x] 旧外链清理（示例索引改为存档说明）
 - [x] 内部链接静态检查（bun run check:links）
 - [x] 分类 OG 图与 Web App Manifest
+- [x] 中英双语页面与语言切换
+- [x] 日夜主题切换与主题化 3D 场景
 
 ### Phase 5：上线
 
@@ -288,6 +311,9 @@ cover: engine
 - [x] 键盘可操作搜索与导航
 - [x] `prefers-reduced-motion` 下无持续动画
 - [x] 文章正文在浅色背景下长时间阅读舒适
+- [x] 中英文切换保留当前页面（系列页做中英映射）
+- [x] 日夜主题切换、刷新保持、首次跟随系统
+- [x] 日间/夜间均通过 axe WCAG A/AA 扫描
 
 ### 维护
 
@@ -306,7 +332,7 @@ cover: engine
 
 ## 9. 后续迭代（不在本次 MVP）
 
-- 英文版 / 中英切换
+- 英文文章正文全文翻译（当前英文页为英文标题/摘要 + 中文正文）
 - giscus 评论
 - 文章 OG 图按标题自动生成（当前按分类复用）
 - Cesium Demo 在线画廊
@@ -329,3 +355,4 @@ cover: engine
 | 2026-11-11 | 建立方案与使用文档；完成 Astro 重构 MVP：首页 3D、项目案例、文章迁移、标签/系列、搜索、下载、Lab、简历、RSS/Sitemap、GitHub Actions；清理旧 Jekyll 文件并保留 `main` 回滚能力 |
 | 2026-11-11 | 补充分类 OG 图、Web App Manifest、内部链接检查；Lighthouse 桌面/移动端主要页面全部 100 分；修复对比度与标题层级问题 |
 | 2026-11-11 | 首屏 3D 视觉升级：稀疏点云、经纬网面、曲线彗尾、Fresnel 边缘光、镜头推拉；移除年限与经历数量展示 |
+| 2026-11-11 | 完成中英双语：`/en/` 路由、语言切换、英文项目内容、英文 SEO/OG/RSS/搜索；完成日夜主题：浅色 Hero、主题化 3D、localStorage 持久化 |

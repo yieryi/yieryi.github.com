@@ -33,19 +33,27 @@
 }
 
 .breadcrumb span {
+  color: var(--ink-mute);
+}
+
+.breadcrumb span:not(:last-child) {
   color: var(--line-light-strong);
 }
 
 .breadcrumb-dark {
-  color: var(--text-on-dark-mute);
+  color: var(--hero-muted);
 }
 
 .breadcrumb-dark span {
-  color: var(--line-dark-strong);
+  color: var(--hero-muted);
+}
+
+.breadcrumb-dark span:not(:last-child) {
+  color: var(--hero-line);
 }
 
 .breadcrumb-dark a:hover {
-  color: var(--accent);
+  color: var(--hero-accent);
 }
 
 /* --------------------------------------------------------------------------
@@ -71,7 +79,7 @@
 }
 
 .post-header-inner {
-  width: min(100%, calc(var(--content-width) + 220px + 64px));
+  max-width: calc(var(--content-width) + 220px + 64px);
   margin-inline: auto;
 }
 
@@ -137,6 +145,25 @@
 
 .post-content {
   min-width: 0;
+}
+
+.post-language-note {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+  padding: 14px 18px;
+  border: 1px solid var(--line-light);
+  border-left: 3px solid var(--accent-ink);
+  border-radius: var(--radius-sm);
+  background: var(--paper-2);
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.post-language-note strong {
+  color: var(--ink);
 }
 
 .toc {
@@ -330,6 +357,7 @@
 }
 
 .prose a {
+  overflow-wrap: anywhere;
   color: var(--accent-ink);
   text-decoration: underline;
   text-decoration-color: rgba(12, 133, 116, 0.35);
@@ -423,14 +451,14 @@
 }
 
 .prose tr:nth-child(even) td {
-  background: rgba(238, 241, 245, 0.5);
+  background: var(--table-stripe);
 }
 
 .prose code {
   padding: 2px 6px;
   border-radius: 5px;
-  background: #e7ebf1;
-  color: #0b6456;
+  background: var(--code-bg);
+  color: var(--code-text);
   font-family: var(--font-mono);
   font-size: 0.84em;
 }
@@ -512,16 +540,16 @@
   position: relative;
   overflow: hidden;
   padding: calc(var(--header-height) + 64px) 0 64px;
-  background: var(--bg-deep);
-  color: var(--text-on-dark);
+  background: var(--hero-bg);
+  color: var(--hero-text);
 }
 
 .project-hero::before {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, var(--hero-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--hero-grid-line) 1px, transparent 1px);
   background-size: 64px 64px;
   content: "";
   mask-image: linear-gradient(to bottom, #000, transparent 95%);
@@ -549,7 +577,7 @@
 .project-hero-summary {
   max-width: 620px;
   margin-top: 18px;
-  color: var(--text-on-dark-soft);
+  color: var(--hero-muted);
   font-size: 1.02rem;
 }
 
@@ -559,11 +587,11 @@
   gap: 18px;
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid var(--line-dark);
+  border-top: 1px solid var(--hero-line);
 }
 
 .project-hero-meta dt {
-  color: var(--text-on-dark-mute);
+  color: var(--hero-muted);
   font-family: var(--font-mono);
   font-size: 0.62rem;
   letter-spacing: 0.1em;
@@ -572,7 +600,7 @@
 
 .project-hero-meta dd {
   margin: 6px 0 0;
-  color: var(--text-on-dark);
+  color: var(--hero-text);
   font-size: 0.86rem;
 }
 
@@ -684,8 +712,8 @@
 
 .filter-chip.is-active {
   border-color: var(--accent-ink);
-  background: var(--accent-ink);
-  color: #fff;
+  background: var(--accent-solid);
+  color: var(--accent-on-solid);
 }
 
 .writing-count {

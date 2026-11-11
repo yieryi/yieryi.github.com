@@ -1,57 +1,102 @@
 ---
 import Icon from './Icon.astro';
 import { site } from '../data/site';
+import {
+  useTranslations,
+  localizePath,
+  switchLangPath,
+  type Lang,
+} from '../i18n/utils';
 
-const pathname = Astro.url.pathname;
-
-function isActive(href: string) {
-  if (href === '/') return pathname === '/';
-  return pathname === href || pathname.startsWith(href);
+interface Props {
+  lang: Lang;
 }
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const pathname = Astro.url.pathname;
+const role = lang === 'zh' ? site.role : site.roleEn;
+const switchHref = switchLangPath(pathname, lang === 'zh' ? 'en' : 'zh');
+
+const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.downloads' | 'nav.about'> = {
+  '/work/': 'nav.work',
+  '/writing/': 'nav.writing',
+  '/lab/': 'nav.lab',
+  '/downloads/': 'nav.downloads',
+  '/about/': 'nav.about',
+};
+
+const isActive = (href: string) => {
+  const localized = localizePath(href, lang);
+  return pathname === localized || pathname.startsWith(localized);
+};
 ---
 
 <header class="site-header" data-open="false">
   <div class="container header-inner">
-    <a class="brand" href="/">
+    <a class="brand" href={localizePath('/', lang)}>
       <span class="brand-mark" aria-hidden="true"><span>WK</span></span>
       <span class="brand-text">
         <span class="brand-name">{site.name}</span>
-        <span class="brand-sub">{site.role}</span>
+        <span class="brand-sub">{role}</span>
       </span>
     </a>
 
-    <nav class="site-nav" id="site-navigation" aria-label="主导航">
+    <nav class="site-nav" id="site-navigation" aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
       {site.nav.map((item) => (
         <a
           class="nav-link"
-          href={item.href}
+          href={localizePath(item.href, lang)}
           aria-current={isActive(item.href) ? 'page' : undefined}
         >
-          {item.label}
+          {t(navKeys[item.href])}
         </a>
       ))}
     </nav>
 
     <div class="header-actions">
+      <a
+        class="lang-switch"
+        href={switchHref}
+        hreflang={lang === 'zh' ? 'en' : 'zh-CN'}
+        aria-label={`${t('lang.switch')} · ${t('lang.switchLabel')}`}
+      >
+        {t('lang.switch')}
+      </a>
+
+      <button
+        class="icon-btn theme-toggle"
+        type="button"
+        data-theme-toggle
+        data-label-dark={t('theme.toDark')}
+        data-label-light={t('theme.toLight')}
+        data-label-title={t('theme.title')}
+        aria-label={t('theme.toDark')}
+        title={t('theme.title')}
+      >
+        <span class="theme-icon-moon"><Icon name="moon" size={17} /></span>
+        <span class="theme-icon-sun"><Icon name="sun" size={17} /></span>
+      </button>
+
       <button
         class="icon-btn search-trigger"
         type="button"
         data-search-open
-        aria-label="搜索"
+        aria-label={t('header.search')}
         aria-haspopup="dialog"
         aria-controls="search-dialog"
-        title="搜索（⌘K）"
+        title={t('header.searchTitle')}
       >
         <Icon name="search" size={17} />
-        <span>搜索</span>
+        <span>{t('header.search')}</span>
       </button>
 
       <a
-        class="icon-btn"
+        class="icon-btn header-github"
         href={site.github}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="GitHub"
+        aria-label={t('header.github')}
       >
         <Icon name="github" size={17} />
       </a>
@@ -60,7 +105,9 @@ function isActive(href: string) {
         class="icon-btn menu-toggle"
         type="button"
         data-menu-toggle
-        aria-label="打开菜单"
+        data-label-open={t('header.menuOpen')}
+        data-label-close={t('header.menuClose')}
+        aria-label={t('header.menuOpen')}
         aria-expanded="false"
         aria-controls="site-navigation"
       >
@@ -80,7 +127,7 @@ function isActive(href: string) {
     if (!header || !toggle) return;
     header.dataset.open = 'false';
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-label', '打开菜单');
+    toggle.setAttribute('aria-label', toggle.dataset.labelOpen ?? 'Open menu');
     document.body.classList.remove('menu-open');
   };
 
@@ -96,7 +143,10 @@ function isActive(href: string) {
     const next = header.dataset.open !== 'true';
     header.dataset.open = String(next);
     toggle.setAttribute('aria-expanded', String(next));
-    toggle.setAttribute('aria-label', next ? '关闭菜单' : '打开菜单');
+    toggle.setAttribute(
+      'aria-label',
+      (next ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? 'Menu',
+    );
     document.body.classList.toggle('menu-open', next);
   });
 
@@ -111,4 +161,29 @@ function isActive(href: string) {
   window.addEventListener('resize', () => {
     if (window.innerWidth > 900) closeMenu();
   });
+
+  const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const themeMeta = document.querySelector<HTMLMetaElement>('#theme-color-meta');
+  const themeKey = 'wangkang-theme';
+
+  const applyTheme = (theme: 'light' | 'dark', persist = false) => {
+    document.documentElement.dataset.theme = theme;
+    themeMeta?.setAttribute('content', theme === 'dark' ? '#070b12' : '#f7f8fa');
+    if (themeToggle) {
+      const label =
+        theme === 'dark'
+          ? (themeToggle.dataset.labelLight ?? 'Switch to light theme')
+          : (themeToggle.dataset.labelDark ?? 'Switch to dark theme');
+      themeToggle.setAttribute('aria-label', label);
+      themeToggle.setAttribute('title', label);
+    }
+    if (persist) localStorage.setItem(themeKey, theme);
+  };
+
+  themeToggle?.addEventListener('click', () => {
+    const current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark', true);
+  });
+
+  applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
 </script>

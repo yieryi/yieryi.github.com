@@ -1,0 +1,408 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroGlobe from '../HeroGlobe.astro';
+import ProjectCard from '../ProjectCard.astro';
+import WritingRow from '../WritingRow.astro';
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { localizePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const projects = (
+  lang === 'en' ? await getCollection('projectsEn') : await getCollection('projects')
+).sort((a, b) => a.data.order - b.data.order);
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const latestPosts = posts.slice(0, 3);
+
+const copy = {
+  zh: {
+    eyebrow: 'WANGKANG · 3D GEO-ENGINEER',
+    title1: '把真实世界，',
+    title2a: '变成',
+    title2b: '可计算、',
+    title3a: '',
+    title3b: '可渲染',
+    title3c: '的三维地图。',
+    descBefore: '我是王康，一名',
+    descStrong: '三维地理空间工程师',
+    descAfter:
+      '。做过数字地球引擎、WebGL 渲染、GIS 几何计算，也在做高精地图与三维模型的规模化生产。',
+    ctaWork: '查看项目案例',
+    ctaWriting: '阅读技术文章',
+    capEyebrow: '01 · Capabilities',
+    capTitle: '三维空间里的四个问题域',
+    capDesc: '渲染、几何、数据与工程交付。不是技术栈罗列，而是我在真实项目里反复处理的问题。',
+    capLink: '了解完整履历',
+    capabilities: [
+      {
+        icon: 'cube',
+        title: '3D 渲染引擎',
+        desc: '从 C++ 桌面端到 WebGL 浏览器端，处理材质、光照、后处理与大规模场景性能。',
+        items: ['WebGL / GLSL', 'C++ / OpenGL', '材质与后处理', '性能优化'],
+      },
+      {
+        icon: 'compass',
+        title: 'GIS 几何计算',
+        desc: '把空间查询、几何编辑、剖面与叠加分析，变成稳定可复用的引擎能力。',
+        items: ['空间分析', '几何编辑', '坐标与瓦片', '管线 / 内涝'],
+      },
+      {
+        icon: 'map',
+        title: '高精地图与三维重建',
+        desc: '面向规模化数据生产，建设编辑器工具链与三维模型半自动生产流程。',
+        items: ['高精地图', '三维建模', '半自动生产', '质量校验'],
+      },
+      {
+        icon: 'code',
+        title: '全栈交付',
+        desc: '从数据生产工具到前端展示，把技术方案落到真实项目和团队协作里。',
+        items: ['TypeScript', 'Node.js', '工具链', '工程化'],
+      },
+    ],
+    workEyebrow: '02 · Selected Work',
+    workTitle: '三个阶段，三种空间计算问题',
+    workDesc:
+      '从桌面端数字地球，到 WebGL 引擎，再到高精地图与三维模型生产。每个案例都写清楚背景、角色、关键设计和复盘。',
+    workLink: '全部项目',
+    writingEyebrow: '03 · Writing',
+    writingTitle: '把踩过的坑写下来',
+    writingDesc:
+      'Cesium、WebGL、GIS 数据与前端工程。尽量写清楚问题、方案和取舍，而不只是贴代码。',
+    writingLink: '全部文章',
+    labEyebrow: '04 · Lab',
+    labTitle: '把常用的空间计算，做成顺手的小工具',
+    labDesc: '一些不需要后端的小功能。既是给自己用，也顺手展示一下工程实现。',
+    labPoints: [
+      '坐标转换、瓦片计算，纯浏览器端完成',
+      'Cesium / GClient 示例索引，持续补充',
+      '后续会加 GeoJSON 校验、模型查看器等',
+    ],
+    labCta: '进入 Lab',
+    tools: [
+      {
+        kicker: 'Coordinate',
+        title: '坐标转换',
+        desc: 'WGS84 / GCJ02 / BD09 互转，纯前端计算。',
+        href: '/lab/#coordinate',
+      },
+      {
+        kicker: 'Tile',
+        title: '瓦片计算',
+        desc: '经纬度与 XYZ / TMS 瓦片号互算。',
+        href: '/lab/#tile',
+      },
+      {
+        kicker: 'Index',
+        title: 'Cesium 示例索引',
+        desc: '早期三维引擎示例的结构化索引。',
+        href: '/lab/#demos',
+      },
+    ],
+    moreKicker: 'More',
+    moreTitle: '持续补充',
+    moreDesc: '更多空间计算与数据生产相关的小工具，会陆续放到这里。',
+    moreArrow: 'Stay tuned',
+    aboutEyebrow: '05 · About',
+    aboutQuote: '从桌面端数字地球，到 WebGL 引擎，再到',
+    aboutQuoteAccent: '高精地图与三维重建',
+    aboutQuoteAfter:
+      '。一直在做同一件事：让真实世界在计算机里变得可计算、可表达。',
+    aboutLink: '关于我',
+    aboutMeta:
+      '做过引擎、写过工具、支撑过项目，也做过跨团队的技术协调。喜欢把复杂问题拆成可落地的小系统。',
+    resume: '查看简历',
+  },
+  en: {
+    eyebrow: 'WANGKANG · 3D GEO-ENGINEER',
+    title1: 'The real world,',
+    title2a: 'made ',
+    title2b: 'computable,',
+    title3a: 'and ',
+    title3b: 'renderable',
+    title3c: '.',
+    descBefore: "I'm Wang Kang, a ",
+    descStrong: '3D geospatial engineer',
+    descAfter:
+      '. I have worked on digital earth engines, WebGL rendering and GIS geometry, and now build HD map and 3D model production systems.',
+    ctaWork: 'View case studies',
+    ctaWriting: 'Read the writing',
+    capEyebrow: '01 · Capabilities',
+    capTitle: 'Four problem spaces in 3D',
+    capDesc:
+      'Rendering, geometry, data and delivery. Not a list of tools, but the problems I keep solving in real projects.',
+    capLink: 'Full experience',
+    capabilities: [
+      {
+        icon: 'cube',
+        title: '3D Rendering Engine',
+        desc: 'From C++ desktop engines to WebGL in the browser — materials, lighting, post-processing and large-scene performance.',
+        items: ['WebGL / GLSL', 'C++ / OpenGL', 'Materials & post', 'Performance'],
+      },
+      {
+        icon: 'compass',
+        title: 'GIS Geometry',
+        desc: 'Turning spatial queries, geometry editing, cross-sections and overlay analysis into stable engine capabilities.',
+        items: ['Spatial analysis', 'Geometry editing', 'Coordinates & tiles', 'Pipelines / flood'],
+      },
+      {
+        icon: 'map',
+        title: 'HD Map & 3D Reconstruction',
+        desc: 'Building editor tooling and semi-automated 3D model production for data at scale.',
+        items: ['HD map', '3D modeling', 'Semi-automated', 'Quality checks'],
+      },
+      {
+        icon: 'code',
+        title: 'Full-stack Delivery',
+        desc: 'From data production tools to front-end experiences, connecting technical design with real projects and teams.',
+        items: ['TypeScript', 'Node.js', 'Tooling', 'Engineering'],
+      },
+    ],
+    workEyebrow: '02 · Selected Work',
+    workTitle: 'Three stages, three spatial problems',
+    workDesc:
+      'From a desktop digital earth to a WebGL engine, then to HD map and 3D model production. Each case covers context, role, key design and reflection.',
+    workLink: 'All projects',
+    writingEyebrow: '03 · Writing',
+    writingTitle: 'Notes from the field',
+    writingDesc:
+      'Cesium, WebGL, GIS data and front-end engineering. I write down the problem, the approach and the trade-offs — not just the code.',
+    writingLink: 'All articles',
+    labEyebrow: '04 · Lab',
+    labTitle: 'Spatial utilities, built to be useful',
+    labDesc: 'Small browser-only tools. Useful for myself, and a quick look at the engineering behind them.',
+    labPoints: [
+      'Coordinate and tile calculations, entirely client-side',
+      'A growing index of Cesium / GClient demos',
+      'GeoJSON validation and a model viewer are next',
+    ],
+    labCta: 'Enter Lab',
+    tools: [
+      {
+        kicker: 'Coordinate',
+        title: 'Coordinate conversion',
+        desc: 'WGS84 / GCJ02 / BD09, entirely client-side.',
+        href: '/lab/#coordinate',
+      },
+      {
+        kicker: 'Tile',
+        title: 'Tile calculator',
+        desc: 'Latitude/longitude ↔ XYZ / TMS tile numbers.',
+        href: '/lab/#tile',
+      },
+      {
+        kicker: 'Index',
+        title: 'Cesium demo index',
+        desc: 'A structured index of early 3D engine demos.',
+        href: '/lab/#demos',
+      },
+    ],
+    moreKicker: 'More',
+    moreTitle: 'More coming',
+    moreDesc: 'More spatial tools and data-production utilities will land here.',
+    moreArrow: 'Stay tuned',
+    aboutEyebrow: '05 · About',
+    aboutQuote: 'From a desktop digital earth to a WebGL engine, and now to',
+    aboutQuoteAccent: 'HD map and 3D reconstruction',
+    aboutQuoteAfter:
+      '. The same goal: make the real world computable and expressive in a computer.',
+    aboutLink: 'About me',
+    aboutMeta:
+      'I have built engines, written tools, supported projects and coordinated across teams. I like turning complex problems into small systems that ship.',
+    resume: 'View resume',
+  },
+} as const;
+
+const c = copy[lang];
+---
+
+<BaseLayout lang={lang}>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="hero-eyebrow">{c.eyebrow}</span>
+          <h1 class="hero-title">
+            <span class="line">{c.title1}</span>
+            <span class="line">{c.title2a}<span class="accent">{c.title2b}</span></span>
+            <span class="line">{c.title3a}<span class="accent">{c.title3b}</span>{c.title3c}</span>
+          </h1>
+          <p class="hero-desc">
+            {c.descBefore}<strong>{c.descStrong}</strong>{c.descAfter}
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href={localizePath('/work/', lang)}>
+              {c.ctaWork}
+              <Icon name="arrow-right" size={16} />
+            </a>
+            <a class="btn btn-ghost" href={localizePath('/writing/', lang)}>
+              {c.ctaWriting}
+              <Icon name="arrow-up-right" size={15} />
+            </a>
+          </div>
+          <div class="hero-stats">
+            {site.stats.map((stat) => (
+              <div>
+                <div class="hero-stat-value">{stat.value}</div>
+                <div class="hero-stat-label">{lang === 'zh' ? stat.label : stat.labelEn}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <HeroGlobe />
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <section class="section section-light" id="capabilities">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">{c.capEyebrow}</span>
+          <h2 class="section-title">{c.capTitle}</h2>
+          <p class="section-desc">{c.capDesc}</p>
+        </div>
+        <a class="text-link" href={localizePath('/about/', lang)}>
+          {c.capLink}
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+
+      <div class="cap-grid">
+        {c.capabilities.map((item, index) => (
+          <article class="cap-card reveal">
+            <span class="cap-num">0{index + 1}</span>
+            <span class="cap-icon"><Icon name={item.icon} size={22} /></span>
+            <h3 class="cap-title">{item.title}</h3>
+            <p class="cap-desc">{item.desc}</p>
+            <div class="cap-list">
+              {item.items.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="work">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">{c.workEyebrow}</span>
+          <h2 class="section-title">{c.workTitle}</h2>
+          <p class="section-desc">{c.workDesc}</p>
+        </div>
+        <a class="text-link" href={localizePath('/work/', lang)}>
+          {c.workLink}
+          <Icon name="arrow-right" size={14} />
+        </a>
+      </div>
+
+      <div class="work-grid">
+        {projects.map((project) => (
+          <div class="reveal"><ProjectCard project={project} lang={lang} /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="writing">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">{c.writingEyebrow}</span>
+          <h2 class="section-title">{c.writingTitle}</h2>
+          <p class="section-desc">{c.writingDesc}</p>
+        </div>
+        <a class="text-link" href={localizePath('/writing/', lang)}>
+          {c.writingLink}
+          <Icon name="arrow-right" size={14} />
+        </a>
+      </div>
+
+      <div class="writing-list reveal">
+        {latestPosts.map((post) => <WritingRow post={post} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="lab">
+    <div class="container lab-band">
+      <div class="lab-copy reveal">
+        <span class="eyebrow">{c.labEyebrow}</span>
+        <h2 class="section-title">{c.labTitle}</h2>
+        <p class="section-desc">{c.labDesc}</p>
+        <div class="lab-points">
+          {c.labPoints.map((point) => <span class="lab-point">{point}</span>)}
+        </div>
+        <a class="btn btn-ghost" href={localizePath('/lab/', lang)} style="margin-top: 28px;">
+          {c.labCta}
+          <Icon name="arrow-right" size={15} />
+        </a>
+      </div>
+
+      <div class="tool-preview-grid reveal">
+        {c.tools.map((tool) => (
+          <a class="tool-preview" href={localizePath(tool.href, lang)}>
+            <span class="tool-preview-kicker">{tool.kicker}</span>
+            <h3>{tool.title}</h3>
+            <p>{tool.desc}</p>
+            <span class="tool-preview-arrow">{lang === 'zh' ? '打开工具' : 'Open tool'} →</span>
+          </a>
+        ))}
+        <div class="tool-preview">
+          <span class="tool-preview-kicker">{c.moreKicker}</span>
+          <h3>{c.moreTitle}</h3>
+          <p>{c.moreDesc}</p>
+          <span class="tool-preview-arrow">{c.moreArrow}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="about">
+    <div class="container about-strip">
+      <div class="reveal">
+        <span class="eyebrow">{c.aboutEyebrow}</span>
+        <p class="about-quote">
+          {c.aboutQuote}
+          <em>{c.aboutQuoteAccent}</em>{c.aboutQuoteAfter}
+        </p>
+        <a class="text-link" href={localizePath('/about/', lang)} style="margin-top: 28px;">
+          {c.aboutLink}
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+
+      <div class="about-meta reveal">
+        <p>{c.aboutMeta}</p>
+        <div class="about-mini-timeline">
+          {site.timeline.map((item) => (
+            <div class="about-mini-item">
+              <div class="about-mini-period">{lang === 'zh' ? item.period : item.periodEn}</div>
+              <div class="about-mini-title">
+                {lang === 'zh' ? item.company : item.companyEn} · {lang === 'zh' ? item.title : item.titleEn}
+              </div>
+            </div>
+          ))}
+        </div>
+        <a class="btn btn-outline" href={localizePath('/resume/', lang)}>
+          {c.resume}
+          <Icon name="arrow-up-right" size={14} />
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

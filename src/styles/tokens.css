@@ -29,10 +29,34 @@
   --accent: #38e8c6;
   --accent-soft: rgba(56, 232, 198, 0.14);
   --accent-ink: #086b5e;
+  --accent-solid: #086b5e;
+  --accent-on-solid: #ffffff;
   --accent-2: #4c8dff;
   --accent-2-soft: rgba(76, 141, 255, 0.14);
   --warm: #ffb86b;
   --danger: #e5484d;
+
+  /* Interaction / content */
+  --row-hover: rgba(255, 255, 255, 0.6);
+  --table-stripe: rgba(238, 241, 245, 0.5);
+  --code-bg: #e7ebf1;
+  --code-text: #0b6456;
+  --btn-dark-bg: #070b12;
+  --btn-dark-text: #e6edf7;
+  --card-reveal-bg: rgba(255, 255, 255, 0.55);
+
+  /* Hero / page hero (light by default) */
+  --hero-bg: #eef2f5;
+  --hero-text: #0b1220;
+  --hero-muted: #4b5563;
+  --hero-line: rgba(17, 24, 39, 0.12);
+  --hero-grid-line: rgba(17, 24, 39, 0.08);
+  --hero-glow: rgba(8, 107, 94, 0.14);
+  --hero-accent: #086b5e;
+  --hero-ghost-border: rgba(17, 24, 39, 0.22);
+  --hero-cta-bg: #086b5e;
+  --hero-cta-text: #ffffff;
+  --hero-cta-hover: #0a7f70;
 
   /* Type */
   --font-display: "Avenir Next", "Futura", "Helvetica Neue", "PingFang SC",
@@ -61,10 +85,77 @@
   color-scheme: light;
 }
 
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0b1220;
+  --paper-2: #0f1726;
+  --paper-3: #16233a;
+  --white: #101a2b;
+
+  --ink: #e6edf7;
+  --ink-soft: #b6c3d6;
+  --ink-mute: #8b9bb4;
+
+  --line-light: rgba(148, 163, 184, 0.16);
+  --line-light-strong: rgba(148, 163, 184, 0.3);
+
+  --accent-soft: rgba(56, 232, 198, 0.12);
+  --accent-ink: #5df0d5;
+  --accent-solid: #38e8c6;
+  --accent-on-solid: #04110e;
+
+  --row-hover: rgba(255, 255, 255, 0.035);
+  --table-stripe: rgba(255, 255, 255, 0.025);
+  --code-bg: #16233a;
+  --code-text: #9ff9e8;
+  --btn-dark-bg: #e6edf7;
+  --btn-dark-text: #070b12;
+  --card-reveal-bg: rgba(255, 255, 255, 0.03);
+
+  --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.35);
+
+  --hero-bg: #070b12;
+  --hero-text: #e6edf7;
+  --hero-muted: #9fb0c9;
+  --hero-line: rgba(148, 163, 184, 0.16);
+  --hero-grid-line: rgba(148, 163, 184, 0.09);
+  --hero-glow: rgba(56, 232, 198, 0.12);
+  --hero-accent: #38e8c6;
+  --hero-ghost-border: rgba(148, 163, 184, 0.28);
+  --hero-cta-bg: #38e8c6;
+  --hero-cta-text: #04110e;
+  --hero-cta-hover: #6df3d9;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --fast: 0ms;
     --base: 0ms;
     --slow: 0ms;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  .section-light,
+  .section-alt,
+  .page-body,
+  .post-header,
+  .cap-card,
+  .project-card,
+  .series-card,
+  .download-card,
+  .tool-panel,
+  .about-side,
+  .contact-item,
+  .wechat-card,
+  .post-nav a,
+  .writing-row,
+  .site-header {
+    transition:
+      background-color var(--base) var(--ease),
+      border-color var(--base) var(--ease),
+      color var(--base) var(--ease);
   }
 }

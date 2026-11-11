@@ -167,9 +167,13 @@ li {
   content: "";
 }
 
-.section-dark .eyebrow,
-.page-hero .eyebrow {
+.section-dark .eyebrow {
   color: var(--accent);
+}
+
+.page-hero .eyebrow,
+.project-hero .eyebrow {
+  color: var(--hero-accent);
 }
 
 .section-title {
@@ -220,6 +224,7 @@ li {
   min-height: 46px;
   padding: 0 22px;
   border: 1px solid transparent;
+  background: transparent;
   border-radius: 999px;
   font-size: 0.92rem;
   font-weight: 600;
@@ -264,12 +269,12 @@ li {
 }
 
 .btn-dark {
-  background: var(--bg-deep);
-  color: var(--text-on-dark);
+  background: var(--btn-dark-bg);
+  color: var(--btn-dark-text);
 }
 
 .btn-dark:hover {
-  background: var(--bg-deep-3);
+  opacity: 0.86;
 }
 
 .tag {

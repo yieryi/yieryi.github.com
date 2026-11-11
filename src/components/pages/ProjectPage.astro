@@ -1,0 +1,152 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CoverArt from '../CoverArt.astro';
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { localizePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  project: CollectionEntry<'projects'> | CollectionEntry<'projectsEn'>;
+  previous?: CollectionEntry<'projects'> | CollectionEntry<'projectsEn'>;
+  next?: CollectionEntry<'projects'> | CollectionEntry<'projectsEn'>;
+  lang: Lang;
+  index: number;
+  Content: any;
+}
+
+const { project, previous, next, lang, index, Content } = Astro.props;
+const { data } = project;
+
+const copy = {
+  zh: {
+    work: '项目',
+    eyebrow: '案例 · ',
+    role: '角色',
+    period: '周期',
+    stack: '技术栈',
+    disclaimerTitle: '关于内容：',
+    disclaimer:
+      '本文仅描述公开可说的技术方向、架构思路和个人贡献，不包含公司数据、内部系统截图或未公开指标。如需进一步交流，欢迎邮件联系。',
+    previous: '← 上一个项目',
+    next: '下一个项目 →',
+    back: '返回全部项目',
+  },
+  en: {
+    work: 'Work',
+    eyebrow: 'Case Study · ',
+    role: 'Role',
+    period: 'Period',
+    stack: 'Stack',
+    disclaimerTitle: 'About this page: ',
+    disclaimer:
+      'This page describes publicly shareable technical directions, architecture ideas and individual contributions. It does not include company data, internal screenshots or unpublished metrics. Feel free to reach out by email.',
+    previous: '← Previous project',
+    next: 'Next project →',
+    back: 'All projects',
+  },
+} as const;
+
+const c = copy[lang];
+const title = lang === 'en' ? (data.titleEn ?? data.title) : data.title;
+const summary = lang === 'en' ? (data.summaryEn ?? data.summary) : data.summary;
+const role = lang === 'en' ? (data.roleEn ?? data.role) : data.role;
+const period = lang === 'en' ? (data.periodEn ?? data.period) : data.period;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: title,
+  description: summary,
+  author: {
+    '@type': 'Person',
+    name: '王康',
+    alternateName: 'WANGKANG',
+  },
+  keywords: data.stack.join(', '),
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+  url: new URL(localizePath(`/work/${project.id}/`, lang), site.url).toString(),
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={summary}
+  image="/og/project.png"
+  type="article"
+  schema={articleSchema}
+>
+  <section class="project-hero">
+    <div class="container project-hero-grid">
+      <div>
+        <div class="breadcrumb breadcrumb-dark">
+          <a href={localizePath('/work/', lang)}>{c.work}</a>
+          <span>/</span>
+          <span>{title}</span>
+        </div>
+
+        <span class="eyebrow">{c.eyebrow}0{index + 1}</span>
+        <h1>{title}</h1>
+        <p class="project-hero-summary">{summary}</p>
+
+        <dl class="project-hero-meta">
+          <div>
+            <dt>{c.role}</dt>
+            <dd>{role}</dd>
+          </div>
+          <div>
+            <dt>{c.period}</dt>
+            <dd>{period}</dd>
+          </div>
+          <div>
+            <dt>{c.stack}</dt>
+            <dd>{data.stack.join(' / ')}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <CoverArt variant={data.cover} label={`${period} / ${role}`} />
+    </div>
+  </section>
+
+  <section class="project-body">
+    <div class="container">
+      <div class="project-article">
+        <article class="prose">
+          <Content />
+        </article>
+
+        <p class="project-disclaimer">
+          <strong>{c.disclaimerTitle}</strong>{c.disclaimer}
+        </p>
+
+        <nav class="post-nav" aria-label={lang === 'zh' ? '项目导航' : 'Project navigation'}>
+          {previous && (
+            <a href={localizePath(`/work/${previous.id}/`, lang)}>
+              <span class="post-nav-direction">{c.previous}</span>
+              <span class="post-nav-title">
+                {lang === 'en' ? (previous.data.titleEn ?? previous.data.title) : previous.data.title}
+              </span>
+            </a>
+          )}
+          {next && (
+            <a href={localizePath(`/work/${next.id}/`, lang)}>
+              <span class="post-nav-direction">{c.next}</span>
+              <span class="post-nav-title">
+                {lang === 'en' ? (next.data.titleEn ?? next.data.title) : next.data.title}
+              </span>
+            </a>
+          )}
+        </nav>
+
+        <div style="margin-top: 32px;">
+          <a class="btn btn-dark" href={localizePath('/work/', lang)}>
+            {c.back}
+            <Icon name="arrow-right" size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostPage from '../../../components/pages/PostPage.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const index = allPosts.findIndex((item) => item.id === post.id);
+const previous = allPosts[index + 1];
+const next = allPosts[index - 1];
+---
+
+<PostPage
+  post={post}
+  previous={previous}
+  next={next}
+  lang="en"
+  Content={Content}
+  headings={headings}
+/>

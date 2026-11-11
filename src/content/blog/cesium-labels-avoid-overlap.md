@@ -1,10 +1,14 @@
 ---
 title: Cesium 中 Label 的遮挡检测
+titleEn: "Cesium Label Overlap Detection"
 description: 在大场景小比例尺下解决 Cesium Label 重叠遮挡问题，按相机距离与屏幕空间做优先级筛选。
+descriptionEn: "Solving label overlap in large-scale Cesium scenes with camera-distance and screen-space priority."
 date: 2021-02-20
 updated: 2025-05-18
 category: Cesium
+categoryEn: "Cesium"
 series: Cesium 实战
+seriesEn: "Cesium in Practice"
 tags: [Cesium, Label, Billboard, 遮挡]
 draft: false
 featured: false

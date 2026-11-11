@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import SeriesPage from '../../../../components/pages/SeriesPage.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const series = [
+    ...new Set(posts.map((post) => post.data.seriesEn).filter(Boolean)),
+  ] as string[];
+  return series.map((name) => ({
+    params: { series: name },
+    props: { series: name },
+  }));
+}
+
+const { series } = Astro.props;
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .filter((post) => post.data.seriesEn === series)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<SeriesPage series={series} posts={posts} lang="en" />

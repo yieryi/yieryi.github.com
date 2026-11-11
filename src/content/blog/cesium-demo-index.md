@@ -1,10 +1,14 @@
 ---
 title: Cesium / GClient 示例索引（存档）
+titleEn: "Cesium / GClient Demo Index (Archive)"
 description: 早期三维引擎示例索引，涵盖第一人称漫游、几何编辑、管线、内涝模拟、卫星轨迹等方向。原演示地址已下线，保留作为技术索引。
+descriptionEn: "An index of early 3D engine demos covering first-person navigation, geometry editing, pipelines, flood simulation and satellite trajectories. The original demos are offline; this remains a technical index."
 date: 2025-05-18
 updated: 2026-11-11
 category: Cesium
+categoryEn: "Cesium"
 series: Cesium 实战
+seriesEn: "Cesium in Practice"
 tags: [Cesium, GClient, 示例, 三维引擎]
 draft: false
 featured: false

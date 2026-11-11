@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
+import { site } from '../../data/site';
+import { localizePath, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const focus = {
+  zh: [
+    { label: '当前方向', value: '三维重建 / 高精地图 / 数据生产' },
+    { label: '常用技术', value: 'C++ / TypeScript / WebGL / Cesium' },
+    { label: '协作方向', value: '技术交流 / 项目合作 / 内推' },
+    { label: '联系邮箱', value: site.email },
+  ],
+  en: [
+    { label: 'Focus', value: '3D reconstruction / HD map / data production' },
+    { label: 'Toolbox', value: 'C++ / TypeScript / WebGL / Cesium' },
+    { label: 'Open to', value: 'Technical exchange / collaboration / referrals' },
+    { label: 'Email', value: site.email },
+  ],
+};
+
+const capabilities = {
+  zh: [
+    { title: '3D Rendering', desc: 'WebGL / GLSL / C++ / OpenGL，材质、光照、后处理、粒子与大规模场景性能。' },
+    { title: 'GIS Geometry', desc: '空间分析、几何编辑、交并差、天际线、剖面、管线与内涝模拟。' },
+    { title: 'HD Map & 3D', desc: '高精地图生产编辑器、三维模型半自动生产、质量校验与工具链。' },
+    { title: 'Engineering', desc: 'TypeScript / Node.js / 数据生产系统 / 跨团队技术协调。' },
+  ],
+  en: [
+    { title: '3D Rendering', desc: 'WebGL / GLSL / C++ / OpenGL: materials, lighting, post-processing, particles and large-scene performance.' },
+    { title: 'GIS Geometry', desc: 'Spatial analysis, geometry editing, booleans, skylines, cross-sections, pipelines and flood simulation.' },
+    { title: 'HD Map & 3D', desc: 'HD map production editors, semi-automated 3D model production, quality checks and tooling.' },
+    { title: 'Engineering', desc: 'TypeScript / Node.js / data production systems / cross-team coordination.' },
+  ],
+};
+
+const copy = {
+  zh: {
+    eyebrow: 'About · WANGKANG',
+    title: '王康<br />三维地理空间工程师',
+    lead: '把真实世界，变成可计算、可渲染的三维地图。从桌面端数字地球走到 WebGL 引擎，再走到高精地图与三维重建。',
+    tags: ['3D Engine', 'GIS Geometry', 'HD Map', '3D Reconstruction'],
+    intro1a: '我是王康，一名',
+    intro1b: '三维地理空间工程师',
+    intro1c: '。从数字地球引擎开始，在 C++ 桌面端接触真实 GIS 数据、地形影像、矢量与模型加载。',
+    intro2: '后来加入正元地信，参与 GClient WebGL 数字地球引擎的底层研发。那段时间深入图形学，做数据格式接入、性能优化、空间分析，也把城市内涝、地下管线、数字孪生等业务需求拆成可复用的引擎能力。',
+    intro3: '现在在高德数据中心，先做高精地图生产人工编辑器的研发提效，后在模型平台参与高质量三维模型半自动生产流程，负责技术研发与跨团队协调。部分数据成果已经上线高德地图 App。',
+    intro4a: '我喜欢把复杂问题拆成可落地的小系统：',
+    intro4b: '渲染管线、几何算法、数据工具、生产流程',
+    intro4c: '。这个站点用来记录工程实践，也放一些空间计算的小工具。',
+    glance: '概览',
+    expEyebrow: '01 · Experience',
+    expTitle: '履历',
+    expDesc: '三个阶段，分别对应桌面端引擎、WebGL 引擎和高精地图/三维重建。',
+    expLink: '打印版简历',
+    capEyebrow: '02 · Capabilities',
+    capTitle: '能力边界',
+    capDesc: '不追求“什么都会”，更在意能不能把一个问题从数据、算法、渲染到交付串起来。',
+    contactEyebrow: '03 · Contact',
+    contactTitle: '聊聊三维、GIS，或者别的',
+    contactDesc: '技术交流、项目合作、招聘内推，都欢迎。邮件通常回复更快。',
+    email: '邮箱',
+    github: 'GitHub',
+    guestbook: '留言板',
+    wechat: '微信',
+    wechatTitle: '微信',
+    wechatDesc: '扫码添加，请备注来意。',
+    wechatId: '微信号',
+  },
+  en: {
+    eyebrow: 'About · WANGKANG',
+    title: 'Wang Kang<br />3D Geospatial Engineer',
+    lead: 'Turning the real world into computable, renderable 3D maps. From a desktop digital earth to a WebGL engine, and now to HD maps and 3D reconstruction.',
+    tags: ['3D Engine', 'GIS Geometry', 'HD Map', '3D Reconstruction'],
+    intro1a: "I'm Wang Kang, a ",
+    intro1b: '3D geospatial engineer',
+    intro1c: '. I started with digital earth engines on the C++ desktop side, working with real GIS data, terrain imagery, vector data and models.',
+    intro2: 'Later I joined Zhengyuan Geoinformation and worked on the core of the GClient WebGL digital earth engine. That period was deep graphics work: data format integration, performance, spatial analysis, and turning requirements from urban flood simulation, underground pipelines and digital twins into reusable engine capabilities.',
+    intro3: 'I am now at Amap Data Center. I started by improving the HD map production editor, then moved to the model platform to work on a high-quality, semi-automated 3D model production pipeline, with R&D and cross-team coordination responsibilities. Some data results are now live in the Amap app.',
+    intro4a: 'I like turning complex problems into small systems that ship: ',
+    intro4b: 'render pipelines, geometry algorithms, data tools and production workflows',
+    intro4c: '. This site is where I document the engineering and keep a few spatial utilities.',
+    glance: 'At a glance',
+    expEyebrow: '01 · Experience',
+    expTitle: 'Experience',
+    expDesc: 'Three stages across a desktop engine, a WebGL engine, and HD map / 3D reconstruction.',
+    expLink: 'Print resume',
+    capEyebrow: '02 · Capabilities',
+    capTitle: 'Where I can help',
+    capDesc: 'I do not aim to do everything. I care about connecting data, algorithms, rendering and delivery into one working system.',
+    contactEyebrow: '03 · Contact',
+    contactTitle: 'Let’s talk 3D, GIS, or anything else',
+    contactDesc: 'Technical exchange, collaboration and referrals are all welcome. Email is usually fastest.',
+    email: 'Email',
+    github: 'GitHub',
+    guestbook: 'Guestbook',
+    wechat: 'WeChat',
+    wechatTitle: 'WeChat',
+    wechatDesc: 'Scan to connect. Please mention why you are reaching out.',
+    wechatId: 'WeChat ID',
+  },
+} as const;
+
+const c = copy[lang];
+const f = focus[lang];
+const caps = capabilities[lang];
+---
+
+<BaseLayout
+  lang={lang}
+  title="About"
+  description={
+    lang === 'zh'
+      ? '王康（WANGKANG），三维地理空间工程师。做过数字地球引擎、WebGL 渲染、GIS 几何计算与高精地图数据生产。'
+      : 'WANGKANG — 3D geospatial engineer working on digital earth engines, WebGL rendering, GIS geometry and HD map data production.'
+  }
+>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <span class="eyebrow">{c.eyebrow}</span>
+      <h1 set:html={c.title} />
+      <p>{c.lead}</p>
+      <div class="page-hero-meta">
+        {c.tags.map((tag) => <span class="tag tag-dark">{tag}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="container about-intro reveal">
+      <div class="about-intro-text">
+        <p>{c.intro1a}<strong>{c.intro1b}</strong>{c.intro1c}</p>
+        <p>{c.intro2}</p>
+        <p>{c.intro3}</p>
+        <p>{c.intro4a}<strong>{c.intro4b}</strong>{c.intro4c}</p>
+      </div>
+
+      <aside class="about-side">
+        <h2>{c.glance}</h2>
+        <ul>
+          {f.map((item) => (
+            <li>
+              <span>{item.label}</span>
+              <span>{item.value}</span>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">{c.expEyebrow}</span>
+          <h2 class="section-title">{c.expTitle}</h2>
+          <p class="section-desc">{c.expDesc}</p>
+        </div>
+        <a class="btn btn-outline" href={localizePath('/resume/', lang)}>
+          {c.expLink}
+          <Icon name="printer" size={15} />
+        </a>
+      </div>
+
+      <div class="timeline reveal">
+        {site.timeline.map((item) => (
+          <div class="timeline-item">
+            <div class="timeline-period">{lang === 'zh' ? item.period : item.periodEn}</div>
+            <div class="timeline-content">
+              <h3>{lang === 'zh' ? item.title : item.titleEn}</h3>
+              <div class="timeline-company">{lang === 'zh' ? item.company : item.companyEn}</div>
+              <p class="timeline-desc">{lang === 'zh' ? item.description : item.descriptionEn}</p>
+              <div class="timeline-tags">
+                {(lang === 'zh' ? item.tags : item.tagsEn).map((tag) => <span class="tag">{tag}</span>)}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">{c.capEyebrow}</span>
+          <h2 class="section-title">{c.capTitle}</h2>
+          <p class="section-desc">{c.capDesc}</p>
+        </div>
+      </div>
+
+      <div class="cap-grid reveal">
+        {caps.map((item, index) => (
+          <article class="cap-card">
+            <span class="cap-num">0{index + 1}</span>
+            <h3 class="cap-title" style="margin-top: 22px;">{item.title}</h3>
+            <p class="cap-desc">{item.desc}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="contact" style="padding-top: 0;">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="section-head-copy">
+          <span class="eyebrow">{c.contactEyebrow}</span>
+          <h2 class="section-title">{c.contactTitle}</h2>
+          <p class="section-desc">{c.contactDesc}</p>
+        </div>
+      </div>
+
+      <div class="contact-grid reveal">
+        <div>
+          <div class="contact-list">
+            <div class="contact-item">
+              <span>{c.email}</span>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </div>
+            <div class="contact-item">
+              <span>{c.github}</span>
+              <a href={site.github} target="_blank" rel="noopener noreferrer">@yieryi</a>
+            </div>
+            <div class="contact-item">
+              <span>{c.guestbook}</span>
+              <a href={site.githubIssues} target="_blank" rel="noopener noreferrer">
+                GitHub Issues
+              </a>
+            </div>
+            <div class="contact-item">
+              <span>{c.wechat}</span>
+              <strong>{site.wechat}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="wechat-card">
+          <img src="/assets/images/wechat.webp" alt={c.wechatTitle} width="132" height="132" loading="lazy" />
+          <div>
+            <h3>{c.wechatTitle}</h3>
+            <p>{c.wechatDesc}</p>
+            <p style="margin-top: 8px;">{c.wechatId}: {site.wechat}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

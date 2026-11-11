@@ -1,34 +1,45 @@
 ---
 import Icon from './Icon.astro';
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
 ---
 
-<dialog class="search-dialog" id="search-dialog" aria-label="站内搜索">
+<dialog class="search-dialog" id="search-dialog" data-lang={lang} aria-label={lang === 'zh' ? '站内搜索' : 'Site search'}>
   <div class="search-input-row">
     <Icon name="search" size={18} />
     <input
       id="search-input"
       type="search"
-      placeholder="搜索文章、项目、标签…"
+      placeholder={t('search.placeholder')}
       autocomplete="off"
       spellcheck="false"
-      aria-label="搜索关键词"
+      aria-label={t('search.placeholder')}
     />
     <kbd>ESC</kbd>
   </div>
-  <div class="search-results" id="search-results" role="listbox" aria-label="搜索结果"></div>
+  <div class="search-results" id="search-results" role="listbox" aria-label={lang === 'zh' ? '搜索结果' : 'Search results'}></div>
   <div class="search-hint">
-    <span>↑↓ 浏览</span>
-    <span>↵ 打开</span>
-    <span>ESC 关闭</span>
+    <span>{t('search.hintUpDown')}</span>
+    <span>{t('search.hintEnter')}</span>
+    <span>{t('search.hintEsc')}</span>
   </div>
 </dialog>
 
 <script>
+  import { ui } from '../i18n/ui';
+
   type SearchItem = {
     title: string;
     description: string;
     href: string;
-    type: '文章' | '项目' | '页面';
+    type: 'article' | 'project' | 'page';
+    lang: 'zh' | 'en';
     date?: string;
     tags?: string[];
   };
@@ -36,13 +47,22 @@ import Icon from './Icon.astro';
   const dialog = document.querySelector<HTMLDialogElement>('#search-dialog');
   const input = document.querySelector<HTMLInputElement>('#search-input');
   const results = document.querySelector<HTMLElement>('#search-results');
+  const lang = dialog?.dataset.lang === 'en' ? 'en' : 'zh';
+  const labels = {
+    empty: ui[lang]['search.empty'],
+    loading: ui[lang]['search.loading'],
+    article: ui[lang]['search.typeArticle'],
+    project: ui[lang]['search.typeProject'],
+    page: ui[lang]['search.typePage'],
+  };
   let items: SearchItem[] | null = null;
   let loading = false;
   let activeIndex = -1;
   let current: SearchItem[] = [];
 
   const typeLabel = (item: SearchItem) => {
-    const parts: string[] = [item.type];
+    const type = item.type === 'article' ? labels.article : item.type === 'project' ? labels.project : labels.page;
+    const parts: string[] = [type];
     if (item.date) parts.push(item.date);
     if (item.tags?.length) parts.push(item.tags.slice(0, 2).join(' / '));
     return parts.join(' · ');
@@ -51,10 +71,10 @@ import Icon from './Icon.astro';
   const render = (query: string) => {
     if (!results) return;
     const q = query.trim().toLowerCase();
-    const all = items ?? [];
+    const all = (items ?? []).filter((item) => item.lang === lang);
     current = q
       ? all.filter((item) => {
-          const haystack = [item.title, item.description, item.type, ...(item.tags ?? [])]
+          const haystack = [item.title, item.description, ...(item.tags ?? [])]
             .join(' ')
             .toLowerCase();
           return haystack.includes(q);
@@ -67,7 +87,7 @@ import Icon from './Icon.astro';
     if (loading) {
       const p = document.createElement('p');
       p.className = 'search-empty';
-      p.textContent = '正在加载索引…';
+      p.textContent = labels.loading;
       results.append(p);
       return;
     }
@@ -75,7 +95,7 @@ import Icon from './Icon.astro';
     if (!current.length) {
       const p = document.createElement('p');
       p.className = 'search-empty';
-      p.textContent = q ? `没有找到与“${query}”相关的内容。` : '暂无内容。';
+      p.textContent = q ? `${labels.empty} “${query}”` : labels.empty;
       results.append(p);
       return;
     }

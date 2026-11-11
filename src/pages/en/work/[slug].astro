@@ -1,0 +1,28 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectPage from '../../../components/pages/ProjectPage.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projectsEn');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const all = (await getCollection('projectsEn')).sort((a, b) => a.data.order - b.data.order);
+const index = all.findIndex((item) => item.id === project.id);
+const previous = all[index - 1];
+const next = all[index + 1];
+---
+
+<ProjectPage
+  project={project}
+  previous={previous}
+  next={next}
+  lang="en"
+  index={index}
+  Content={Content}
+/>

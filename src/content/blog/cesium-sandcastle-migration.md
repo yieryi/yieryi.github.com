@@ -1,10 +1,14 @@
 ---
 title: 批量迁移 Cesium Sandcastle 示例的工程实践
+titleEn: "Batch Migrating Cesium Sandcastle Demos"
 description: 使用 Node.js、Selenium、jsdom 与正则批量迁移 Cesium Sandcastle 示例，解决路径、样式、数据源和启动入口不一致的问题。
+descriptionEn: "Using Node.js, Selenium, jsdom and regex to batch-migrate Cesium Sandcastle demos, fixing paths, styles, data sources and entry points."
 date: 2022-07-24
 updated: 2022-07-24
 category: Cesium
+categoryEn: "Cesium"
 series: Cesium 实战
+seriesEn: "Cesium in Practice"
 tags: [Cesium, Node.js, Selenium, 自动化, 爬虫]
 draft: false
 featured: true

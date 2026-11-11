@@ -1,0 +1,214 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WritingRow from '../WritingRow.astro';
+import Icon from '../Icon.astro';
+import {
+  readingTime,
+  seriesHref,
+  tagHref,
+  postCategory,
+  postSeries,
+} from '../../utils/content';
+import { type Lang } from '../../i18n/utils';
+import { tagLabel } from '../../i18n/tags';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const categories = [...new Set(posts.map((post) => postCategory(post, lang)))];
+const series = [...new Set(posts.map((post) => postSeries(post, lang)).filter(Boolean))] as string[];
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+
+const seriesDescriptions: Record<string, string> = {
+  'Cesium 实战': 'Label 遮挡、全景融合、Sandcastle 批量迁移，以及三维引擎示例索引。',
+  前端基础: 'JavaScript 模块化、工程化与浏览器端基础能力。',
+  'GIS 数据与工具': '瓦片、投影、影像下载与三维 GIS 工具链。',
+  'Cesium in Practice': 'Label overlap, panorama integration, Sandcastle migration and a demo index.',
+  'Frontend Fundamentals': 'JavaScript modules, tooling and browser fundamentals.',
+  'GIS Data & Tools': 'Tiles, projections, imagery downloads and 3D GIS tooling.',
+};
+
+const totalMinutes = posts.reduce((sum, post) => sum + readingTime(post.body), 0);
+
+const copy = {
+  zh: {
+    eyebrow: 'Writing · Notes & Engineering',
+    title: '写清楚问题，<br />比秀技术更重要。',
+    desc: 'Cesium、WebGL、GIS 数据与前端工程。记录问题、方案和取舍，尽量让后来的人少踩一次坑。',
+    articles: '篇文章',
+    series: '个系列',
+    categories: '个分类',
+    reading: '约 {n} 分钟阅读',
+    all: '全部',
+    searchPlaceholder: '搜索标题、摘要、标签…',
+    searchLabel: '搜索文章',
+    seriesKicker: 'Series',
+    count: '篇',
+    empty: '没有匹配的文章，换个关键词或分类试试。',
+    tags: 'Tags',
+  },
+  en: {
+    eyebrow: 'Writing · Notes & Engineering',
+    title: 'Clarity beats<br />technical flex.',
+    desc: 'Cesium, WebGL, GIS data and front-end engineering. I write down the problem, the approach and the trade-offs.',
+    articles: 'articles',
+    series: 'series',
+    categories: 'categories',
+    reading: '~{n} min read',
+    all: 'All',
+    searchPlaceholder: 'Search title, summary, tags…',
+    searchLabel: 'Search articles',
+    seriesKicker: 'Series',
+    count: 'articles',
+    empty: 'No matching articles. Try another keyword or category.',
+    tags: 'Tags',
+  },
+} as const;
+
+const c = copy[lang];
+const readingLabel = c.reading.replace('{n}', String(Math.max(10, Math.round(totalMinutes / 10) * 10)));
+---
+
+<BaseLayout
+  lang={lang}
+  title={lang === 'zh' ? '文章' : 'Writing'}
+  description={
+    lang === 'zh'
+      ? '王康（WANGKANG）的技术文章：Cesium、WebGL、GIS 几何计算、高精地图与三维数据生产。'
+      : 'WANGKANG — notes on Cesium, WebGL, GIS geometry, HD maps and 3D data production.'
+  }
+  image="/og/writing.png"
+>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <span class="eyebrow">{c.eyebrow}</span>
+      <h1 set:html={c.title} />
+      <p>{c.desc}</p>
+      <div class="page-hero-meta">
+        <span class="tag tag-dark">{posts.length} {c.articles}</span>
+        <span class="tag tag-dark">{series.length} {c.series}</span>
+        <span class="tag tag-dark">{categories.length} {c.categories}</span>
+        <span class="tag tag-dark">{readingLabel}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="container">
+      {series.length > 0 && (
+        <div class="series-grid reveal">
+          {series.map((name) => {
+            const count = posts.filter((post) => postSeries(post, lang) === name).length;
+            return (
+              <a class="series-card" href={seriesHref(name, lang)}>
+                <span class="series-kicker">{c.seriesKicker}</span>
+                <span class="series-title">{name}</span>
+                <span class="series-desc">{seriesDescriptions[name] ?? ''}</span>
+                <span class="series-count">{count} {c.count}</span>
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      <div class="writing-toolbar">
+        <label class="filter-search">
+          <Icon name="search" size={16} />
+          <span class="sr-only">{c.searchLabel}</span>
+          <input
+            id="writing-search"
+            type="search"
+            placeholder={c.searchPlaceholder}
+            autocomplete="off"
+          />
+        </label>
+
+        <div class="filter-chips" role="group" aria-label={c.searchLabel}>
+          <button class="filter-chip is-active" type="button" data-category={c.all} aria-pressed="true">
+            {c.all}
+          </button>
+          {categories.map((category) => (
+            <button class="filter-chip" type="button" data-category={category} aria-pressed="false">
+              {category}
+            </button>
+          ))}
+        </div>
+
+        <span class="writing-count" id="writing-count">{posts.length} {c.count}</span>
+      </div>
+
+      <div class="writing-list" id="writing-list">
+        {posts.map((post) => <WritingRow post={post} lang={lang} />)}
+      </div>
+
+      <div class="empty-state" id="writing-empty" hidden>
+        {c.empty}
+      </div>
+
+      {tags.length > 0 && (
+        <div style="margin-top: 48px;">
+          <span class="eyebrow">{c.tags}</span>
+          <div class="tag-cloud">
+            {tags.map((tag) => <a class="tag" href={tagHref(tag, lang)}>{tagLabel(tag, lang)}</a>)}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('.writing-row'));
+  const input = document.querySelector<HTMLInputElement>('#writing-search');
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-chip'));
+  const count = document.querySelector<HTMLElement>('#writing-count');
+  const empty = document.querySelector<HTMLElement>('#writing-empty');
+  let activeCategory = chips[0]?.dataset.category ?? '';
+  const countSuffix = count?.textContent?.replace(/^\d+\s*/, '') ?? '';
+
+  const applyFilter = () => {
+    const query = (input?.value ?? '').trim().toLowerCase();
+    let visible = 0;
+
+    rows.forEach((row) => {
+      const matchesCategory =
+        activeCategory === chips[0]?.dataset.category || row.dataset.category === activeCategory;
+      const haystack = [
+        row.dataset.title,
+        row.dataset.description,
+        row.dataset.category,
+        row.dataset.tags,
+      ]
+        .join(' ')
+        .toLowerCase();
+      const matchesQuery = !query || haystack.includes(query);
+      const show = matchesCategory && matchesQuery;
+      row.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    if (count) count.textContent = `${visible} ${countSuffix}`;
+    if (empty) empty.hidden = visible > 0;
+  };
+
+  input?.addEventListener('input', applyFilter);
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      activeCategory = chip.dataset.category ?? '';
+      chips.forEach((item) => {
+        const active = item === chip;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      applyFilter();
+    });
+  });
+</script>

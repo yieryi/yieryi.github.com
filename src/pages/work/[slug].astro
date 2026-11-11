@@ -1,9 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import CoverArt from '../../components/CoverArt.astro';
-import Icon from '../../components/Icon.astro';
+import ProjectPage from '../../components/pages/ProjectPage.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -13,110 +10,19 @@ export async function getStaticPaths() {
   }));
 }
 
-interface Props {
-  project: CollectionEntry<'projects'>;
-}
-
 const { project } = Astro.props;
-const { data } = project;
 const { Content } = await render(project);
-
-const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const index = allProjects.findIndex((item) => item.id === project.id);
-const previous = allProjects[index - 1];
-const next = allProjects[index + 1];
-
-const articleSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'CreativeWork',
-  name: data.title,
-  description: data.summary,
-  author: {
-    '@type': 'Person',
-    name: '王康',
-    alternateName: 'WANGKANG',
-  },
-  keywords: data.stack.join(', '),
-  inLanguage: 'zh-CN',
-  url: `https://yieryi.github.io/work/${project.id}/`,
-};
+const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const index = all.findIndex((item) => item.id === project.id);
+const previous = all[index - 1];
+const next = all[index + 1];
 ---
 
-<BaseLayout
-  title={data.title}
-  description={data.summary}
-  image="/og/project.png"
-  type="article"
-  schema={articleSchema}
->
-  <section class="project-hero">
-    <div class="container project-hero-grid">
-      <div>
-        <div class="breadcrumb breadcrumb-dark">
-          <a href="/work/">Work</a>
-          <span>/</span>
-          <span>{data.title}</span>
-        </div>
-
-        <span class="eyebrow">Case Study · 0{index + 1}</span>
-        <h1>{data.title}</h1>
-        <p class="project-hero-summary">{data.summary}</p>
-
-        <dl class="project-hero-meta">
-          <div>
-            <dt>Role</dt>
-            <dd>{data.role}</dd>
-          </div>
-          <div>
-            <dt>Period</dt>
-            <dd>{data.period}</dd>
-          </div>
-          <div>
-            <dt>Stack</dt>
-            <dd>{data.stack.join(' / ')}</dd>
-          </div>
-        </dl>
-      </div>
-
-      <CoverArt variant={data.cover} label={`${data.period} / ${data.role}`} />
-    </div>
-  </section>
-
-  <section class="project-body">
-    <div class="container">
-      <div class="project-article">
-        <article class="prose">
-          <Content />
-        </article>
-
-        <p class="project-disclaimer">
-          <strong>关于内容：</strong>
-          本文仅描述公开可说的技术方向、架构思路和个人贡献，不包含公司数据、内部系统截图或未公开指标。
-          如需进一步交流，欢迎邮件联系。
-        </p>
-
-        <nav class="post-nav" aria-label="项目导航">
-          {previous && (
-            <a href={`/work/${previous.id}/`}>
-              <span class="post-nav-direction">← 上一个项目</span>
-              <span class="post-nav-title">{previous.data.title}</span>
-            </a>
-          )}
-          {next && (
-            <a href={`/work/${next.id}/`}>
-              <span class="post-nav-direction">下一个项目 →</span>
-              <span class="post-nav-title">{next.data.title}</span>
-            </a>
-          )}
-        </nav>
-
-        <div style="margin-top: 32px;">
-          <a class="btn btn-dark" href="/work/">
-            返回全部项目
-            <Icon name="arrow-right" size={15} />
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-</BaseLayout>
+<ProjectPage
+  project={project}
+  previous={previous}
+  next={next}
+  lang="zh"
+  index={index}
+  Content={Content}
+/>

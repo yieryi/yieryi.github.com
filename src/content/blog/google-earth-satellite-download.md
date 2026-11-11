@@ -1,10 +1,14 @@
 ---
 title: 按范围下载谷歌地球卫星影像
+titleEn: "Downloading Google Earth Satellite Imagery by Extent"
 description: 通过瓦片坐标计算与 libcurl，按地理范围下载谷歌地球卫星影像，并在 Cesium 中加载验证。
+descriptionEn: "Computing tile coordinates and using libcurl to download satellite imagery for a geographic extent, then validating it in Cesium."
 date: 2021-08-16
 updated: 2021-11-06
 category: GIS
+categoryEn: "GIS"
 series: GIS 数据与工具
+seriesEn: "GIS Data & Tools"
 tags: [GIS, C++, TMS, 瓦片, 影像下载]
 draft: false
 featured: false

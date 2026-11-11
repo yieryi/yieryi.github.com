@@ -1,0 +1,193 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../Icon.astro';
+import {
+  formatDate,
+  isoDate,
+  readingTime,
+  seriesHref,
+  tagHref,
+  postTitle,
+  postDescription,
+  postCategory,
+  postSeries,
+} from '../../utils/content';
+import { localizePath, useTranslations, type Lang } from '../../i18n/utils';
+import { ogImageForCategory } from '../../utils/og';
+import { tagLabel } from '../../i18n/tags';
+import { site } from '../../data/site';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  previous?: CollectionEntry<'blog'>;
+  next?: CollectionEntry<'blog'>;
+  lang: Lang;
+  Content: any;
+  headings: Array<{ depth: number; slug: string; text: string }>;
+}
+
+const { post, previous, next, lang, Content, headings } = Astro.props;
+const { data } = post;
+const t = useTranslations(lang);
+
+const title = postTitle(post, lang);
+const description = postDescription(post, lang);
+const category = postCategory(post, lang);
+const series = postSeries(post, lang);
+const minutes = readingTime(post.body);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const image = ogImageForCategory(lang === 'zh' ? data.category : data.categoryEn);
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: isoDate(data.date),
+  dateModified: isoDate(data.updated ?? data.date),
+  author: {
+    '@type': 'Person',
+    name: '王康',
+    alternateName: 'WANGKANG',
+    url: site.url,
+  },
+  publisher: {
+    '@type': 'Person',
+    name: '王康',
+  },
+  mainEntityOfPage: new URL(localizePath(`/writing/${post.id}/`, lang), site.url).toString(),
+  keywords: data.tags.join(', '),
+  articleSection: category,
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
+};
+---
+
+<BaseLayout lang={lang} title={title} description={description} image={image} type="article" schema={articleSchema}>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <header class="post-header">
+    <div class="container post-header-inner">
+      <div class="post-kicker">
+        <a href={localizePath('/writing/', lang)}>{lang === 'zh' ? '文章' : 'Writing'}</a>
+        <span>/</span>
+        <span>{category}</span>
+        {series && (
+          <>
+            <span>/</span>
+            <a href={seriesHref(series, lang)}>{series}</a>
+          </>
+        )}
+      </div>
+
+      <h1 class="post-title">{title}</h1>
+      <p class="post-description">{description}</p>
+
+      <div class="post-meta">
+        <span>{formatDate(data.date, 'long', lang)}</span>
+        <span class="post-meta-dot"></span>
+        <span>{minutes} {t('common.minutes')}</span>
+        {data.updated && (
+          <>
+            <span class="post-meta-dot"></span>
+            <span>{t('common.updated')} {formatDate(data.updated, 'long', lang)}</span>
+          </>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <section class="page-body" style="padding-top: 8px;">
+    <div class="container">
+      <div class="post-layout">
+        <div class="post-content">
+          {lang === 'en' && (
+            <div class="post-language-note">
+              <strong>{t('article.chineseNote')}</strong>
+              <span>{t('article.chineseNoteDesc')}</span>
+            </div>
+          )}
+
+          <article class="prose" lang={lang === 'en' ? 'zh-CN' : undefined}>
+            <Content />
+          </article>
+
+          <footer class="post-footer">
+            <div class="post-footer-head">
+              <div>
+                <span class="eyebrow" style="margin-bottom: 10px;">{t('common.tags')}</span>
+                <div class="post-tags">
+                  {data.tags.map((tag) => <a class="tag" href={tagHref(tag, lang)}>{tagLabel(tag, lang)}</a>)}
+                </div>
+                {data.updated && (
+                  <p class="post-updated">
+                    {t('common.updated')}：{formatDate(data.updated, 'long', lang)}
+                  </p>
+                )}
+              </div>
+              <div class="post-footer-actions">
+                <a class="btn btn-outline" href={site.githubIssues} target="_blank" rel="noopener noreferrer">
+                  {t('common.discuss')}
+                  <Icon name="arrow-up-right" size={14} />
+                </a>
+                <a class="btn btn-dark" href={localizePath('/writing/', lang)}>
+                  {t('common.allArticles')}
+                  <Icon name="arrow-right" size={14} />
+                </a>
+              </div>
+            </div>
+
+            <nav class="post-nav" aria-label={lang === 'zh' ? '文章导航' : 'Article navigation'}>
+              {previous && (
+                <a href={localizePath(`/writing/${previous.id}/`, lang)}>
+                  <span class="post-nav-direction">← {t('common.previous')}</span>
+                  <span class="post-nav-title">{postTitle(previous, lang)}</span>
+                </a>
+              )}
+              {next && (
+                <a href={localizePath(`/writing/${next.id}/`, lang)}>
+                  <span class="post-nav-direction">{t('common.next')} →</span>
+                  <span class="post-nav-title">{postTitle(next, lang)}</span>
+                </a>
+              )}
+            </nav>
+          </footer>
+        </div>
+
+        <aside class="toc" aria-label={lang === 'zh' ? '文章目录' : 'Table of contents'}>
+          <h2>{t('article.toc')}</h2>
+          {toc.length > 0 ? (
+            <ul>
+              {toc.map((heading) => (
+                <li class={`depth-${heading.depth}`}>
+                  <a href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="toc-empty">{t('article.noToc')}</p>
+          )}
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('#reading-progress');
+  const content = document.querySelector<HTMLElement>('.post-content');
+
+  if (bar && content) {
+    const update = () => {
+      const rect = content.getBoundingClientRect();
+      const total = rect.height - window.innerHeight * 0.4;
+      const scrolled = Math.min(Math.max(-rect.top + window.innerHeight * 0.2, 0), Math.max(total, 1));
+      const progress = total > 0 ? (scrolled / total) * 100 : 0;
+      bar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
+</script>

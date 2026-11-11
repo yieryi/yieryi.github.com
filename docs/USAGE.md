@@ -3,7 +3,7 @@
 > 适用版本：Astro 7 重构版（`astro` 分支）
 > 最后更新：2026-11-11
 >
-> 当前状态：MVP 已完成，`astro` 分支可本地运行；合并到 `main` 前，线上仍是旧 Jekyll 站。
+> 当前状态：中英双语 + 日夜主题已完成，`astro` 分支可本地运行；合并到 `main` 前，线上仍是旧 Jekyll 站。
 >
 > 日常写作、加项目、加下载、发布上线，看这一份就够了。
 > 设计与重构背景见 [`REFACTOR_PLAN.md`](./REFACTOR_PLAN.md)。
@@ -48,8 +48,10 @@ bun run check:links # 先 build，再检查内部链接
 
 ```
 src/
-  content/blog/        文章（Markdown）
-  content/projects/    项目案例（MDX）
+  content/blog/        中文文章（Markdown，含英文标题/摘要）
+  content/projects/    中文项目案例（MDX）
+  content/projects-en/ 英文项目案例（MDX）
+  i18n/                界面文案、语言路径、标签翻译
   data/site.ts         姓名、邮箱、导航、社交链接
   data/downloads.ts    下载资源注册表
   data/legacy.ts       旧站 URL 重定向（补充项）
@@ -106,12 +108,16 @@ featured: false
 
 | 字段 | 必填 | 说明 |
 |---|---|---|
-| `title` | 是 | 文章标题 |
-| `description` | 是 | 列表和 SEO 摘要，建议 40–80 字 |
+| `title` | 是 | 中文文章标题 |
+| `titleEn` | 否 | 英文标题；英文页会优先使用 |
+| `description` | 是 | 中文列表和 SEO 摘要 |
+| `descriptionEn` | 否 | 英文摘要 |
 | `date` | 是 | 发布日期，`YYYY-MM-DD` |
 | `updated` | 否 | 最后更新时间 |
-| `category` | 是 | 单个分类，用于列表展示 |
-| `series` | 否 | 系列名，用于系列聚合 |
+| `category` | 是 | 单个中文分类 |
+| `categoryEn` | 否 | 英文分类 |
+| `series` | 否 | 中文系列名 |
+| `seriesEn` | 否 | 英文系列名 |
 | `tags` | 否 | 标签数组 |
 | `cover` | 否 | 封面图路径，例如 `/assets/images/...` |
 | `draft` | 否 | `true` 时不在生产构建中展示 |
@@ -201,6 +207,8 @@ featured: false
 
 `cover` 可选值：`engine` / `gis` / `map` / `data`，对应内置的抽象封面。
 
+英文项目正文放在 `src/content/projects-en/`，文件名 slug 与中文项目一致。英文页会读取这个集合，中文页读取 `src/content/projects/`。
+
 **合规提醒**：公司项目只写公开可说的技术方法、架构和个人贡献；不要放未公开数据、内部截图、真实指标。页面会自动带“已脱敏”提示。
 
 ## 6. 新增下载资源
@@ -265,13 +273,63 @@ export const site = {
 }
 ```
 
-- 改导航：调整 `nav` 数组
+- 改英文角色：`roleEn`
+- 改英文简介：`descriptionEn`
+- 改导航：调整 `nav` 数组（Header/Footer 会按语言自动加 `/en` 前缀并翻译标签）
 - 改首页文案：`src/pages/index.astro`
 - 改页脚：`src/components/Footer.astro`
 - 改关于页：`src/pages/about.astro`
 - 改简历：`src/pages/resume.astro`
 
-## 8. OG 图与分享卡片
+## 8. 中英双语与主题
+
+### 8.1 语言
+
+- 中文默认在根路径：`/`、`/work/`、`/writing/`。
+- 英文在 `/en/` 下：`/en/`、`/en/work/`、`/en/writing/`。
+- Header 右上角的 `EN / 中文` 用于切换，切换时会尽量保留当前页面。
+- 系列页会在中英系列名之间映射；标签页沿用原始标签路径，只翻译显示名。
+- 文章的英文页目前提供英文标题、摘要、分类、系列和站点导航，正文仍为中文，并在正文前显示说明。后续可逐步补充英文正文。
+
+英文内容字段：
+
+```yaml
+titleEn: English title
+descriptionEn: English summary
+categoryEn: Frontend Engineering
+seriesEn: Frontend Fundamentals
+```
+
+项目案例的英文正文位于 `src/content/projects-en/`，文件名与中文项目保持一致，例如 `gclient-webgl-engine.mdx`。新增英文项目时复制一个文件并翻译正文即可。
+
+界面文案在 `src/i18n/ui.ts`，语言路径工具在 `src/i18n/utils.ts`，标签翻译在 `src/i18n/tags.ts`。
+
+### 8.2 主题
+
+- 首次访问跟随系统 `prefers-color-scheme`。
+- Header 的月亮/太阳按钮切换日夜主题，选择会写入 `localStorage` 的 `wangkang-theme`，刷新后保持。
+- 日间：浅色纸面 + 深色文字，首屏/页面 Hero 也是浅色技术图。
+- 夜间：深空墨蓝 + 浅色文字，首屏/页面 Hero 为深色数字地球。
+- 颜色令牌在 `src/styles/tokens.css`：`--paper`、`--ink`、`--hero-bg`、`--hero-text` 等。
+- 3D 场景配色在 `src/scripts/globe.ts` 的 `palette` 中，通过 `MutationObserver` 监听 `data-theme` 自动切换。
+- 新增组件时不要写死白色/黑色，优先使用现有 token。
+
+### 8.3 检查两种模式
+
+```bash
+bun run check
+bun run build
+bun run check:links
+```
+
+手动检查：
+
+- 中文 / 英文各看一遍首页、文章、项目、下载、Lab、简历
+- 日间 / 夜间各看一遍，重点看卡片、表格、标签、按钮、代码块
+- 移动端 390px 下检查 Header 是否溢出
+- 搜索在中文页只返回中文条目，在英文页只返回英文条目
+
+## 9. OG 图与分享卡片
 
 - 默认 OG 图：`public/og/default.png`
 - 分类 OG 图：`public/og/cesium.png`、`gis.png`、`frontend.png`
@@ -280,7 +338,7 @@ export const site = {
 - 新增分类时，在 `src/utils/og.ts` 里补映射；没有映射会回退到默认图。
 - 图片尺寸统一为 1200 × 630。
 
-## 9. 首页 3D 说明
+## 10. 首页 3D 说明
 
 - 3D 容器在 `src/components/HeroGlobe.astro`，场景逻辑在 `src/scripts/globe.ts`。
 - 视觉由稀疏点云、经纬网曲面、三条曲线彗尾、轨道节点和 Fresnel 边缘光组成。
@@ -293,16 +351,16 @@ export const site = {
   3. 替换为视频或纯 CSS 视觉。
 - **不要**在 3D 里加后处理、外部模型、大贴图，除非重新评估性能预算。
 
-## 10. 站内搜索
+## 11. 站内搜索
 
-- 搜索数据由 `src/pages/search.json.ts` 在构建时生成（静态 JSON）。
-- 前端搜索组件在 `src/components/SearchDialog.astro`。
+- 搜索数据由 `src/pages/search.json.ts` 在构建时生成（静态 JSON，中英双语条目）。
+- 前端搜索组件在 `src/components/SearchDialog.astro`，会按当前页面语言过滤结果。
 - 支持 `⌘K` / `Ctrl+K` 打开，输入标题、摘要、标签过滤。
-- 新增文章后无需手动维护索引，构建会自动更新。
+- 新增文章后无需手动维护索引，构建会自动更新；记得补 `titleEn` / `descriptionEn`，否则英文搜索会回退到中文。
 
-## 11. 构建与部署
+## 12. 构建与部署
 
-### 11.1 本地构建检查
+### 12.1 本地构建检查
 
 ```bash
 bun run check
@@ -313,7 +371,7 @@ bun run preview
 
 构建产物在 `dist/`。
 
-### 11.2 GitHub Pages 自动部署
+### 12.2 GitHub Pages 自动部署
 
 仓库已配置 `.github/workflows/deploy.yml`：
 
@@ -336,14 +394,14 @@ bun run preview
 
 > 切换过程中站点可能短暂 404，这是正常的。想做到零停机，可以先把 `astro` 分支接到 Cloudflare Pages 做预览，确认后再切 GitHub Pages。
 
-### 11.3 分支预览
+### 12.3 分支预览
 
 - 日常改动推送到 `astro` 分支。
 - 本地用 `bun run dev` / `bun run preview` 检查。
 - 确认无误后合并到 `main`；`main` 的 push 会触发 GitHub Actions 自动上线。
 - 也可以在 Actions 页面手动 `workflow_dispatch`。
 
-### 11.4 回滚
+### 12.4 回滚
 
 旧站仍在 `main` 的历史中。如果新站出现严重问题：
 
@@ -354,7 +412,7 @@ bun run preview
 
 当前 `astro` 分支已经把旧 Jekyll 文件替换为新站；`main` 分支仍保留旧站。合并前请先确认 GitHub Pages 的 Source 已切换为 **GitHub Actions**。
 
-## 12. 常见问题
+## 13. 常见问题
 
 ### Q1：新增文章后列表没有出现？
 
@@ -392,14 +450,14 @@ bun run preview
 - 把文件移到 GitHub Releases
 - `public/downloads/` 只保留小文件
 
-## 13. 维护节奏
+## 14. 维护节奏
 
 - **每次发文**：`bun run check` + 本地预览
 - **每月**：`bun update` 检查依赖，跑一次构建
 - **每季度**：检查失效链接、更新 About/简历
 - **每年**：回顾设计 tokens，必要时做一次视觉微调
 
-## 14. 文档更新约定
+## 15. 文档更新约定
 
 改动以下内容时，请同步更新本文件：
 
@@ -411,9 +469,10 @@ bun run preview
 
 改动完成后，在 `docs/REFACTOR_PLAN.md` 勾选对应阶段。
 
-## 15. 更新记录
+## 16. 更新记录
 
 | 日期 | 变更 |
 |---|---|
 | 2026-11-11 | 初版：本地开发、文章/项目/下载维护、3D/搜索说明、部署与回滚 |
 | 2026-11-11 | 补充内部链接检查、分类 OG 图、Manifest 与 Lighthouse 结果 |
+| 2026-11-11 | 增加中英双语、语言切换、日夜主题与主题化 3D 场景说明 |

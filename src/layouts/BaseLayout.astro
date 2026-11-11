@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import { site } from '../data/site';
+import { getLangFromUrl, useTranslations, alternatePaths, type Lang } from '../i18n/utils';
 
 interface Props {
   title?: string;
@@ -15,12 +16,14 @@ interface Props {
   type?: 'website' | 'article';
   noIndex?: boolean;
   bodyClass?: string;
+  lang?: Lang;
   schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
+  lang = getLangFromUrl(Astro.url),
   title,
-  description = site.description,
+  description = lang === 'zh' ? site.description : site.descriptionEn,
   image = '/og/default.png',
   type = 'website',
   noIndex = false,
@@ -29,9 +32,13 @@ const {
 } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL(site.url);
-const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const t = useTranslations(lang);
+const role = lang === 'zh' ? site.role : site.roleEn;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${role}`;
 const canonical = new URL(Astro.url.pathname, siteUrl);
 const ogImage = new URL(image, siteUrl);
+const alternates = alternatePaths(Astro.url.pathname);
+const keywords = lang === 'zh' ? site.keywords : site.keywordsEn;
 
 const personSchema = {
   '@context': 'https://schema.org',
@@ -39,8 +46,8 @@ const personSchema = {
   name: site.nameZh,
   alternateName: site.name,
   url: site.url,
-  jobTitle: site.role,
-  description: site.description,
+  jobTitle: role,
+  description: lang === 'zh' ? site.description : site.descriptionEn,
   email: `mailto:${site.email}`,
   sameAs: [site.github],
   knowsAbout: [
@@ -56,23 +63,41 @@ const personSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: `${site.name} · ${site.role}`,
+  name: `${site.name} · ${role}`,
   url: site.url,
-  description: site.description,
-  inLanguage: 'zh-CN',
+  description: lang === 'zh' ? site.description : site.descriptionEn,
+  inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
 };
 
 const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ? schema : schema ? [schema] : [])];
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#070b12" />
-    <script is:inline>document.documentElement.classList.add('has-js');</script>
+    <meta id="theme-color-meta" name="theme-color" content="#f7f8fa" />
+    <script is:inline>
+      (() => {
+        let theme = 'light';
+        try {
+          const saved = localStorage.getItem('wangkang-theme');
+          if (saved === 'light' || saved === 'dark') {
+            theme = saved;
+          } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            theme = 'dark';
+          }
+        } catch {
+          // Ignore storage access errors.
+        }
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.add('has-js');
+        const meta = document.getElementById('theme-color-meta');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#070b12' : '#f7f8fa');
+      })();
+    </script>
     <noscript>
       <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
     </noscript>
@@ -80,9 +105,12 @@ const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ?
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.nameZh} />
-    <meta name="keywords" content={site.keywords.join(',')} />
+    <meta name="keywords" content={keywords.join(',')} />
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="zh-CN" href={new URL(alternates.zh, siteUrl)} />
+    <link rel="alternate" hreflang="en" href={new URL(alternates.en, siteUrl)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates.zh, siteUrl)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -92,11 +120,11 @@ const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ?
       rel="alternate"
       type="application/rss+xml"
       title={`${site.name} · RSS`}
-      href="/rss.xml"
+      href={lang === 'zh' ? '/rss.xml' : '/en/rss.xml'}
     />
 
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content={`${site.name} · ${site.role}`} />
+    <meta property="og:site_name" content={`${site.name} · ${role}`} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -104,7 +132,7 @@ const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ?
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={pageTitle} />
-    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
@@ -115,13 +143,13 @@ const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ?
     <slot name="head" />
   </head>
   <body class={bodyClass}>
-    <a class="skip-link" href="#main">跳到主要内容</a>
-    <Header />
+    <a class="skip-link" href="#main">{t('common.skip')}</a>
+    <Header lang={lang} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
-    <SearchDialog />
+    <Footer lang={lang} />
+    <SearchDialog lang={lang} />
 
     <script>
       // Reveal sections on scroll.
