@@ -30,9 +30,9 @@ export const site = {
     { label: 'About', href: '/about/' },
   ],
   stats: [
-    { value: '8+', label: '年三维 GIS 经验' },
-    { value: '3', label: '段核心工程经历' },
-    { value: '3D', label: '渲染 · 几何 · 数据' },
+    { value: '3D', label: '渲染引擎' },
+    { value: 'GIS', label: '几何与空间分析' },
+    { value: 'HD', label: '高精地图与三维重建' },
   ],
   timeline: [
     {

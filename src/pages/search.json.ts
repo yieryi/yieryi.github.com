@@ -39,7 +39,7 @@ export const GET: APIRoute = async () => {
     },
     {
       title: 'About · 关于王康',
-      description: '三维地理空间工程师，8 年三维 GIS 经验。',
+      description: '三维地理空间工程师，关注三维渲染、GIS 与高精地图数据生产。',
       href: '/about/',
       type: '页面' as const,
       tags: ['履历', '联系方式'],

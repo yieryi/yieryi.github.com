@@ -283,7 +283,9 @@ export const site = {
 ## 9. 首页 3D 说明
 
 - 3D 容器在 `src/components/HeroGlobe.astro`，场景逻辑在 `src/scripts/globe.ts`。
+- 视觉由稀疏点云、经纬网曲面、三条曲线彗尾、轨道节点和 Fresnel 边缘光组成。
 - 使用 Three.js 动态加载，不阻塞首屏文字。
+- 入场有约 2.4s 的镜头推拉，之后是轻微呼吸缩放；移动端会自动降低点数量与 DPR。
 - 页面隐藏、离开视口、`prefers-reduced-motion` 时会暂停或只渲染一帧。
 - 如果后续觉得太重，可以：
   1. 降低点数量 / 降低 DPR 上限；
