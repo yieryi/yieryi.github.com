@@ -14,7 +14,7 @@ legacy: /2021/02/20/Cesium中Label的遮挡检测
 
 
 
-### 问题
+## 问题
 
 在Cesium中，大场景小比例尺情况下POI进行文字标注时，会发生前后(上下)重叠遮盖的问题。如下所示：
 
@@ -24,7 +24,7 @@ legacy: /2021/02/20/Cesium中Label的遮挡检测
 
 <img src="/assets/images/Cesium/LabelsAvoidOverlap.webp" alt="Label 遮挡检测后的清晰效果" width="1172" height="863" loading="lazy" />
 
-### 结果演示录屏
+## 结果演示录屏
 
 <video id="video" controls preload="metadata" poster="/assets/images/Cesium/avoidLabelOverlap-poster.webp" style="width: 100%;">
 <source id="mp4" src="/assets/videos/Cesium/avoidLabelOverlap.mp4" type="video/mp4">

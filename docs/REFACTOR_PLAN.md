@@ -36,7 +36,8 @@
 
 ## 2.1 当前进度
 
-- 已完成：工程骨架、设计系统、首页 3D 与全部内容页、6 篇文章迁移、3 个项目案例、标签/系列、搜索、下载中心、Lab 小工具、简历页、RSS/Sitemap/OG、GitHub Actions 配置。
+- 已完成：工程骨架、设计系统、首页 3D 与全部内容页、6 篇文章迁移、3 个项目案例、标签/系列、搜索、下载中心、Lab 小工具、简历页、RSS/Sitemap/OG、GitHub Actions 配置、内部链接检查。
+- 质量：Lighthouse 桌面/移动端首页与主要内页均为 Performance 100 / Accessibility 100 / Best Practices 100 / SEO 100。
 - 待完成：合并到 `main`、在 GitHub 仓库设置里把 Pages Source 切到 GitHub Actions、接 Lighthouse CI 实测、提交搜索引擎。
 - 旧站：`main` 分支仍保留 Jekyll 版本，可随时回滚。
 
@@ -246,9 +247,11 @@ cover: engine
 - [x] 站内搜索（⌘K）
 - [x] 文章目录、阅读进度、代码复制
 - [x] 移动端适配
-- [x] 性能检查（首屏 3D 懒加载、图片转 WebP、视频压缩）
+- [x] 性能检查（首屏 3D 懒加载、图片转 WebP、视频压缩、Lighthouse 100）
 - [x] RSS / Sitemap / OG / robots
 - [x] 旧外链清理（示例索引改为存档说明）
+- [x] 内部链接静态检查（bun run check:links）
+- [x] 分类 OG 图与 Web App Manifest
 
 ### Phase 5：上线
 
@@ -271,7 +274,7 @@ cover: engine
 
 ### 性能
 
-- [ ] 首页首屏文字 LCP < 2.5s（待接 Lighthouse CI 实测）
+- [x] 首页首屏文字 LCP < 2.5s（Lighthouse：桌面 0.2s / 移动 0.8s）
 - [x] 3D 资源不阻塞首屏文字（动态 import + idle 加载）
 - [x] 移动端 3D 降采样（点数量、DPR、抗锯齿）
 - [x] 无布局抖动（固定画布/卡片比例）
@@ -303,7 +306,7 @@ cover: engine
 
 - 英文版 / 中英切换
 - giscus 评论
-- 文章 OG 图自动生成
+- 文章 OG 图按标题自动生成（当前按分类复用）
 - Cesium Demo 在线画廊
 - glTF 模型查看器
 -  newsletter / 邮件订阅
@@ -322,3 +325,4 @@ cover: engine
 | 日期 | 变更 |
 |---|---|
 | 2026-11-11 | 建立方案与使用文档；完成 Astro 重构 MVP：首页 3D、项目案例、文章迁移、标签/系列、搜索、下载、Lab、简历、RSS/Sitemap、GitHub Actions；清理旧 Jekyll 文件并保留 `main` 回滚能力 |
+| 2026-11-11 | 补充分类 OG 图、Web App Manifest、内部链接检查；Lighthouse 桌面/移动端主要页面全部 100 分；修复对比度与标题层级问题 |

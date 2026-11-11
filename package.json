@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "new:post": "bun run scripts/new-post.ts",
-    "new:project": "bun run scripts/new-project.ts"
+    "new:project": "bun run scripts/new-project.ts",
+    "check:links": "bun run scripts/check-links.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.4",

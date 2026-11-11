@@ -16,6 +16,7 @@ bun run dev        # http://localhost:4321
 bun run build      # 构建到 dist/
 bun run preview    # 预览构建结果
 bun run check      # 类型与内容校验
+bun run check:links # 构建后检查内部链接和静态资源
 ```
 
 ## 内容维护

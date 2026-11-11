@@ -14,7 +14,7 @@
   /* Text */
   --ink: #111827;
   --ink-soft: #4b5563;
-  --ink-mute: #6b7280;
+  --ink-mute: #5b6472;
   --text-on-dark: #e6edf7;
   --text-on-dark-soft: #9fb0c9;
   --text-on-dark-mute: #73849d;
@@ -28,7 +28,7 @@
   /* Accents */
   --accent: #38e8c6;
   --accent-soft: rgba(56, 232, 198, 0.14);
-  --accent-ink: #0c8574;
+  --accent-ink: #086b5e;
   --accent-2: #4c8dff;
   --accent-2-soft: rgba(76, 141, 255, 0.14);
   --warm: #ffb86b;

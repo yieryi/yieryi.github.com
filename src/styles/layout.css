@@ -178,15 +178,6 @@
   font-size: 0.8rem;
 }
 
-.search-trigger kbd {
-  padding: 2px 5px;
-  border: 1px solid var(--line-dark);
-  border-radius: 4px;
-  color: var(--text-on-dark-mute);
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-}
-
 .menu-toggle {
   display: none;
 }
@@ -1143,8 +1134,7 @@
     display: grid;
   }
 
-  .search-trigger span,
-  .search-trigger kbd {
+  .search-trigger span {
     display: none;
   }
 

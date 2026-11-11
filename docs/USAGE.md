@@ -39,6 +39,7 @@ bun run preview
 
 # 类型与内容校验
 bun run check
+bun run check:links # 先 build，再检查内部链接
 ```
 
 开发地址通常是 `http://localhost:4321`。
@@ -270,7 +271,16 @@ export const site = {
 - 改关于页：`src/pages/about.astro`
 - 改简历：`src/pages/resume.astro`
 
-## 8. 首页 3D 说明
+## 8. OG 图与分享卡片
+
+- 默认 OG 图：`public/og/default.png`
+- 分类 OG 图：`public/og/cesium.png`、`gis.png`、`frontend.png`
+- 项目/写作列表：`project.png`、`writing.png`
+- 文章会按分类自动选择 OG 图，项目页使用 `project.png`。
+- 新增分类时，在 `src/utils/og.ts` 里补映射；没有映射会回退到默认图。
+- 图片尺寸统一为 1200 × 630。
+
+## 9. 首页 3D 说明
 
 - 3D 容器在 `src/components/HeroGlobe.astro`，场景逻辑在 `src/scripts/globe.ts`。
 - 使用 Three.js 动态加载，不阻塞首屏文字。
@@ -281,31 +291,32 @@ export const site = {
   3. 替换为视频或纯 CSS 视觉。
 - **不要**在 3D 里加后处理、外部模型、大贴图，除非重新评估性能预算。
 
-## 9. 站内搜索
+## 10. 站内搜索
 
 - 搜索数据由 `src/pages/search.json.ts` 在构建时生成（静态 JSON）。
 - 前端搜索组件在 `src/components/SearchDialog.astro`。
 - 支持 `⌘K` / `Ctrl+K` 打开，输入标题、摘要、标签过滤。
 - 新增文章后无需手动维护索引，构建会自动更新。
 
-## 10. 构建与部署
+## 11. 构建与部署
 
-### 10.1 本地构建检查
+### 11.1 本地构建检查
 
 ```bash
 bun run check
 bun run build
+bun run check:links
 bun run preview
 ```
 
 构建产物在 `dist/`。
 
-### 10.2 GitHub Pages 自动部署
+### 11.2 GitHub Pages 自动部署
 
 仓库已配置 `.github/workflows/deploy.yml`：
 
 1. 合并/推送到 `main` 分支
-2. GitHub Actions 自动执行 `bun install`、`bun run build`
+2. GitHub Actions 自动执行 `bun install`、`bun run check`、`bun run build`、`bun run check:links`
 3. 产物发布到 GitHub Pages
 
 首次切换需要在 GitHub 仓库设置里：
@@ -313,14 +324,14 @@ bun run preview
 - **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**
 - 确认自定义域名留空（当前使用 `yieryi.github.io`）
 
-### 10.3 分支预览
+### 11.3 分支预览
 
 - 日常改动推送到 `astro` 分支。
 - 本地用 `bun run dev` / `bun run preview` 检查。
 - 确认无误后合并到 `main`；`main` 的 push 会触发 GitHub Actions 自动上线。
 - 也可以在 Actions 页面手动 `workflow_dispatch`。
 
-### 10.4 回滚
+### 11.4 回滚
 
 旧站仍在 `main` 的历史中。如果新站出现严重问题：
 
@@ -331,7 +342,7 @@ bun run preview
 
 当前 `astro` 分支已经把旧 Jekyll 文件替换为新站；`main` 分支仍保留旧站。合并前请先确认 GitHub Pages 的 Source 已切换为 **GitHub Actions**。
 
-## 11. 常见问题
+## 12. 常见问题
 
 ### Q1：新增文章后列表没有出现？
 
@@ -369,14 +380,14 @@ bun run preview
 - 把文件移到 GitHub Releases
 - `public/downloads/` 只保留小文件
 
-## 12. 维护节奏
+## 13. 维护节奏
 
 - **每次发文**：`bun run check` + 本地预览
 - **每月**：`bun update` 检查依赖，跑一次构建
 - **每季度**：检查失效链接、更新 About/简历
 - **每年**：回顾设计 tokens，必要时做一次视觉微调
 
-## 13. 文档更新约定
+## 14. 文档更新约定
 
 改动以下内容时，请同步更新本文件：
 
@@ -388,8 +399,9 @@ bun run preview
 
 改动完成后，在 `docs/REFACTOR_PLAN.md` 勾选对应阶段。
 
-## 14. 更新记录
+## 15. 更新记录
 
 | 日期 | 变更 |
 |---|---|
 | 2026-11-11 | 初版：本地开发、文章/项目/下载维护、3D/搜索说明、部署与回滚 |
+| 2026-11-11 | 补充内部链接检查、分类 OG 图、Manifest 与 Lighthouse 结果 |

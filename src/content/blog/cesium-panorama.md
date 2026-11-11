@@ -13,7 +13,7 @@ legacy: /2021/09/06/Cesium三维地球融合全景效果
 
 
 
-### 背景
+## 背景
 
 关于实现全景功能的方案。生成处理全景照片的工具有[https://github.com/ppwwyyxx/OpenPano](https://github.com/ppwwyyxx/OpenPano)，十分强大。在B端展示的方案有很多，当中有不少基于`Three.js`实现的，比如[https://github.com/pchen66/panolens.js](https://github.com/pchen66/panolens.js) ，也有直接封装`WebGL`实现的库，必如 [https://github.com/mpetroff/pannellum](https://github.com/mpetroff/pannellum),这两个库都很强大，不仅支持常规的全景浏览，还支持多分辨率的显示和全景视频。
 
@@ -23,7 +23,7 @@ legacy: /2021/09/06/Cesium三维地球融合全景效果
 - 通过复用`Cesium`渲染流程的颜色缓冲区，过渡显示可以无缝衔接。避免借助第三方库初始化`div`容器等出现瞬时切换、黑屏现象
 - 学会使用`Cesium`封装的渲染接口实现一个自定义的简单渲染流程
 
-### 现状
+## 现状
 
 全景照片数据格式，常用的有单张ERP投影图片（`Equirectangular Projection`,宽高比为2:1)，立方体贴图(切割成六个面)，和多分辨率形式的全景切片数据。关于全景数据格式的更多介绍，可以参考[http://hugin.sourceforge.net/docs/manual/Panorama_formats.html](http://hugin.sourceforge.net/docs/manual/Panorama_formats.html),
 
@@ -33,7 +33,7 @@ legacy: /2021/09/06/Cesium三维地球融合全景效果
 - 不依赖其他的`javascript`库
 - 代码开源，原生`WebGL`实现，可玩性更强（我没有深入研究）
 
-### 实现原理
+## 实现原理
 
 本来想说明实现原理，但是感觉一是比较简单，二是灵活有多种实现方式，另外发现不确定是否能理解。我的实现其实是参考`twgl`的相关示例并做了改动，使用`cubemap`，假定相机位于原点，相机方向朝向视角原点，这样可以直接简化`MVP`矩阵计算关系。
 
@@ -43,7 +43,7 @@ legacy: /2021/09/06/Cesium三维地球融合全景效果
 
 关于渲染流程，在Cesium流程中增加`pass`或者通过`framebuffer`去实现，是没必要而且并没有很好的办法去做切换管理，我这里是直接停掉了`Cesium`的渲染过程，新增了全景的渲染流程。
 
-### 结果演示录屏
+## 结果演示录屏
 
 > 该视频约 4MB，点击播放后再加载。
 

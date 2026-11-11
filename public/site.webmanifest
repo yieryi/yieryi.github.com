@@ -1,0 +1,13 @@
+{
+  "name": "WANGKANG · 三维地理空间工程师",
+  "short_name": "WANGKANG",
+  "description": "三维渲染引擎、GIS 几何计算、三维建模与高精地图数据生产。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070b12",
+  "theme_color": "#070b12",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

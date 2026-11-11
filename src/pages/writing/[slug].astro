@@ -5,6 +5,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import { formatDate, isoDate, readingTime, seriesHref, tagHref } from '../../utils/content';
 import { site } from '../../data/site';
+import { ogImageForCategory } from '../../utils/og';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -55,7 +56,13 @@ const articleSchema = {
 };
 ---
 
-<BaseLayout title={data.title} description={data.description} type="article" schema={articleSchema}>
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  image={ogImageForCategory(data.category)}
+  type="article"
+  schema={articleSchema}
+>
   <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
 
   <header class="post-header">
