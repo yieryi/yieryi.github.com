@@ -40,6 +40,7 @@
 - 已完成：工程骨架、设计系统、首页 3D 与全部内容页、6 篇文章迁移、3 个项目案例、标签/系列、搜索、下载中心、Lab 小工具、简历页、RSS/Sitemap/OG、GitHub Actions 配置、内部链接检查。
 - 质量：Lighthouse 桌面/移动端首页与主要内页均为 Performance 100 / Accessibility 100 / Best Practices 100 / SEO 100；axe WCAG A/AA 扫描通过。
 - 待完成：合并到 `main`、在 GitHub 仓库设置里把 Pages Source 切到 GitHub Actions、接 Lighthouse CI 实测、提交搜索引擎。
+- 已搁置：6 篇博客正文的英文全文翻译，优先级 **P2**，暂不排期。
 - 旧站：`main` 分支仍保留 Jekyll 版本，可随时回滚。
 
 ## 3. 信息架构
@@ -330,14 +331,22 @@ cover: engine
 5. **工具链**：本机使用 Bun，CI 使用 Bun；如果换到 Node，命令需保持一致。
 6. **旧站切换**：切换前保留 `main` 分支；如新站异常，GitHub Pages 改回 `main` 即可回滚。
 
-## 9. 后续迭代（不在本次 MVP）
+## 9. 后续迭代与 Backlog
 
-- 英文文章正文全文翻译（当前英文页为英文标题/摘要 + 中文正文）
+### 9.1 Backlog
+
+| 优先级 | 事项 | 状态 | 备注 |
+|---|---|---|---|
+| P2 | 6 篇博客正文的英文全文翻译 | **已搁置**（2026-11-11） | 当前英文页为英文标题/摘要/导航 + 中文正文，正文前有说明；恢复时按篇翻译，并在 `/en/writing/<slug>/` 替换中文正文 |
+| P2 | 新增文章的英文正文同步 | 随 P2 翻译一起做 | 新文章先补 `titleEn` / `descriptionEn`，正文可暂不翻译 |
+
+### 9.2 其他候选
+
 - giscus 评论
 - 文章 OG 图按标题自动生成（当前按分类复用）
 - Cesium Demo 在线画廊
 - glTF 模型查看器
--  newsletter / 邮件订阅
+- newsletter / 邮件订阅
 - 访问统计（Cloudflare Web Analytics / Umami）
 - 更多小工具：GeoJSON 校验、投影换算、瓦片拼接
 
@@ -356,3 +365,4 @@ cover: engine
 | 2026-11-11 | 补充分类 OG 图、Web App Manifest、内部链接检查；Lighthouse 桌面/移动端主要页面全部 100 分；修复对比度与标题层级问题 |
 | 2026-11-11 | 首屏 3D 视觉升级：稀疏点云、经纬网面、曲线彗尾、Fresnel 边缘光、镜头推拉；移除年限与经历数量展示 |
 | 2026-11-11 | 完成中英双语：`/en/` 路由、语言切换、英文项目内容、英文 SEO/OG/RSS/搜索；完成日夜主题：浅色 Hero、主题化 3D、localStorage 持久化 |
+| 2026-11-11 | 将“6 篇博客正文英文全文翻译”记为 **P2 待做事项**，暂时搁置 |
