@@ -324,6 +324,16 @@ bun run preview
 - **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**
 - 确认自定义域名留空（当前使用 `yieryi.github.io`）
 
+**切换顺序（重要）：**
+
+1. 先确认 `astro` 分支的 `bun run check`、`bun run build`、`bun run check:links` 全部通过。
+2. 在 **Settings → Pages → Source** 选择 **GitHub Actions**。
+3. 合并 `astro` 到 `main`，触发部署 workflow。
+4. 等待 Actions 成功，访问 `https://yieryi.github.io` 验证。
+5. 如果失败，把 Source 改回 **Deploy from a branch**（`main` / root），旧站仍在 `main` 历史中，可回滚。
+
+> 切换过程中站点可能短暂 404，这是正常的。想做到零停机，可以先把 `astro` 分支接到 Cloudflare Pages 做预览，确认后再切 GitHub Pages。
+
 ### 11.3 分支预览
 
 - 日常改动推送到 `astro` 分支。
