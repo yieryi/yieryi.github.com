@@ -1,0 +1,49 @@
+name: Publish to main
+
+on:
+  push:
+    branches: [astro]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-main
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type and content check
+        run: bun run check
+
+      - name: Build
+        run: bun run build
+
+      - name: Check internal links
+        run: bun run check:links
+
+      - name: Publish dist to main
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: main
+          force_orphan: true
+          enable_jekyll: false
+          user_name: yieryi
+          user_email: yieryi@users.noreply.github.com
+          full_commit_message: "deploy: ${{ github.sha }}"

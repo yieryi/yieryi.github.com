@@ -3,7 +3,7 @@
 > 适用版本：Astro 7 重构版（`astro` 分支）
 > 最后更新：2026-11-12
 >
-> 当前状态：中英双语 + 日夜主题已完成，`astro` 分支可本地运行；合并到 `main` 前，线上仍是旧 Jekyll 站。
+> 当前状态：中英双语 + 日夜主题已完成，并已上线 <https://yieryi.github.io>。源码在 `astro`，部署产物在 `main`，旧站备份在 `legacy-jekyll`。
 >
 > 日常写作、加项目、加下载、发布上线，看这一份就够了。
 > 设计与重构背景见 [`REFACTOR_PLAN.md`](./REFACTOR_PLAN.md)。
@@ -376,46 +376,77 @@ bun run preview
 
 构建产物在 `dist/`。
 
-### 12.2 GitHub Pages 自动部署
+### 12.2 部署结构
 
-仓库已配置 `.github/workflows/deploy.yml`：
+当前采用「源码分支 + 部署产物分支」的方式：
 
-1. 合并/推送到 `main` 分支
-2. GitHub Actions 自动执行 `bun install`、`bun run check`、`bun run build`、`bun run check:links`
-3. 产物发布到 GitHub Pages
+| 分支 | 用途 |
+|---|---|
+| `astro` | Astro 源码、内容、脚本（日常只改这里） |
+| `main` | 构建后的静态站点，由 GitHub Actions 自动发布 |
+| `legacy-jekyll` | 旧 Jekyll 站点备份，用于回滚 |
 
-首次切换需要在 GitHub 仓库设置里：
+GitHub Pages 设置保持：
 
-- **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**
-- 确认自定义域名留空（当前使用 `yieryi.github.io`）
+- **Settings → Pages → Build and deployment → Source**：**Deploy from a branch**
+- 分支：`main` / `(root)`
 
-**切换顺序（重要）：**
+`.github/workflows/publish.yml` 会在推送到 `astro` 后：
 
-1. 先确认 `astro` 分支的 `bun run check`、`bun run build`、`bun run check:links` 全部通过。
-2. 在 **Settings → Pages → Source** 选择 **GitHub Actions**。
-3. 合并 `astro` 到 `main`，触发部署 workflow。
-4. 等待 Actions 成功，访问 `https://yieryi.github.io` 验证。
-5. 如果失败，把 Source 改回 **Deploy from a branch**（`main` / root），旧站仍在 `main` 历史中，可回滚。
+1. `bun install --frozen-lockfile`
+2. `bun run check`
+3. `bun run build`
+4. `bun run check:links`
+5. 把 `dist/` 强制发布到 `main`（orphan commit）
 
-> 切换过程中站点可能短暂 404，这是正常的。想做到零停机，可以先把 `astro` 分支接到 Cloudflare Pages 做预览，确认后再切 GitHub Pages。
+发布成功后访问 <https://yieryi.github.io> 验证。
 
-### 12.3 分支预览
+> 注意：`main` 是构建产物，不要直接在 `main` 上改源码。所有内容修改都提交到 `astro`。
 
-- 日常改动推送到 `astro` 分支。
-- 本地用 `bun run dev` / `bun run preview` 检查。
-- 确认无误后合并到 `main`；`main` 的 push 会触发 GitHub Actions 自动上线。
-- 也可以在 Actions 页面手动 `workflow_dispatch`。
+### 12.3 日常发布
 
-### 12.4 回滚
+```bash
+git checkout astro
+# 修改内容
+bun run check
+bun run build
+bun run check:links
+git add -A
+git commit -m "content: ..."
+git push origin astro
+```
 
-旧站仍在 `main` 的历史中。如果新站出现严重问题：
+推送后 GitHub Actions 会自动发布到 `main`。也可以在 Actions 页面手动运行 `Publish to main`（`workflow_dispatch`）。
 
-1. 在 GitHub Pages 设置里把 Source 改回 **Deploy from a branch**，选择旧分支/目录；
-2. 或直接 revert 对应 commit。
+### 12.4 手动兜底发布
 
-因此**切换前不要删除 `main` 上的旧 Jekyll 文件**，确认稳定后再清理。
+如果 Actions 不可用，可以在本地构建后手动发布：
 
-当前 `astro` 分支已经把旧 Jekyll 文件替换为新站；`main` 分支仍保留旧站。合并前请先确认 GitHub Pages 的 Source 已切换为 **GitHub Actions**。
+```bash
+bun run build
+rm -rf /tmp/wk-deploy
+mkdir -p /tmp/wk-deploy
+cp -R dist/. /tmp/wk-deploy/
+cd /tmp/wk-deploy
+git init
+git checkout -b main
+git add -A
+git -c user.name="yieryi" -c user.email="yieryi@users.noreply.github.com" commit -m "deploy: manual"
+git remote add origin git@github.com:yieryi/yieryi.github.com.git
+git push --force origin main
+```
+
+### 12.5 回滚
+
+旧 Jekyll 站备份在 `legacy-jekyll` 分支：
+
+```bash
+git push --force origin legacy-jekyll:main
+```
+
+GitHub Pages 会重新发布旧站。也可以在 Pages 设置里把 Source 临时指向 `legacy-jekyll` 分支。
+
+如果只是新站某个改动有问题，优先在 `astro` 上 revert 对应 commit，再推送触发重新发布。
 
 ## 13. 常见问题
 

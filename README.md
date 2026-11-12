@@ -6,7 +6,7 @@
 - 技术栈：Astro + MDX + 原生 CSS + Three.js（首屏按需加载）
 - 双语：中文默认 `/`，英文 `/en/`，Header 可切换
 - 主题：日间 / 夜间切换，首次跟随系统，选择持久化
-- 部署：GitHub Actions → GitHub Pages
+- 部署：`astro` 源码 → GitHub Actions → `main` 部署产物 → GitHub Pages
 
 ## 本地开发
 
@@ -63,13 +63,15 @@ src/
 
 ## 部署
 
-推送到 `main` 分支后，GitHub Actions 自动构建并发布到 GitHub Pages。
+采用「源码分支 + 部署产物分支」：
 
-首次切换需要在仓库 **Settings → Pages → Build and deployment** 中把 Source 设为 **GitHub Actions**。
+- `astro`：源码、内容、脚本。日常只改这里。
+- `main`：构建后的静态站点，由 `.github/workflows/publish.yml` 自动发布。
+- `legacy-jekyll`：旧 Jekyll 站点备份，用于回滚。
 
-## 旧站
+推送到 `astro` 后，GitHub Actions 会执行检查、构建，并把 `dist/` 发布到 `main`。GitHub Pages 保持 **Deploy from a branch → main / (root)** 即可。
 
-旧 Jekyll 站点保留在 `main` 分支历史中。新站稳定前不要删除旧分支，出问题可以直接回滚。
+不要直接在 `main` 上修改源码。
 
 ## License
 

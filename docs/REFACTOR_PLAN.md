@@ -1,6 +1,6 @@
 # 萧安（WANGKANG）个人站重构方案
 
-> 状态：MVP + 中英双语 + 日夜主题已完成，等待切换上线
+> 状态：已上线（astro 源码 → main 部署产物）
 > 开始日期：2026-11-11
 > 当前分支：`astro`
 > 线上旧站：`main` 分支（Jekyll Paper 模板，保持不动，直到新站验收）
@@ -31,7 +31,7 @@
 | 自定义域名 | 暂不使用，继续 `https://yieryi.github.io` |
 | 首屏 3D | 直接上，但保持简单：低面数线框/点云地球 + 缓慢旋转，懒加载 + 静态兜底 |
 | 技术栈 | Astro 7 + MDX + 原生 CSS + Three.js（仅首屏按需加载） |
-| 部署 | GitHub Actions 构建，GitHub Pages 托管 |
+| 部署 | `astro` 源码 → GitHub Actions 构建 → 自动发布 `main`；GitHub Pages 使用 main / root |
 | 内容语言 | 中文为主（默认 `/`），英文为辅（`/en/`），支持切换 |
 | 旧站 | 保留在 `main` 分支，`astro` 分支完成后切换 |
 | 主题 | 日夜切换，首次跟随系统，手动选择写入 localStorage |
@@ -41,9 +41,10 @@
 - 已完成：工程骨架、设计系统、首页 3D 与全部内容页、6 篇文章迁移、3 个项目案例、标签/系列、搜索、下载中心、Lab 小工具、RSS/Sitemap/OG、GitHub Actions 配置、内部链接检查。
 - 隐私收敛：已移除简历模块、详细履历/时间线、公司历史与任职时间；保留当前角色、邮箱、微信和 GitHub 作为合作联系。项目案例改为匿名化技术复盘。
 - 质量：Lighthouse 桌面/移动端首页与主要内页均为 Performance 100 / Accessibility 100 / Best Practices 100 / SEO 100；axe WCAG A/AA 扫描通过。
-- 待完成：合并到 `main`、在 GitHub 仓库设置里把 Pages Source 切到 GitHub Actions、接 Lighthouse CI 实测、提交搜索引擎。
+- 待完成：接 Lighthouse CI 实测、提交搜索引擎。
+- 已上线：`main` 为构建产物，`astro` 为源码，`legacy-jekyll` 为旧站备份。
 - 已搁置：6 篇博客正文的英文全文翻译，优先级 **P2**，暂不排期。
-- 旧站：`main` 分支仍保留 Jekyll 版本，可随时回滚。
+- 旧站：备份在 `legacy-jekyll` 分支，可随时回滚。
 
 ## 3. 信息架构
 
@@ -158,7 +159,7 @@ Astro 7
 ├── i18n 字典（`src/i18n`）
 ├── @astrojs/rss
 ├── @astrojs/sitemap
-└── GitHub Actions → GitHub Pages
+└── GitHub Actions → 发布 dist 到 main → GitHub Pages
 ```
 
 不引入：
@@ -280,11 +281,11 @@ cover: engine
 
 ### Phase 5：上线
 
-- [x] GitHub Actions 部署配置
-- [ ] GitHub Pages 切换为 Actions（需要在仓库 Settings 操作）
-- [x] 旧站备份与回滚说明
+- [x] GitHub Actions 发布到 `main` 配置
+- [x] GitHub Pages 使用 main / root（保持 branch deploy）
+- [x] 旧站备份 `legacy-jekyll` 与回滚说明
 - [ ] 提交搜索引擎
-- [ ] 合并到 main 后观察一周，再清理旧 Jekyll 文件
+- [x] 已完成首次上线验证
 
 ## 7. 验收标准
 
@@ -328,7 +329,7 @@ cover: engine
 3. **媒体体积**：现有视频约 7.6MB，继续使用本地文件，但改为点击播放；后续大文件建议放 GitHub Releases。
 4. **国内访问**：GitHub Pages 在国内可能偏慢；暂不换域名/备案，先保证静态资源和首屏足够轻。
 5. **工具链**：本机使用 Bun，CI 使用 Bun；如果换到 Node，命令需保持一致。
-6. **旧站切换**：切换前保留 `main` 分支；如新站异常，GitHub Pages 改回 `main` 即可回滚。
+6. **回滚**：旧站备份在 `legacy-jekyll`；如新站异常，可 `git push --force origin legacy-jekyll:main` 或把 Pages Source 临时指向 `legacy-jekyll`。
 
 ## 9. 后续迭代与 Backlog
 
@@ -366,3 +367,4 @@ cover: engine
 | 2026-11-11 | 完成中英双语：`/en/` 路由、语言切换、英文项目内容、英文 SEO/OG/RSS/搜索；完成日夜主题：浅色 Hero、主题化 3D、localStorage 持久化 |
 | 2026-11-11 | 将“6 篇博客正文英文全文翻译”记为 **P2 待做事项**，暂时搁置 |
 | 2026-11-12 | 主 IP 改为**萧安**，`WANGKANG` 作为辅助标识；移除简历模块与详细履历/时间线；项目案例匿名化；保留当前角色「高德 · 高级地图工程师」、邮箱和微信用于合作联系 |
+| 2026-11-12 | 完成首次上线：`main` 发布构建产物，`astro` 保留源码，`legacy-jekyll` 备份旧站 |
