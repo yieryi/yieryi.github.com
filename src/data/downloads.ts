@@ -12,29 +12,9 @@ export interface DownloadItem {
   tags: string[];
   tagsEn: string[];
   sha256?: string;
-  actionLabel?: string;
-  actionLabelEn?: string;
 }
 
 export const downloads: DownloadItem[] = [
-  {
-    id: 'resume',
-    title: '个人简历（打印 / PDF）',
-    titleEn: 'Resume (Print / PDF)',
-    description:
-      '在线简历页，按 A4 排版。打开后使用浏览器“打印 → 另存为 PDF”即可导出。',
-    descriptionEn:
-      'An A4-formatted online resume. Open it and use the browser print dialog to save as PDF.',
-    file: '/resume/',
-    type: 'HTML / Print',
-    size: '—',
-    version: '2026.11',
-    updated: '2026-11-11',
-    tags: ['简历', 'PDF'],
-    tagsEn: ['Resume', 'PDF'],
-    actionLabel: '打开简历',
-    actionLabelEn: 'Open resume',
-  },
   {
     id: 'sample-buildings',
     title: '示例建筑白模 GeoJSON',
@@ -54,8 +34,8 @@ export const downloads: DownloadItem[] = [
   },
   {
     id: 'cesium-demo-index',
-    title: 'Cesium / GClient 示例索引',
-    titleEn: 'Cesium / GClient Demo Index',
+    title: 'Cesium 示例索引',
+    titleEn: 'Cesium Demo Index',
     description:
       '早期三维引擎示例的结构化索引，包含交互、渲染、管线与内涝模拟等方向，适合做 Demo 重做清单。',
     descriptionEn:
@@ -65,8 +45,8 @@ export const downloads: DownloadItem[] = [
     size: '2.4 KB',
     version: '2026.11',
     updated: '2026-11-11',
-    tags: ['Cesium', 'GClient', '索引'],
-    tagsEn: ['Cesium', 'GClient', 'Index'],
+    tags: ['Cesium', '示例', '索引'],
+    tagsEn: ['Cesium', 'Examples', 'Index'],
     sha256: '7f034be330a0e603423b12c8894877554f011ed0ee8db5de69a88cff6eb2a2a7',
   },
   {

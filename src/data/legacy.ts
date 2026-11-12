@@ -8,6 +8,12 @@ export interface LegacyRedirect {
  * 这里保留旧地址，生成静态跳转页，避免已有外链失效。
  */
 export const legacyRedirects: LegacyRedirect[] = [
+  { from: '/work/gclient-webgl-engine', to: '/work/webgl-digital-earth-engine/' },
+  { from: '/en/work/gclient-webgl-engine', to: '/en/work/webgl-digital-earth-engine/' },
+  { from: '/work/amap-hd-map-3d-platform', to: '/work/hd-map-3d-platform/' },
+  { from: '/en/work/amap-hd-map-3d-platform', to: '/en/work/hd-map-3d-platform/' },
+  { from: '/work/lsv-digital-earth-engine', to: '/work/desktop-digital-earth-engine/' },
+  { from: '/en/work/lsv-digital-earth-engine', to: '/en/work/desktop-digital-earth-engine/' },
   {
     from: '/2021/02/20/Labels-avoid-overlap',
     to: '/writing/cesium-labels-avoid-overlap/',

@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../Icon.astro';
 import { downloads } from '../../data/downloads';
-import { localizePath, type Lang } from '../../i18n/utils';
+import { type Lang } from '../../i18n/utils';
 
 interface Props {
   lang: Lang;
@@ -13,34 +13,32 @@ const copy = {
   zh: {
     eyebrow: 'Downloads · Resources',
     title: '一些可以直接拿走的东西。',
-    desc: '简历、示例数据、演示视频和工具索引。文件尽量保持小而有用；较大的资源后续会放到 GitHub Releases。',
-    meta: ['个资源', 'GeoJSON / JSON / MP4 / PDF', '持续更新'],
+    desc: '示例数据、演示视频和工具索引。文件尽量保持小而有用；较大的资源后续会放到 GitHub Releases。',
+    meta: ['个资源', 'GeoJSON / JSON / MP4', '持续更新'],
     sectionEyebrow: '01 · Files',
     sectionTitle: '资源列表',
     sectionDesc: '每个文件都标注类型、大小、版本和 SHA256。下载后可自行校验完整性。',
     size: '大小',
     updated: '更新',
     type: '类型',
-    open: '打开',
     download: '下载',
     noteTitle: '关于大文件：',
-    note: '超过 20MB 的资源建议放在 GitHub Releases，而不是直接提交到仓库。这样既不会拖慢构建，也方便版本管理和回滚。如果你需要某个示例的原始工程或数据，可以邮件联系。',
+    note: '超过 20MB 的资源建议放在 GitHub Releases，而不是直接提交到仓库。这样既不会拖慢构建，也方便版本管理和回滚。如果你需要某个示例的原始工程或数据，可以在 GitHub Issues 留言。',
   },
   en: {
     eyebrow: 'Downloads · Resources',
     title: 'A few things you can take with you.',
-    desc: 'Resume, sample data, demo videos and a tool index. Files are kept small and useful; larger assets will move to GitHub Releases.',
-    meta: ['resources', 'GeoJSON / JSON / MP4 / PDF', 'Continuously updated'],
+    desc: 'Sample data, demo videos and a tool index. Files are kept small and useful; larger assets will move to GitHub Releases.',
+    meta: ['resources', 'GeoJSON / JSON / MP4', 'Continuously updated'],
     sectionEyebrow: '01 · Files',
     sectionTitle: 'Resources',
     sectionDesc: 'Every file lists type, size, version and SHA256 so you can verify it after download.',
     size: 'Size',
     updated: 'Updated',
     type: 'Type',
-    open: 'Open',
     download: 'Download',
     noteTitle: 'About large files: ',
-    note: 'Assets over 20MB should live in GitHub Releases rather than the repository. That keeps builds fast and versions easy to manage. If you need the original project or data behind a demo, email me.',
+    note: 'Assets over 20MB should live in GitHub Releases rather than the repository. That keeps builds fast and versions easy to manage. If you need the original project or data behind a demo, leave a note in GitHub Issues.',
   },
 } as const;
 
@@ -52,8 +50,8 @@ const c = copy[lang];
   title={lang === 'zh' ? '下载' : 'Downloads'}
   description={
     lang === 'zh'
-      ? '王康（WANGKANG）的简历、示例数据、Cesium 演示视频与工具资源下载。'
-      : 'Download WANGKANG’s resume, sample data, Cesium demo videos and tool resources.'
+      ? '萧安（WANGKANG）的示例数据、Cesium 演示视频与工具资源下载。'
+      : 'Download XIAO AN (WANGKANG)’s sample data, Cesium demo videos and tool resources.'
   }
 >
   <section class="page-hero">
@@ -84,9 +82,6 @@ const c = copy[lang];
           const title = lang === 'zh' ? item.title : item.titleEn;
           const description = lang === 'zh' ? item.description : item.descriptionEn;
           const tags = lang === 'zh' ? item.tags : item.tagsEn;
-          const actionLabel = lang === 'zh' ? item.actionLabel : item.actionLabelEn;
-          const isPage = item.file.endsWith('/');
-          const file = isPage ? localizePath(item.file, lang) : item.file;
           return (
             <article class="download-card reveal">
               <div class="download-card-top">
@@ -120,9 +115,9 @@ const c = copy[lang];
                 {tags.map((tag) => <span class="tag">{tag}</span>)}
               </div>
 
-              <a class="download-action" href={file} download={isPage ? undefined : ''}>
-                <span>{actionLabel ?? (isPage ? c.open : c.download)}</span>
-                <Icon name={isPage ? 'arrow-up-right' : 'download'} size={15} />
+              <a class="download-action" href={item.file} download>
+                <span>{c.download}</span>
+                <Icon name="download" size={15} />
               </a>
             </article>
           );

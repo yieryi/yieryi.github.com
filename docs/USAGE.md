@@ -1,7 +1,7 @@
-# WANGKANG 个人站使用说明
+# 萧安（WANGKANG）个人站使用说明
 
 > 适用版本：Astro 7 重构版（`astro` 分支）
-> 最后更新：2026-11-11
+> 最后更新：2026-11-12
 >
 > 当前状态：中英双语 + 日夜主题已完成，`astro` 分支可本地运行；合并到 `main` 前，线上仍是旧 Jekyll 站。
 >
@@ -52,7 +52,7 @@ src/
   content/projects/    中文项目案例（MDX）
   content/projects-en/ 英文项目案例（MDX）
   i18n/                界面文案、语言路径、标签翻译
-  data/site.ts         姓名、邮箱、导航、社交链接
+  data/site.ts         主标识、辅助标识、导航、GitHub 链接
   data/downloads.ts    下载资源注册表
   data/legacy.ts       旧站 URL 重定向（补充项）
   scripts/globe.ts     首屏 Three.js 场景
@@ -169,7 +169,7 @@ bun run new:project
 也支持参数：
 
 ```bash
-bun run new:project --title "项目名" --slug my-project --summary "摘要" --role "引擎研发" --period "2026" --stack "TypeScript, WebGL" --cover engine --order 10
+bun run new:project --title "项目名" --slug my-project --summary "摘要" --stack "TypeScript, WebGL" --cover engine --order 10
 ```
 
 ### 5.2 手动方式
@@ -180,8 +180,6 @@ bun run new:project --title "项目名" --slug my-project --summary "摘要" --r
 ---
 title: 某三维引擎项目
 summary: 一句话说明项目价值。
-role: 引擎研发
-period: 2023.11 – 至今
 stack: [C++, WebGL, GLSL, Cesium]
 order: 4
 cover: engine
@@ -192,7 +190,7 @@ featured: false
 
 ……
 
-## 我的角色
+## 技术工作
 
 ……
 
@@ -209,7 +207,7 @@ featured: false
 
 英文项目正文放在 `src/content/projects-en/`，文件名 slug 与中文项目一致。英文页会读取这个集合，中文页读取 `src/content/projects/`。
 
-**合规提醒**：公司项目只写公开可说的技术方法、架构和个人贡献；不要放未公开数据、内部截图、真实指标。页面会自动带“已脱敏”提示。
+**隐私与合规提醒**：项目案例只写公开可说的技术方法、架构和工程思路；不要放真实姓名、公司名、任职时间、未公开数据、内部截图或真实指标。页面会自动带“已脱敏”提示。
 
 ## 6. 新增下载资源
 
@@ -256,12 +254,11 @@ shasum -a 256 public/downloads/your-file.zip
 
 ```ts
 export const site = {
-  name: 'WANGKANG',
-  nameZh: '王康',
+  name: '萧安',
+  nameEn: 'XIAO AN',
+  handle: 'WANGKANG',
   role: '三维地理空间工程师',
-  email: 'kang_wang163@163.com',
   github: 'https://github.com/yieryi',
-  wechat: 'i4vanky',
   url: 'https://yieryi.github.io',
   nav: [
     { label: 'Work', href: '/work/' },
@@ -276,10 +273,13 @@ export const site = {
 - 改英文角色：`roleEn`
 - 改英文简介：`descriptionEn`
 - 改导航：调整 `nav` 数组（Header/Footer 会按语言自动加 `/en` 前缀并翻译标签）
-- 改首页文案：`src/pages/index.astro`
+- 改首页文案：`src/components/pages/HomePage.astro`
 - 改页脚：`src/components/Footer.astro`
-- 改关于页：`src/pages/about.astro`
-- 改简历：`src/pages/resume.astro`
+- 改关于页：`src/components/pages/AboutPage.astro`
+- 改项目页：`src/components/pages/ProjectPage.astro`
+- 改下载页：`src/components/pages/DownloadsPage.astro`
+
+**隐私约定**：站点不展示真实姓名、公司、任职时间、邮箱、微信或简历；联系方式只保留 GitHub。新增项目/文章时也不要写入这些信息。
 
 ## 8. 中英双语与主题
 
@@ -300,7 +300,7 @@ categoryEn: Frontend Engineering
 seriesEn: Frontend Fundamentals
 ```
 
-项目案例的英文正文位于 `src/content/projects-en/`，文件名与中文项目保持一致，例如 `gclient-webgl-engine.mdx`。新增英文项目时复制一个文件并翻译正文即可。
+项目案例的英文正文位于 `src/content/projects-en/`，文件名与中文项目保持一致，例如 `webgl-digital-earth-engine.mdx`。新增英文项目时复制一个文件并翻译正文即可。
 
 界面文案在 `src/i18n/ui.ts`，语言路径工具在 `src/i18n/utils.ts`，标签翻译在 `src/i18n/tags.ts`。
 
@@ -324,7 +324,7 @@ bun run check:links
 
 手动检查：
 
-- 中文 / 英文各看一遍首页、文章、项目、下载、Lab、简历
+- 中文 / 英文各看一遍首页、文章、项目、下载、Lab、关于
 - 日间 / 夜间各看一遍，重点看卡片、表格、标签、按钮、代码块
 - 移动端 390px 下检查 Header 是否溢出
 - 搜索在中文页只返回中文条目，在英文页只返回英文条目
@@ -454,7 +454,7 @@ bun run preview
 
 - **每次发文**：`bun run check` + 本地预览
 - **每月**：`bun update` 检查依赖，跑一次构建
-- **每季度**：检查失效链接、更新 About/简历
+- **每季度**：检查失效链接、更新 About/项目
 - **每年**：回顾设计 tokens，必要时做一次视觉微调
 
 ## 15. 文档更新约定
@@ -477,3 +477,4 @@ bun run preview
 | 2026-11-11 | 补充内部链接检查、分类 OG 图、Manifest 与 Lighthouse 结果 |
 | 2026-11-11 | 增加中英双语、语言切换、日夜主题与主题化 3D 场景说明 |
 | 2026-11-11 | 英文正文全文翻译标记为 P2 搁置事项 |
+| 2026-11-12 | 主 IP 改为萧安（WANGKANG 辅助）；移除简历模块、履历、公司名、任职时间、邮箱与微信；项目案例改为匿名化技术复盘 |

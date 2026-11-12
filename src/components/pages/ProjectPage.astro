@@ -22,12 +22,12 @@ const copy = {
   zh: {
     work: '项目',
     eyebrow: '案例 · ',
-    role: '角色',
-    period: '周期',
     stack: '技术栈',
+    type: '类型',
+    typeValue: '工程案例',
     disclaimerTitle: '关于内容：',
     disclaimer:
-      '本文仅描述公开可说的技术方向、架构思路和个人贡献，不包含公司数据、内部系统截图或未公开指标。如需进一步交流，欢迎邮件联系。',
+      '本文仅描述公开可说的技术方向、架构思路和工程实践，不包含内部数据、系统截图或未公开指标。如需进一步交流，欢迎在 GitHub 留言。',
     previous: '← 上一个项目',
     next: '下一个项目 →',
     back: '返回全部项目',
@@ -35,12 +35,12 @@ const copy = {
   en: {
     work: 'Work',
     eyebrow: 'Case Study · ',
-    role: 'Role',
-    period: 'Period',
     stack: 'Stack',
+    type: 'Type',
+    typeValue: 'Case study',
     disclaimerTitle: 'About this page: ',
     disclaimer:
-      'This page describes publicly shareable technical directions, architecture ideas and individual contributions. It does not include company data, internal screenshots or unpublished metrics. Feel free to reach out by email.',
+      'This page describes publicly shareable technical directions, architecture ideas and engineering practice. It does not include internal data, screenshots or unpublished metrics. Use GitHub Issues to get in touch.',
     previous: '← Previous project',
     next: 'Next project →',
     back: 'All projects',
@@ -50,8 +50,6 @@ const copy = {
 const c = copy[lang];
 const title = lang === 'en' ? (data.titleEn ?? data.title) : data.title;
 const summary = lang === 'en' ? (data.summaryEn ?? data.summary) : data.summary;
-const role = lang === 'en' ? (data.roleEn ?? data.role) : data.role;
-const period = lang === 'en' ? (data.periodEn ?? data.period) : data.period;
 
 const articleSchema = {
   '@context': 'https://schema.org',
@@ -60,8 +58,8 @@ const articleSchema = {
   description: summary,
   author: {
     '@type': 'Person',
-    name: '王康',
-    alternateName: 'WANGKANG',
+    name: site.name,
+    alternateName: site.handle,
   },
   keywords: data.stack.join(', '),
   inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
@@ -90,23 +88,19 @@ const articleSchema = {
         <h1>{title}</h1>
         <p class="project-hero-summary">{summary}</p>
 
-        <dl class="project-hero-meta">
-          <div>
-            <dt>{c.role}</dt>
-            <dd>{role}</dd>
-          </div>
-          <div>
-            <dt>{c.period}</dt>
-            <dd>{period}</dd>
-          </div>
+        <dl class="project-hero-meta" style="grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);">
           <div>
             <dt>{c.stack}</dt>
             <dd>{data.stack.join(' / ')}</dd>
           </div>
+          <div>
+            <dt>{c.type}</dt>
+            <dd>{c.typeValue}</dd>
+          </div>
         </dl>
       </div>
 
-      <CoverArt variant={data.cover} label={`${period} / ${role}`} />
+      <CoverArt variant={data.cover} label={data.stack.slice(0, 2).join(' / ')} />
     </div>
   </section>
 

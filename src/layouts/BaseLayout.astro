@@ -34,7 +34,8 @@ const {
 const siteUrl = Astro.site ?? new URL(site.url);
 const t = useTranslations(lang);
 const role = lang === 'zh' ? site.role : site.roleEn;
-const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${role}`;
+const displayName = lang === 'zh' ? site.name : site.nameEn;
+const pageTitle = title ? `${title} · ${displayName}` : `${displayName} · ${role}`;
 const canonical = new URL(Astro.url.pathname, siteUrl);
 const ogImage = new URL(image, siteUrl);
 const alternates = alternatePaths(Astro.url.pathname);
@@ -43,12 +44,11 @@ const keywords = lang === 'zh' ? site.keywords : site.keywordsEn;
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: site.nameZh,
-  alternateName: site.name,
+  name: site.name,
+  alternateName: site.handle,
   url: site.url,
   jobTitle: role,
   description: lang === 'zh' ? site.description : site.descriptionEn,
-  email: `mailto:${site.email}`,
   sameAs: [site.github],
   knowsAbout: [
     '3D Rendering Engine',
@@ -63,7 +63,7 @@ const personSchema = {
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: `${site.name} · ${role}`,
+  name: `${displayName} · ${role}`,
   url: site.url,
   description: lang === 'zh' ? site.description : site.descriptionEn,
   inLanguage: lang === 'zh' ? 'zh-CN' : 'en',
@@ -104,7 +104,7 @@ const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ?
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="author" content={site.nameZh} />
+    <meta name="author" content={displayName} />
     <meta name="keywords" content={keywords.join(',')} />
     {noIndex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
@@ -119,12 +119,12 @@ const structuredData = [personSchema, websiteSchema, ...(Array.isArray(schema) ?
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={`${site.name} · RSS`}
+      title={`${displayName} · RSS`}
       href={lang === 'zh' ? '/rss.xml' : '/en/rss.xml'}
     />
 
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content={`${site.name} · ${role}`} />
+    <meta property="og:site_name" content={`${displayName} · ${role}`} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />

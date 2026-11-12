@@ -27,23 +27,23 @@ const latestPosts = posts.slice(0, 3);
 
 const copy = {
   zh: {
-    eyebrow: 'WANGKANG · 3D GEO-ENGINEER',
+    eyebrow: '萧安 · 3D GEO-ENGINEER',
     title1: '把真实世界，',
     title2a: '变成',
     title2b: '可计算、',
     title3a: '',
     title3b: '可渲染',
     title3c: '的三维地图。',
-    descBefore: '我是王康，一名',
+    descBefore: '我是萧安，一名',
     descStrong: '三维地理空间工程师',
     descAfter:
-      '。做过数字地球引擎、WebGL 渲染、GIS 几何计算，也在做高精地图与三维模型的规模化生产。',
+      '。关注三维渲染引擎、GIS 几何计算、三维建模与高精地图数据生产。',
     ctaWork: '查看项目案例',
     ctaWriting: '阅读技术文章',
     capEyebrow: '01 · Capabilities',
     capTitle: '三维空间里的四个问题域',
-    capDesc: '渲染、几何、数据与工程交付。不是技术栈罗列，而是我在真实项目里反复处理的问题。',
-    capLink: '了解完整履历',
+    capDesc: '渲染、几何、数据与工程交付。不是技术栈罗列，而是三维空间里反复出现的问题。',
+    capLink: '了解方向',
     capabilities: [
       {
         icon: 'cube',
@@ -71,9 +71,9 @@ const copy = {
       },
     ],
     workEyebrow: '02 · Selected Work',
-    workTitle: '三个阶段，三种空间计算问题',
+    workTitle: '三类空间计算问题',
     workDesc:
-      '从桌面端数字地球，到 WebGL 引擎，再到高精地图与三维模型生产。每个案例都写清楚背景、角色、关键设计和复盘。',
+      '围绕三维引擎、GIS 几何与高精地图数据生产，记录公开可说的技术方案、关键设计与取舍。',
     workLink: '全部项目',
     writingEyebrow: '03 · Writing',
     writingTitle: '把踩过的坑写下来',
@@ -85,7 +85,7 @@ const copy = {
     labDesc: '一些不需要后端的小功能。既是给自己用，也顺手展示一下工程实现。',
     labPoints: [
       '坐标转换、瓦片计算，纯浏览器端完成',
-      'Cesium / GClient 示例索引，持续补充',
+      'Cesium 示例索引，持续补充',
       '后续会加 GeoJSON 校验、模型查看器等',
     ],
     labCta: '进入 Lab',
@@ -114,34 +114,34 @@ const copy = {
     moreDesc: '更多空间计算与数据生产相关的小工具，会陆续放到这里。',
     moreArrow: 'Stay tuned',
     aboutEyebrow: '05 · About',
-    aboutQuote: '从桌面端数字地球，到 WebGL 引擎，再到',
-    aboutQuoteAccent: '高精地图与三维重建',
+    aboutQuote: '把三维渲染、',
+    aboutQuoteAccent: 'GIS 几何与数据生产',
     aboutQuoteAfter:
-      '。一直在做同一件事：让真实世界在计算机里变得可计算、可表达。',
+      '，放在同一个系统里思考。',
     aboutLink: '关于我',
     aboutMeta:
-      '做过引擎、写过工具、支撑过项目，也做过跨团队的技术协调。喜欢把复杂问题拆成可落地的小系统。',
-    resume: '查看简历',
+      '关注渲染管线、几何算法、数据工具与生产流程。喜欢把复杂问题拆成可落地的小系统。',
+    aboutTags: ['3D Rendering', 'GIS Geometry', 'HD Map', 'Data Production'],
   },
   en: {
-    eyebrow: 'WANGKANG · 3D GEO-ENGINEER',
+    eyebrow: 'XIAO AN · 3D GEO-ENGINEER',
     title1: 'The real world,',
     title2a: 'made ',
     title2b: 'computable,',
     title3a: 'and ',
     title3b: 'renderable',
     title3c: '.',
-    descBefore: "I'm Wang Kang, a ",
+    descBefore: "I'm XIAO AN, a ",
     descStrong: '3D geospatial engineer',
     descAfter:
-      '. I have worked on digital earth engines, WebGL rendering and GIS geometry, and now build HD map and 3D model production systems.',
+      '. I focus on rendering engines, GIS geometry, 3D modeling and HD map data production.',
     ctaWork: 'View case studies',
     ctaWriting: 'Read the writing',
     capEyebrow: '01 · Capabilities',
     capTitle: 'Four problem spaces in 3D',
     capDesc:
-      'Rendering, geometry, data and delivery. Not a list of tools, but the problems I keep solving in real projects.',
-    capLink: 'Full experience',
+      'Rendering, geometry, data and delivery. Not a list of tools, but the problems that keep appearing in spatial systems.',
+    capLink: 'Explore focus',
     capabilities: [
       {
         icon: 'cube',
@@ -169,9 +169,9 @@ const copy = {
       },
     ],
     workEyebrow: '02 · Selected Work',
-    workTitle: 'Three stages, three spatial problems',
+    workTitle: 'Three spatial problem spaces',
     workDesc:
-      'From a desktop digital earth to a WebGL engine, then to HD map and 3D model production. Each case covers context, role, key design and reflection.',
+      '3D engines, GIS geometry and HD map data production — publicly shareable approaches, key design decisions and trade-offs.',
     workLink: 'All projects',
     writingEyebrow: '03 · Writing',
     writingTitle: 'Notes from the field',
@@ -183,7 +183,7 @@ const copy = {
     labDesc: 'Small browser-only tools. Useful for myself, and a quick look at the engineering behind them.',
     labPoints: [
       'Coordinate and tile calculations, entirely client-side',
-      'A growing index of Cesium / GClient demos',
+      'A growing index of Cesium demos',
       'GeoJSON validation and a model viewer are next',
     ],
     labCta: 'Enter Lab',
@@ -212,14 +212,12 @@ const copy = {
     moreDesc: 'More spatial tools and data-production utilities will land here.',
     moreArrow: 'Stay tuned',
     aboutEyebrow: '05 · About',
-    aboutQuote: 'From a desktop digital earth to a WebGL engine, and now to',
-    aboutQuoteAccent: 'HD map and 3D reconstruction',
-    aboutQuoteAfter:
-      '. The same goal: make the real world computable and expressive in a computer.',
+    aboutQuote: 'Rendering, ', aboutQuoteAccent: 'GIS geometry and data production',
+    aboutQuoteAfter: ' — thinking about them as one system.',
     aboutLink: 'About me',
     aboutMeta:
-      'I have built engines, written tools, supported projects and coordinated across teams. I like turning complex problems into small systems that ship.',
-    resume: 'View resume',
+      'I care about render pipelines, geometry algorithms, data tools and production workflows. I like turning complex problems into small systems that ship.',
+    aboutTags: ['3D Rendering', 'GIS Geometry', 'HD Map', 'Data Production'],
   },
 } as const;
 
@@ -388,18 +386,11 @@ const c = copy[lang];
 
       <div class="about-meta reveal">
         <p>{c.aboutMeta}</p>
-        <div class="about-mini-timeline">
-          {site.timeline.map((item) => (
-            <div class="about-mini-item">
-              <div class="about-mini-period">{lang === 'zh' ? item.period : item.periodEn}</div>
-              <div class="about-mini-title">
-                {lang === 'zh' ? item.company : item.companyEn} · {lang === 'zh' ? item.title : item.titleEn}
-              </div>
-            </div>
-          ))}
+        <div class="tag-cloud" style="margin-top: 4px;">
+          {c.aboutTags.map((tag) => <span class="tag">{tag}</span>)}
         </div>
-        <a class="btn btn-outline" href={localizePath('/resume/', lang)}>
-          {c.resume}
+        <a class="btn btn-outline" href={site.github} target="_blank" rel="noopener noreferrer">
+          GitHub
           <Icon name="arrow-up-right" size={14} />
         </a>
       </div>

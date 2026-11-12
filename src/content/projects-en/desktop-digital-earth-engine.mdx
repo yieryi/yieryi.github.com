@@ -1,0 +1,43 @@
+---
+title: Desktop Digital Earth Engine
+summary: Feature R&D for a desktop 3D digital earth, covering terrain, imagery, vector and model loading, plus viewing, measurement and analysis in industry scenarios.
+stack: [C++, OpenGL, Digital Earth, 3D Rendering]
+order: 3
+cover: gis
+featured: true
+---
+
+> Note: This page describes publicly shareable technical directions and engineering ideas. It does not include internal materials.
+
+## Context
+
+Desktop digital earth software serves transportation planning, engineering construction and related industries. Users need to load terrain, imagery, vector data and models onto a 3D globe, then view, measure, analyze and export results.
+
+## Technical work
+
+The work mainly involved:
+
+- data loading and display in 3D scenes;
+- overlaying terrain, imagery, vector data and models;
+- basic measurement and analysis tools;
+- feature customization and issue diagnosis for industry projects.
+
+## Technical environment
+
+Desktop C++ engines and browser engines have different priorities:
+
+- desktop engines care more about large datasets and long-running stability;
+- the render pipeline is closer to the metal and debugging is more expensive;
+- industry users have stricter requirements for coordinates, precision and formats.
+
+This combination of **real GIS data and 3D rendering** is quite different from pure graphics effects.
+
+## Outcomes
+
+- Contributed to multiple feature modules of the digital earth engine.
+- Supported real projects in transportation planning and engineering construction.
+- Built a foundation in 3D GIS data loading, rendering and interaction.
+
+## Reflection
+
+The most important takeaway is not a specific feature, but understanding the relationship between engine capabilities, industry data and project delivery. That relationship shapes many decisions in 3D engine and data-production work.

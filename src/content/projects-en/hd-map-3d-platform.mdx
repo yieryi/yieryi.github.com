@@ -1,0 +1,49 @@
+---
+title: HD Map & 3D Model Platform
+summary: From productivity work on HD map production tools to a semi-automated 3D model production pipeline, focused on quality, efficiency and extensibility.
+stack: [TypeScript, Node.js, 3D Reconstruction, HD Map, Data Production]
+order: 2
+cover: map
+featured: true
+---
+
+> Note: This page describes publicly shareable technical directions and engineering ideas. It does not include internal data or unpublished metrics.
+
+## Context
+
+HD maps and 3D models are foundational data for intelligent driving and map experiences. Unlike pure rendering, a data production system must satisfy:
+
+- **Quality**: geometry, topology, semantics and attributes must be verifiable.
+- **Efficiency**: the pipeline must scale without relying on manual work for everything.
+- **Extensibility**: data specifications, model types and tools keep changing.
+- **Collaboration**: algorithms, platform, production and quality teams work on the same chain.
+
+## Technical work
+
+### HD map production tooling
+
+Worked on productivity improvements for HD map production editors, focusing on editing efficiency, data validation and tooling experience. The goal was not to add another feature, but to find the truly time-consuming steps and turn them into reusable tools.
+
+### Semi-automated 3D model production
+
+Contributed to a high-quality, semi-automated 3D model production pipeline. The core idea is to move from manual modeling to a flow of algorithmic generation plus human review/refinement:
+
+1. Ingest multi-source data and unify coordinates and scale.
+2. Generate an initial model or structure with algorithms.
+3. Use quality checks to locate problems.
+4. Let humans handle only the uncertain parts.
+5. Feed results back into the pipeline and iterate.
+
+### Engineering collaboration
+
+Semi-automated production is not a single algorithm problem. It involves data, algorithms, tools, production standards and quality criteria. The work is to translate between technical design and production reality: what should be solved by algorithms, what should be constrained by tools, and what must remain a human judgment.
+
+## Outcomes
+
+- Contributed to a semi-automated 3D model production pipeline; some data results are now live in a map app.
+- Reduced repetitive manual work through tooling and process changes.
+- Validated the feasibility of a hybrid algorithm + human workflow under real production constraints.
+
+## Reflection
+
+The hard part of HD maps and 3D reconstruction is rarely a single image or model. It is **stability at scale**. Getting an algorithm to work in a demo is easy; keeping it controllable with long-tail data, quality standards, production cadence and team collaboration is the real challenge.

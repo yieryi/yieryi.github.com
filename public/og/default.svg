@@ -24,7 +24,7 @@
     <circle cx="930" cy="300" r="4"/>
   </g>
   <g fill="#e6edf7" font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif">
-    <text x="80" y="150" fill="#38e8c6" font-family="SFMono-Regular, Menlo, monospace" font-size="18" letter-spacing="4">WANGKANG · 3D GEO-ENGINEER</text>
+    <text x="80" y="150" fill="#38e8c6" font-family="SFMono-Regular, Menlo, monospace" font-size="18" letter-spacing="4">萧安 · 3D GEO-ENGINEER</text>
     <text x="78" y="278" font-size="70" font-weight="600" letter-spacing="-2">把真实世界，</text>
     <text x="78" y="372" font-size="70" font-weight="600" letter-spacing="-2">变成<tspan fill="#38e8c6">可计算、可渲染</tspan></text>
     <text x="78" y="466" font-size="70" font-weight="600" letter-spacing="-2">的三维地图。</text>

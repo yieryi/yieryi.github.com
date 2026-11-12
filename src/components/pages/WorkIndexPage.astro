@@ -17,23 +17,23 @@ const projects = (
 const copy = {
   zh: {
     eyebrow: 'Work · Selected Projects',
-    title: '做过的事，<br />比技术栈更有说服力。',
-    desc: '三个阶段的工程实践：桌面端数字地球、WebGL 引擎底层、高精地图与三维模型规模化生产。每个案例都按“背景 — 角色 — 关键设计 — 结果 — 复盘”展开。',
+    title: '把问题讲清楚，<br />比技术栈更有说服力。',
+    desc: '围绕三维引擎、GIS 几何与高精地图数据生产的三类工程实践。每个案例按“背景 — 关键设计 — 结果 — 复盘”展开。',
     tags: ['3D Engine', 'GIS Geometry', 'HD Map', '3D Reconstruction'],
     sectionEyebrow: '01 · Case Studies',
     sectionTitle: '工程案例',
-    sectionDesc: '涉及公司业务的内容已做脱敏，只保留公开可说的技术方法、架构和个人贡献。',
-    link: '查看履历',
+    sectionDesc: '项目案例已做脱敏，只保留公开可说的技术方法、架构和工程思路。',
+    link: '了解方向',
   },
   en: {
     eyebrow: 'Work · Selected Projects',
-    title: 'The work speaks<br />louder than the stack.',
-    desc: 'Three stages of engineering: a desktop digital earth, a WebGL engine, and HD map / 3D model production at scale. Each case follows context, role, key design, outcome and reflection.',
+    title: 'Clarity beats<br />the stack.',
+    desc: 'Three areas of engineering practice: 3D engines, GIS geometry, and HD map / 3D model production. Each case follows context, key design, outcome and reflection.',
     tags: ['3D Engine', 'GIS Geometry', 'HD Map', '3D Reconstruction'],
     sectionEyebrow: '01 · Case Studies',
     sectionTitle: 'Case studies',
-    sectionDesc: 'Company-related content has been sanitized. Only publicly shareable methods, architecture and individual contributions are included.',
-    link: 'View experience',
+    sectionDesc: 'Case studies have been sanitized. Only publicly shareable methods, architecture and engineering ideas are included.',
+    link: 'Explore focus',
   },
 } as const;
 
@@ -45,8 +45,8 @@ const c = copy[lang];
   title={lang === 'zh' ? '项目' : 'Work'}
   description={
     lang === 'zh'
-      ? '王康（WANGKANG）的项目案例：数字地球引擎、WebGL 渲染、GIS 几何计算、高精地图与三维模型生产。'
-      : 'WANGKANG — case studies on digital earth engines, WebGL rendering, GIS geometry, HD maps and 3D model production.'
+      ? '萧安（WANGKANG）的项目案例：三维引擎、GIS 几何计算、高精地图与三维模型生产。'
+      : 'XIAO AN (WANGKANG) — case studies on 3D engines, GIS geometry, HD maps and 3D model production.'
   }
   image="/og/project.png"
 >

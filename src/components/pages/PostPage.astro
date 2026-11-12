@@ -48,13 +48,13 @@ const articleSchema = {
   dateModified: isoDate(data.updated ?? data.date),
   author: {
     '@type': 'Person',
-    name: '王康',
-    alternateName: 'WANGKANG',
+    name: site.name,
+    alternateName: site.handle,
     url: site.url,
   },
   publisher: {
     '@type': 'Person',
-    name: '王康',
+    name: site.name,
   },
   mainEntityOfPage: new URL(localizePath(`/writing/${post.id}/`, lang), site.url).toString(),
   keywords: data.tags.join(', '),

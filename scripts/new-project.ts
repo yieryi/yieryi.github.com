@@ -25,8 +25,6 @@ if (!/^[a-z0-9][a-z0-9-]*$/.test(slug)) {
 }
 
 const summary = await prompt.ask('一句话摘要', '一句话说明项目价值。', getFlag('summary'));
-const role = await prompt.ask('你的角色', '引擎研发', getFlag('role'));
-const period = await prompt.ask('时间区间', '2023.11 – 至今', getFlag('period'));
 const stackRaw = await prompt.ask(
   '技术栈（逗号分隔）',
   'TypeScript, WebGL, Cesium',
@@ -45,8 +43,6 @@ const coverValue = ['engine', 'gis', 'map', 'data'].includes(cover) ? cover : 'e
 const content = `---
 title: ${JSON.stringify(title)}
 summary: ${JSON.stringify(summary)}
-role: ${JSON.stringify(role)}
-period: ${JSON.stringify(period)}
 stack: ${stackYaml}
 order: ${Number(order) || 99}
 cover: ${coverValue}
@@ -57,7 +53,7 @@ featured: false
 
 ## 背景
 
-## 我的角色
+## 技术工作
 
 ## 关键设计
 

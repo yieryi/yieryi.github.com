@@ -1148,78 +1148,6 @@
   color: var(--ink-mute);
 }
 
-.timeline {
-  position: relative;
-  margin-top: 8px;
-  border-left: 1px solid var(--line-light);
-}
-
-.timeline-item {
-  position: relative;
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 32px;
-  padding: 0 0 40px 28px;
-}
-
-.timeline-item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline-item::before {
-  position: absolute;
-  top: 7px;
-  left: -5px;
-  width: 9px;
-  height: 9px;
-  border: 2px solid var(--paper);
-  border-radius: 50%;
-  background: var(--accent-ink);
-  box-shadow: 0 0 0 1px var(--accent-ink);
-  content: "";
-}
-
-.timeline-period {
-  color: var(--ink-mute);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  line-height: 1.6;
-}
-
-.timeline-content h3 {
-  font-family: var(--font-display);
-  font-size: 1.14rem;
-  font-weight: 600;
-}
-
-.timeline-company {
-  margin-top: 2px;
-  color: var(--accent-ink);
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.timeline-desc {
-  margin-top: 8px;
-  color: var(--ink-soft);
-  font-size: 0.86rem;
-  line-height: 1.75;
-}
-
-.timeline-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: 32px;
-  align-items: center;
-}
-
 .contact-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1255,172 +1183,6 @@
 
 .contact-item a:hover {
   color: var(--accent-ink);
-}
-
-.wechat-card {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  padding: 22px;
-  border: 1px solid var(--line-light);
-  border-radius: var(--radius);
-  background: var(--white);
-}
-
-.wechat-card img {
-  width: 132px;
-  height: 132px;
-  border-radius: var(--radius-sm);
-  object-fit: cover;
-}
-
-.wechat-card h3 {
-  font-family: var(--font-display);
-  font-size: 1rem;
-}
-
-.wechat-card p {
-  margin-top: 4px;
-  color: var(--ink-mute);
-  font-size: 0.78rem;
-}
-
-/* --------------------------------------------------------------------------
-   Resume
-   -------------------------------------------------------------------------- */
-
-.resume-page {
-  padding: calc(var(--header-height) + 40px) 0 64px;
-  background: var(--paper-2);
-}
-
-.resume-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: min(100% - 48px, 210mm);
-  margin: 0 auto 20px;
-}
-
-.resume-actions p {
-  color: var(--ink-mute);
-  font-size: 0.78rem;
-}
-
-.resume-sheet {
-  width: min(100% - 48px, 210mm);
-  min-height: 297mm;
-  margin: 0 auto;
-  padding: 18mm;
-  border: 1px solid var(--line-light);
-  background: #fff;
-  box-shadow: 0 20px 60px rgba(7, 11, 18, 0.1);
-  color: #111827;
-}
-
-.resume-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 18px;
-  border-bottom: 2px solid #111827;
-}
-
-.resume-name {
-  font-family: var(--font-display);
-  font-size: 2.4rem;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.resume-role {
-  margin-top: 6px;
-  color: #4b5563;
-  font-size: 0.9rem;
-}
-
-.resume-contact {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  color: #4b5563;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  text-align: right;
-}
-
-.resume-summary {
-  margin-top: 20px;
-  color: #374151;
-  font-size: 0.86rem;
-  line-height: 1.75;
-}
-
-.resume-section {
-  margin-top: 24px;
-}
-
-.resume-section h2 {
-  margin-bottom: 12px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #d1d5db;
-  color: #111827;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.resume-item {
-  display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
-  gap: 18px;
-  padding: 8px 0;
-}
-
-.resume-item-period {
-  color: #6b7280;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  line-height: 1.7;
-}
-
-.resume-item h3 {
-  font-size: 0.92rem;
-  font-weight: 650;
-}
-
-.resume-item-company {
-  color: #4b5563;
-  font-size: 0.78rem;
-}
-
-.resume-item p {
-  margin-top: 4px;
-  color: #4b5563;
-  font-size: 0.78rem;
-  line-height: 1.7;
-}
-
-.resume-skills {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 24px;
-  font-size: 0.78rem;
-  line-height: 1.7;
-}
-
-.resume-skills strong {
-  color: #111827;
-}
-
-.resume-skills span {
-  color: #4b5563;
 }
 
 /* --------------------------------------------------------------------------
@@ -1604,8 +1366,7 @@
     max-width: 560px;
   }
 
-  .about-intro,
-  .contact-grid {
+  .about-intro {
     grid-template-columns: 1fr;
     gap: 32px;
   }
@@ -1668,38 +1429,10 @@
     grid-template-columns: 1fr;
   }
 
-  .timeline-item {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding-left: 22px;
-  }
-
   .contact-list {
     grid-template-columns: 1fr;
   }
 
-  .wechat-card {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .resume-item {
-    grid-template-columns: 1fr;
-    gap: 2px;
-  }
-
-  .resume-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .resume-contact {
-    text-align: left;
-  }
-
-  .resume-skills {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1717,48 +1450,5 @@
 
   .prose h3 {
     font-size: 1.16rem;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Print
-   -------------------------------------------------------------------------- */
-
-@media print {
-  @page {
-    size: A4;
-    margin: 0;
-  }
-
-  body {
-    background: #fff !important;
-  }
-
-  .site-header,
-  .site-footer,
-  .resume-actions,
-  .reading-progress,
-  .skip-link,
-  .no-print {
-    display: none !important;
-  }
-
-  .resume-page {
-    padding: 0;
-    background: #fff;
-  }
-
-  .resume-sheet {
-    width: 100%;
-    min-height: auto;
-    margin: 0;
-    padding: 14mm;
-    border: 0;
-    box-shadow: none;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
   }
 }

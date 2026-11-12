@@ -1,19 +1,17 @@
 ---
-title: GClient WebGL Digital Earth Engine
-summary: Core R&D on a WebGL 3D engine for digital twins and smart cities, spanning rendering, data integration, spatial analysis and business-specific pipelines.
-role: Engine R&D
-period: 2020.07 – 2023.11
+title: WebGL Digital Earth Engine
+summary: R&D on a 3D engine for digital twins and smart cities, covering rendering, data integration, spatial analysis and business pipelines.
 stack: [C++, WebGL, GLSL, Cesium, 3D Tiles, Spatial Analysis]
 order: 1
 cover: engine
 featured: true
 ---
 
-> Note: This page describes publicly shareable technical approaches and my individual contribution. It does not include company data, internal screenshots or unpublished metrics.
+> Note: This page describes publicly shareable technical approaches and engineering ideas. It does not include internal data or unpublished metrics.
 
 ## Context
 
-GClient is a WebGL engine for digital earth and digital twin scenarios. In the browser it needs to handle city-scale terrain, imagery, vector data, photogrammetry, BIM/glTF models, spatial analysis, underground pipelines and urban flood simulation.
+This is a WebGL engine for digital earth and digital twin scenarios. In the browser it needs to handle city-scale terrain, imagery, vector data, photogrammetry, BIM/glTF models, spatial analysis, underground pipelines and urban flood simulation.
 
 The hard part is not simply drawing models. It is:
 
@@ -22,14 +20,14 @@ The hard part is not simply drawing models. It is:
 - giving business teams reusable rendering capabilities rather than one-off effects;
 - bringing analysis results back into the 3D scene.
 
-## My role
+## Technical work
 
-I worked on core engine R&D and key project support, mainly in four areas:
+The work falls into four areas:
 
 1. **Rendering**: materials, lighting, post-processing, particles, dynamic line/area effects and business-specific render pipelines.
 2. **Data integration**: extending 3D formats and sources, handling coordinate systems, hierarchy, transforms and style mapping.
 3. **Performance and stability**: reducing unnecessary draw calls and state changes, improving loading and interaction for large datasets.
-4. **Project support**: turning requirements from urban flood simulation, underground pipelines and digital twins into engine capabilities.
+4. **Business support**: turning requirements from urban flood simulation, underground pipelines and digital twins into reusable engine capabilities.
 
 ## Key directions
 
@@ -41,21 +39,17 @@ Business scenarios often need effects that the engine does not provide out of th
 - clipping, transparency, occlusion and flow animation for underground pipelines;
 - analytical representations for building blocks, administrative areas and skylines.
 
-My approach was to split each effect into three layers — data preparation, render pipeline, interaction/analysis — and reuse the existing render flow instead of writing a separate system for every project.
+The approach is to split each effect into three layers — data preparation, render pipeline, interaction/analysis — and reuse the existing render flow instead of writing a separate system for every project.
 
 ### Geometry and spatial analysis
 
 GIS analysis is more than visualization. Geometry editing, boolean operations, rectangle picking, skyline analysis and cross-sections require geometric correctness, screen interaction and rendering performance at the same time.
 
-This gave me solid experience in combining geometry algorithms with 3D rendering.
-
-### Project support
-
-I supported provincial and municipal projects in smart cities, digital twins, underground pipelines and urban flood simulation, focusing on engine capability building and difficult production issues. The more projects we handled, the clearer the boundary became: what belongs in the engine and what belongs in the business layer.
+This is where geometry algorithms and 3D rendering meet in practice.
 
 ## Outcomes
 
-- Built a reusable set of 3D rendering and spatial analysis capabilities that supported multiple projects.
+- Built a reusable set of 3D rendering and spatial analysis capabilities for multiple scenarios.
 - Turned several project-specific effects into engine capabilities, reducing duplicate development.
 - Validated loading, rendering and interaction stability with real city-scale datasets.
 

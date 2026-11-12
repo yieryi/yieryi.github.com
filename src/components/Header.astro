@@ -15,7 +15,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const pathname = Astro.url.pathname;
-const role = lang === 'zh' ? site.role : site.roleEn;
+const displayName = lang === 'zh' ? site.name : site.nameEn;
 const switchHref = switchLangPath(pathname, lang === 'zh' ? 'en' : 'zh');
 
 const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.downloads' | 'nav.about'> = {
@@ -35,10 +35,10 @@ const isActive = (href: string) => {
 <header class="site-header" data-open="false">
   <div class="container header-inner">
     <a class="brand" href={localizePath('/', lang)}>
-      <span class="brand-mark" aria-hidden="true"><span>WK</span></span>
+      <span class="brand-mark" aria-hidden="true"><span>XA</span></span>
       <span class="brand-text">
-        <span class="brand-name">{site.name}</span>
-        <span class="brand-sub">{role}</span>
+        <span class="brand-name">{displayName}</span>
+        <span class="brand-sub">{site.handle}</span>
       </span>
     </a>
 

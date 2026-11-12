@@ -1126,43 +1126,6 @@ html[data-theme="light"] .globe-fallback-grid {
   font-size: 0.92rem;
 }
 
-.about-mini-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 8px;
-  border-left: 1px solid var(--line-light);
-}
-
-.about-mini-item {
-  position: relative;
-  padding: 0 0 18px 20px;
-}
-
-.about-mini-item::before {
-  position: absolute;
-  top: 7px;
-  left: -4px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--paper);
-  box-shadow: 0 0 0 1px var(--accent-ink);
-  content: "";
-}
-
-.about-mini-period {
-  color: var(--ink-mute);
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-}
-
-.about-mini-title {
-  margin-top: 2px;
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
 /* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */

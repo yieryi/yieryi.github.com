@@ -9,7 +9,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const role = lang === 'zh' ? site.role : site.roleEn;
+const displayName = lang === 'zh' ? site.name : site.nameEn;
 const year = new Date().getFullYear();
 
 const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.downloads' | 'nav.about'> = {
@@ -26,10 +26,10 @@ const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.down
     <div class="footer-cta">
       <h2 class="footer-title">
         {t('footer.cta1')}<br />
-        <a href={`mailto:${site.email}`}>{t('footer.cta2')}</a>{t('footer.cta3')}
+        <a href={site.github} target="_blank" rel="noopener noreferrer">{t('footer.cta2')}</a>{t('footer.cta3')}
       </h2>
-      <a class="btn btn-primary" href={`mailto:${site.email}`}>
-        {t('footer.email')}
+      <a class="btn btn-primary" href={site.github} target="_blank" rel="noopener noreferrer">
+        {t('footer.ctaButton')}
         <Icon name="arrow-up-right" size={16} />
       </a>
     </div>
@@ -37,10 +37,10 @@ const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.down
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="brand" href={localizePath('/', lang)}>
-          <span class="brand-mark" aria-hidden="true"><span>WK</span></span>
+          <span class="brand-mark" aria-hidden="true"><span>XA</span></span>
           <span class="brand-text">
-            <span class="brand-name">{site.name}</span>
-            <span class="brand-sub">{role}</span>
+            <span class="brand-name">{displayName}</span>
+            <span class="brand-sub">{site.handle}</span>
           </span>
         </a>
         <p>{t('footer.desc')}</p>
@@ -75,9 +75,9 @@ const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.down
       <div class="footer-col">
         <h3>{t('footer.contact')}</h3>
         <ul>
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
-          <li><span>{t('footer.wechat')}: {site.wechat}</span></li>
-          <li><span>GitHub: @yieryi</span></li>
+          <li><a href={site.github} target="_blank" rel="noopener noreferrer">{t('footer.github')}: @yieryi</a></li>
+          <li><a href={site.githubIssues} target="_blank" rel="noopener noreferrer">{t('footer.guestbook')}</a></li>
+          <li><a href={localizePath('/rss.xml', lang)}>RSS</a></li>
         </ul>
       </div>
     </div>
