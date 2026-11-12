@@ -47,7 +47,11 @@ const personSchema = {
   name: site.name,
   alternateName: site.handle,
   url: site.url,
-  jobTitle: role,
+  jobTitle: lang === 'zh' ? '高级地图工程师' : 'Senior Map Engineer',
+  worksFor: {
+    '@type': 'Organization',
+    name: lang === 'zh' ? '高德' : 'Amap',
+  },
   description: lang === 'zh' ? site.description : site.descriptionEn,
   sameAs: [site.github],
   knowsAbout: [

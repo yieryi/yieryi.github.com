@@ -1148,6 +1148,13 @@
   color: var(--ink-mute);
 }
 
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 32px;
+  align-items: center;
+}
+
 .contact-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1183,6 +1190,34 @@
 
 .contact-item a:hover {
   color: var(--accent-ink);
+}
+
+.wechat-card {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 22px;
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+
+.wechat-card img {
+  width: 132px;
+  height: 132px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.wechat-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.wechat-card p {
+  margin-top: 4px;
+  color: var(--ink-mute);
+  font-size: 0.78rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -1366,7 +1401,8 @@
     max-width: 560px;
   }
 
-  .about-intro {
+  .about-intro,
+  .contact-grid {
     grid-template-columns: 1fr;
     gap: 32px;
   }
@@ -1431,6 +1467,11 @@
 
   .contact-list {
     grid-template-columns: 1fr;
+  }
+
+  .wechat-card {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
 }

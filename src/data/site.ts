@@ -4,12 +4,14 @@ export const site = {
   handle: 'WANGKANG',
   role: '三维地理空间工程师',
   roleEn: '3D Geospatial Engineer',
+  currentRole: '高德 · 高级地图工程师',
+  currentRoleEn: 'Amap · Senior Map Engineer',
   tagline: '把真实世界，变成可计算、可渲染的三维地图。',
   taglineEn: 'Turning the real world into computable, renderable 3D maps.',
   description:
-    '萧安（WANGKANG）的个人技术主页。关注三维渲染引擎、GIS 几何计算、三维建模与高精地图数据生产。',
+    '萧安（WANGKANG）的个人技术主页。三维地理空间工程师，目前在 高德 担任 高级地图工程师，关注三维渲染引擎、GIS 几何计算、三维建模与高精地图数据生产。',
   descriptionEn:
-    'XIAO AN (WANGKANG) — 3D geospatial engineer working on rendering engines, GIS geometry, 3D modeling and HD map data production.',
+    'XIAO AN (WANGKANG) — 3D geospatial engineer, currently a Senior Map Engineer at Amap, working on rendering engines, GIS geometry, 3D modeling and HD map data production.',
   keywords: [
     '萧安',
     'WANGKANG',
@@ -20,6 +22,7 @@ export const site = {
     'GIS 几何计算',
     '高精地图',
     '三维重建',
+    '高级地图工程师',
   ],
   keywordsEn: [
     'XIAO AN',
@@ -31,7 +34,10 @@ export const site = {
     'GIS geometry',
     'HD map',
     '3D reconstruction',
+    'Senior Map Engineer',
   ],
+  email: 'kang_wang163@163.com',
+  wechat: 'i4vanky',
   github: 'https://github.com/yieryi',
   githubIssues: 'https://github.com/yieryi/yieryi.github.com/issues',
   url: 'https://yieryi.github.io',
@@ -49,7 +55,6 @@ export const site = {
     { value: 'GIS', label: '几何与空间分析', labelEn: 'Geometry & spatial analysis' },
     { value: 'HD', label: '高精地图与三维重建', labelEn: 'HD map & 3D reconstruction' },
   ],
-
 } as const;
 
 export type Site = typeof site;

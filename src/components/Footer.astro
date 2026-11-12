@@ -26,9 +26,9 @@ const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.down
     <div class="footer-cta">
       <h2 class="footer-title">
         {t('footer.cta1')}<br />
-        <a href={site.github} target="_blank" rel="noopener noreferrer">{t('footer.cta2')}</a>{t('footer.cta3')}
+        <a href={`mailto:${site.email}`}>{t('footer.cta2')}</a>{t('footer.cta3')}
       </h2>
-      <a class="btn btn-primary" href={site.github} target="_blank" rel="noopener noreferrer">
+      <a class="btn btn-primary" href={`mailto:${site.email}`}>
         {t('footer.ctaButton')}
         <Icon name="arrow-up-right" size={16} />
       </a>
@@ -75,9 +75,9 @@ const navKeys: Record<string, 'nav.work' | 'nav.writing' | 'nav.lab' | 'nav.down
       <div class="footer-col">
         <h3>{t('footer.contact')}</h3>
         <ul>
-          <li><a href={site.github} target="_blank" rel="noopener noreferrer">{t('footer.github')}: @yieryi</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><span>{t('footer.wechat')}: {site.wechat}</span></li>
           <li><a href={site.githubIssues} target="_blank" rel="noopener noreferrer">{t('footer.guestbook')}</a></li>
-          <li><a href={localizePath('/rss.xml', lang)}>RSS</a></li>
         </ul>
       </div>
     </div>

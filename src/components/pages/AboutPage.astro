@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { site } from '../../data/site';
-import { localizePath, type Lang } from '../../i18n/utils';
+import { type Lang } from '../../i18n/utils';
 
 interface Props {
   lang: Lang;
@@ -13,7 +13,7 @@ const copy = {
   zh: {
     eyebrow: '关于 · 萧安',
     title: '萧安<br />三维地理空间工程师',
-    lead: '把真实世界，变成可计算、可渲染的三维地图。关注三维渲染、GIS 几何与高精地图数据生产。',
+    lead: '把真实世界，变成可计算、可渲染的三维地图。关注三维渲染、GIS 几何与高精地图数据生产。目前在 高德 担任 高级地图工程师。',
     tags: ['3D Rendering', 'GIS Geometry', 'HD Map', 'Data Production'],
     intro1a: '我是萧安，一名',
     intro1b: '三维地理空间工程师',
@@ -24,6 +24,7 @@ const copy = {
       '这个站点用来记录工程实践、整理技术笔记，也放一些空间计算的小工具。',
     glance: '概览',
     focus: [
+      { label: '当前角色', value: site.currentRole },
       { label: '关注方向', value: '3D 渲染 / GIS 几何 / 高精地图' },
       { label: '常用技术', value: 'C++ / TypeScript / WebGL / Cesium' },
       { label: '网络标识', value: 'WANGKANG' },
@@ -34,15 +35,19 @@ const copy = {
     capDesc: '不追求“什么都会”，更在意能不能把一个问题从数据、算法、渲染到交付串起来。',
     contactEyebrow: '02 · Contact',
     contactTitle: '交流与反馈',
-    contactDesc: '技术交流、问题反馈、合作想法，欢迎在 GitHub 留言。',
+    contactDesc: '技术交流、项目合作、问题反馈，欢迎邮件或微信联系。',
+    email: '邮箱',
+    wechat: '微信',
     github: 'GitHub',
     guestbook: '留言板',
-    rss: 'RSS',
+    wechatTitle: '微信',
+    wechatDesc: '扫码添加，请备注来意。',
+    wechatId: '微信号',
   },
   en: {
     eyebrow: 'About · XIAO AN',
     title: 'XIAO AN<br />3D Geospatial Engineer',
-    lead: 'Turning the real world into computable, renderable 3D maps. Focused on 3D rendering, GIS geometry and HD map data production.',
+    lead: 'Turning the real world into computable, renderable 3D maps. Focused on 3D rendering, GIS geometry and HD map data production. Currently a Senior Map Engineer at Amap.',
     tags: ['3D Rendering', 'GIS Geometry', 'HD Map', 'Data Production'],
     intro1a: "I'm XIAO AN, a ",
     intro1b: '3D geospatial engineer',
@@ -53,6 +58,7 @@ const copy = {
       'This site is where I document engineering practice, keep technical notes and publish a few spatial utilities.',
     glance: 'At a glance',
     focus: [
+      { label: 'Current role', value: site.currentRoleEn },
       { label: 'Focus', value: '3D rendering / GIS geometry / HD map' },
       { label: 'Toolbox', value: 'C++ / TypeScript / WebGL / Cesium' },
       { label: 'Handle', value: 'WANGKANG' },
@@ -63,10 +69,14 @@ const copy = {
     capDesc: 'I do not aim to do everything. I care about connecting data, algorithms, rendering and delivery into one working system.',
     contactEyebrow: '02 · Contact',
     contactTitle: 'Exchange and feedback',
-    contactDesc: 'Technical exchange, feedback and collaboration ideas are welcome via GitHub.',
+    contactDesc: 'Technical exchange, project collaboration and feedback — email or WeChat is welcome.',
+    email: 'Email',
+    wechat: 'WeChat',
     github: 'GitHub',
     guestbook: 'Guestbook',
-    rss: 'RSS',
+    wechatTitle: 'WeChat',
+    wechatDesc: 'Scan to connect. Please mention why you are reaching out.',
+    wechatId: 'WeChat ID',
   },
 } as const;
 
@@ -94,8 +104,8 @@ const caps = capabilities[lang];
   title="About"
   description={
     lang === 'zh'
-      ? '萧安（WANGKANG），三维地理空间工程师。关注三维渲染、GIS 几何与高精地图数据生产。'
-      : 'XIAO AN (WANGKANG) — 3D geospatial engineer focused on 3D rendering, GIS geometry and HD map data production.'
+      ? '萧安（WANGKANG），三维地理空间工程师，目前在 高德 担任 高级地图工程师。关注三维渲染、GIS 几何与高精地图数据生产。'
+      : 'XIAO AN (WANGKANG) — 3D geospatial engineer, currently a Senior Map Engineer at Amap, focused on 3D rendering, GIS geometry and HD map data production.'
   }
 >
   <section class="page-hero">
@@ -163,18 +173,33 @@ const caps = capabilities[lang];
         </div>
       </div>
 
-      <div class="contact-list reveal" style="max-width: 820px;">
-        <div class="contact-item">
-          <span>{c.github}</span>
-          <a href={site.github} target="_blank" rel="noopener noreferrer">@yieryi</a>
+      <div class="contact-grid reveal">
+        <div class="contact-list">
+          <div class="contact-item">
+            <span>{c.email}</span>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </div>
+          <div class="contact-item">
+            <span>{c.wechat}</span>
+            <strong>{site.wechat}</strong>
+          </div>
+          <div class="contact-item">
+            <span>{c.github}</span>
+            <a href={site.github} target="_blank" rel="noopener noreferrer">@yieryi</a>
+          </div>
+          <div class="contact-item">
+            <span>{c.guestbook}</span>
+            <a href={site.githubIssues} target="_blank" rel="noopener noreferrer">GitHub Issues</a>
+          </div>
         </div>
-        <div class="contact-item">
-          <span>{c.guestbook}</span>
-          <a href={site.githubIssues} target="_blank" rel="noopener noreferrer">GitHub Issues</a>
-        </div>
-        <div class="contact-item">
-          <span>{c.rss}</span>
-          <a href={localizePath('/rss.xml', lang)}>RSS</a>
+
+        <div class="wechat-card">
+          <img src="/assets/images/wechat.webp" alt={c.wechatTitle} width="132" height="132" loading="lazy" />
+          <div>
+            <h3>{c.wechatTitle}</h3>
+            <p>{c.wechatDesc}</p>
+            <p style="margin-top: 8px;">{c.wechatId}: {site.wechat}</p>
+          </div>
         </div>
       </div>
     </div>

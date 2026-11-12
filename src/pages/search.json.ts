@@ -49,7 +49,7 @@ export const GET: APIRoute = async () => {
     {
       lang: 'zh' as const,
       title: '首页',
-      description: '萧安 · 三维地理空间工程师。',
+      description: '萧安 · 三维地理空间工程师，目前在 高德 担任 高级地图工程师。',
       href: '/',
       type: 'page' as const,
       tags: ['WANGKANG'],
@@ -57,7 +57,7 @@ export const GET: APIRoute = async () => {
     {
       lang: 'en' as const,
       title: 'Home',
-      description: 'XIAO AN · 3D Geospatial Engineer.',
+      description: 'XIAO AN · 3D Geospatial Engineer, currently a Senior Map Engineer at Amap.',
       href: '/en/',
       type: 'page' as const,
       tags: ['WANGKANG'],
@@ -97,7 +97,7 @@ export const GET: APIRoute = async () => {
     {
       lang: 'zh' as const,
       title: 'About · 关于萧安',
-      description: '三维地理空间工程师，关注三维渲染、GIS 与高精地图数据生产。',
+      description: '三维地理空间工程师，目前在 高德 担任 高级地图工程师，关注三维渲染、GIS 与高精地图数据生产。',
       href: '/about/',
       type: 'page' as const,
       tags: ['方向', 'GitHub'],
@@ -105,7 +105,7 @@ export const GET: APIRoute = async () => {
     {
       lang: 'en' as const,
       title: 'About · XIAO AN',
-      description: '3D geospatial engineer working on rendering, GIS and HD map data production.',
+      description: '3D geospatial engineer, currently a Senior Map Engineer at Amap, focused on rendering, GIS and HD map data production.',
       href: '/en/about/',
       type: 'page' as const,
       tags: ['Focus', 'GitHub'],

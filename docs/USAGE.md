@@ -52,7 +52,7 @@ src/
   content/projects/    中文项目案例（MDX）
   content/projects-en/ 英文项目案例（MDX）
   i18n/                界面文案、语言路径、标签翻译
-  data/site.ts         主标识、辅助标识、导航、GitHub 链接
+  data/site.ts         主标识、当前角色、联系方式、导航
   data/downloads.ts    下载资源注册表
   data/legacy.ts       旧站 URL 重定向（补充项）
   scripts/globe.ts     首屏 Three.js 场景
@@ -207,7 +207,7 @@ featured: false
 
 英文项目正文放在 `src/content/projects-en/`，文件名 slug 与中文项目一致。英文页会读取这个集合，中文页读取 `src/content/projects/`。
 
-**隐私与合规提醒**：项目案例只写公开可说的技术方法、架构和工程思路；不要放真实姓名、公司名、任职时间、未公开数据、内部截图或真实指标。页面会自动带“已脱敏”提示。
+**隐私与合规提醒**：项目案例只写公开可说的技术方法、架构和工程思路；不要放详细公司历史、任职时间、未公开数据、内部截图或真实指标。当前角色可按需公开。页面会自动带“已脱敏”提示。
 
 ## 6. 新增下载资源
 
@@ -258,6 +258,9 @@ export const site = {
   nameEn: 'XIAO AN',
   handle: 'WANGKANG',
   role: '三维地理空间工程师',
+  currentRole: '高德 · 高级地图工程师',
+  email: 'kang_wang163@163.com',
+  wechat: 'i4vanky',
   github: 'https://github.com/yieryi',
   url: 'https://yieryi.github.io',
   nav: [
@@ -271,6 +274,8 @@ export const site = {
 ```
 
 - 改英文角色：`roleEn`
+- 改当前角色：`currentRole` / `currentRoleEn`
+- 改邮箱/微信：`email` / `wechat`
 - 改英文简介：`descriptionEn`
 - 改导航：调整 `nav` 数组（Header/Footer 会按语言自动加 `/en` 前缀并翻译标签）
 - 改首页文案：`src/components/pages/HomePage.astro`
@@ -279,7 +284,7 @@ export const site = {
 - 改项目页：`src/components/pages/ProjectPage.astro`
 - 改下载页：`src/components/pages/DownloadsPage.astro`
 
-**隐私约定**：站点不展示真实姓名、公司、任职时间、邮箱、微信或简历；联系方式只保留 GitHub。新增项目/文章时也不要写入这些信息。
+**隐私约定**：站点不展示简历或详细履历/任职时间线；仅公开当前角色「高德 · 高级地图工程师」。邮箱/微信仅用于合作交流；新增项目/文章时不要写入其他公司历史或未公开信息。
 
 ## 8. 中英双语与主题
 
@@ -477,4 +482,4 @@ bun run preview
 | 2026-11-11 | 补充内部链接检查、分类 OG 图、Manifest 与 Lighthouse 结果 |
 | 2026-11-11 | 增加中英双语、语言切换、日夜主题与主题化 3D 场景说明 |
 | 2026-11-11 | 英文正文全文翻译标记为 P2 搁置事项 |
-| 2026-11-12 | 主 IP 改为萧安（WANGKANG 辅助）；移除简历模块、履历、公司名、任职时间、邮箱与微信；项目案例改为匿名化技术复盘 |
+| 2026-11-12 | 主 IP 改为萧安（WANGKANG 辅助）；移除简历模块与详细履历/时间线；项目案例匿名化；保留当前角色、邮箱和微信用于合作联系 |
