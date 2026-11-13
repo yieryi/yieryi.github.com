@@ -19,10 +19,10 @@ export function getHeroQuality(): HeroQuality {
       dpr: Math.min(deviceDpr, 1.25),
       antialias: false,
       terrainSegments: 84,
-      birdCount: 14,
+      birdCount: 0,
       starCount: 160,
       cameraDistance: 16.5,
-      fov: 50,
+      fov: 48,
     };
   }
 
@@ -31,9 +31,9 @@ export function getHeroQuality(): HeroQuality {
     dpr: Math.min(deviceDpr, 1.5),
     antialias: true,
     terrainSegments: 140,
-    birdCount: 14,
+    birdCount: 16,
     starCount: 320,
     cameraDistance: 14,
-    fov: 42,
+    fov: 44,
   };
 }

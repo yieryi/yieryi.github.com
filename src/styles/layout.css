@@ -1277,42 +1277,6 @@ html[data-theme="dark"] .theme-icon-moon {
   pointer-events: none;
 }
 
-.hero-observer-label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 7px 9px;
-  border: 1px solid var(--hero-label-border);
-  border-left: 2px solid var(--hero-accent);
-  border-radius: 4px;
-  background: var(--hero-label-bg);
-  color: var(--hero-label-text);
-  font-family: var(--font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.08em;
-  line-height: 1.45;
-  white-space: nowrap;
-  pointer-events: none;
-  backdrop-filter: blur(8px);
-  transform: translate3d(-9999px, -9999px, 0);
-  transition: opacity 180ms var(--ease);
-}
-
-.hero-label-kicker,
-.hero-label-meta {
-  color: var(--hero-label-muted);
-  font-size: 0.52rem;
-}
-
-.hero-label-main {
-  color: var(--hero-accent);
-  font-weight: 600;
-}
-
 .hero-inner {
   position: relative;
   z-index: 5;
@@ -1370,10 +1334,6 @@ html[data-theme="dark"] .hero-fallback-ridge-front {
       color-mix(in srgb, var(--hero-bg) 32%, transparent) 68%,
       transparent 100%
     );
-  }
-
-  .hero-observer-label {
-    display: none;
   }
 
   .hero-coordinate {

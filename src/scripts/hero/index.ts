@@ -15,21 +15,19 @@ import { createTerrain } from './terrain';
 import { createRiver } from './river';
 import { createSky } from './sky';
 import { createBirds } from './birds';
-import { createObserver } from './observer';
 import { createCameraController } from './camera';
 import { createTrail } from './trail';
 
 interface HeroSceneOptions {
   canvas: HTMLCanvasElement;
   trailCanvas: HTMLCanvasElement;
-  label: HTMLElement;
   hero: HTMLElement;
 }
 
 const getTheme = (): 'light' | 'dark' =>
   document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
 
-export function initHeroScene({ canvas, trailCanvas, label, hero }: HeroSceneOptions): void {
+export function initHeroScene({ canvas, trailCanvas, hero }: HeroSceneOptions): void {
   const quality = getHeroQuality();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -60,8 +58,7 @@ export function initHeroScene({ canvas, trailCanvas, label, hero }: HeroSceneOpt
   const river = createRiver();
   const sky = createSky(quality);
   const birds = createBirds(quality);
-  const observer = createObserver(quality);
-  world.add(sky.group, terrain.group, river.mesh, birds.group, observer.group);
+  world.add(sky.group, terrain.group, river.mesh, birds.group);
 
   const trail = createTrail(trailCanvas, hero);
 
@@ -76,7 +73,6 @@ export function initHeroScene({ canvas, trailCanvas, label, hero }: HeroSceneOpt
     river.updateTheme(palette);
     sky.updateTheme(palette);
     birds.updateTheme(palette);
-    observer.updateTheme(palette);
 
     hemisphere.color.setHex(palette.hemiSky);
     hemisphere.groundColor.setHex(palette.hemiGround);
@@ -104,16 +100,15 @@ export function initHeroScene({ canvas, trailCanvas, label, hero }: HeroSceneOpt
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvas);
 
-  const updateLabel = () => {
-    const projected = observer.anchor.clone().project(camera);
-    const visible = projected.z < 1 && projected.z > -1;
-    label.style.opacity = visible ? '1' : '0';
-    if (!visible) return;
-
-    const x = (projected.x * 0.5 + 0.5) * canvas.clientWidth;
-    const y = (-projected.y * 0.5 + 0.5) * canvas.clientHeight;
-    label.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -100%)`;
+  const onPointerMove = (event: PointerEvent) => {
+    if (event.pointerType !== 'mouse') return;
+    const rect = hero.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+    birds.setPointer(x, y);
   };
+  hero.addEventListener('pointermove', onPointerMove, { passive: true });
 
   const animate = () => {
     frame = 0;
@@ -126,9 +121,7 @@ export function initHeroScene({ canvas, trailCanvas, label, hero }: HeroSceneOpt
 
     cameraController.update(elapsed, reducedMotion);
     river.updateTime(elapsed);
-    birds.update(elapsed);
-    observer.update(elapsed);
-    updateLabel();
+    birds.update(elapsed, delta);
     trail.update(now, getTheme());
 
     renderer.render(scene, camera);
@@ -165,9 +158,7 @@ export function initHeroScene({ canvas, trailCanvas, label, hero }: HeroSceneOpt
   scene.fog = new Fog(heroPalettes.light.fog, 22, 100);
   applyTheme();
   resize();
-  observer.update(0);
   cameraController.update(0, reducedMotion);
-  updateLabel();
   animate();
   canvas.classList.add('is-ready');
 }

@@ -345,32 +345,33 @@ bun run check:links
 
 ## 10. 首页 3D 说明
 
-> 首屏已升级为「全屏数字地形」。详细方案、决策和待验证问题见 [`HERO_3D_PLAN.md`](./HERO_3D_PLAN.md)。
+> 首屏为「全屏数字地形」。详细方案、决策和待验证问题见 [`HERO_3D_PLAN.md`](./HERO_3D_PLAN.md)。
 
 - 容器：`src/components/HeroScene.astro`
 - 入口：`src/scripts/hero/index.ts`
 - 模块：
-  - `terrain.ts`：程序化 heightfield、雪线/岩石/雪地颜色、淡网格、世界高度等高线
+  - `terrain.ts`：程序化 heightfield、雪线/岩石/雪地颜色、加宽河谷、世界高度等高线
   - `river.ts`：河谷水面与流动高光
   - `sky.ts`：渐变天空、日/月、星点
-  - `birds.ts`：桌面端 14 只 V 字鸟群，移动端不显示
-  - `observer.ts`：世界空间火柴人 + 坐标轴
-  - `camera.ts`：`rotate_forward` 固定循环
+  - `birds.ts`：桌面端 16 只鸟群，随机巡航并跟随鼠标；移动端不显示
+  - `camera.ts`：`rotate_forward` 固定循环 + 地形高度安全距离
   - `trail.ts`：鼠标等高线拖尾
   - `palette.ts`：日/夜配色
   - `quality.ts`：桌面/移动端画质档
 - 视觉：风格化数字地形，不是写实喜马拉雅；首屏全屏铺满，文字在左侧渐变遮罩上。
-- 相机：约 22 秒 `rotate_forward` 循环，固定注视点，无用户相机控制。
-- 交互：桌面端鼠标移动产生等高线笔触，约 1 秒消散；触屏不启用。
-- 移动端：仍然渲染 3D，但降低地形精度、鸟数量、星点和 DPR；观测者标签与火柴人在移动端隐藏，避免压住按钮/文字。
-- 主题：日/夜共享同一场景，只切换光照、天空、地形、水面和鸟/观测者颜色。
+- 相机：约 15 秒 `rotate_forward` 循环，位于谷口外河谷中心线上方，俯看河道，固定注视点，无用户相机控制。
+- 交互：桌面端鼠标移动产生等高线笔触，约 1 秒消散，并让鸟群向鼠标方向偏移；触屏不启用。
+- 移动端：仍然渲染 3D，但降低地形精度、星点和 DPR；不显示鸟群，避免拥挤。
+- 主题：日/夜共享同一场景，只切换光照、天空、地形、水面和鸟群颜色。
 - 性能：动态加载、离开视口暂停、DPR 上限、低多边形、无后处理。
 - WebGL 不可用时显示 CSS 山脊兜底。
 
 可调参数：
 
-- 相机幅度/周期：`src/scripts/hero/camera.ts`
-- 地形高度/雪线：`src/scripts/hero/terrain.ts`
+- 相机位置/幅度/周期：`src/scripts/hero/camera.ts`
+- 地形高度/河谷/雪线：`src/scripts/hero/terrain.ts`
+- 河面宽度/水流：`src/scripts/hero/river.ts`
+- 鸟群数量/巡航范围/跟随强度：`src/scripts/hero/birds.ts`、`src/scripts/hero/quality.ts`
 - 配色：`src/scripts/hero/palette.ts`
 - 画质：`src/scripts/hero/quality.ts`
 - 拖尾寿命/线宽：`src/scripts/hero/trail.ts`

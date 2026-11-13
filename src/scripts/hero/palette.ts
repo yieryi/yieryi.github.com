@@ -13,19 +13,12 @@ export interface HeroPalette {
   terrainHigh: number;
   terrainRock: number;
   terrainSnow: number;
-  wire: number;
-  wireOpacity: number;
   contour: number;
   contourOpacity: number;
   waterDeep: number;
   waterShallow: number;
   waterHighlight: number;
   bird: number;
-  observer: number;
-  axisX: number;
-  axisY: number;
-  axisZ: number;
-  ring: number;
   starOpacity: number;
 }
 
@@ -45,19 +38,12 @@ export const heroPalettes: Record<'light' | 'dark', HeroPalette> = {
     terrainHigh: 0xf7fdff,
     terrainRock: 0x46595d,
     terrainSnow: 0xf9fdff,
-    wire: 0x0a7f70,
-    wireOpacity: 0.09,
     contour: 0x0a6f63,
     contourOpacity: 0.23,
-    waterDeep: 0x1d5f70,
-    waterShallow: 0x6cc9c4,
+    waterDeep: 0x14556b,
+    waterShallow: 0x3fb3b0,
     waterHighlight: 0xe7fffb,
     bird: 0x26363d,
-    observer: 0x083f39,
-    axisX: 0xb85c38,
-    axisY: 0x087b6b,
-    axisZ: 0x2f628c,
-    ring: 0x087b6b,
     starOpacity: 0,
   },
   dark: {
@@ -75,19 +61,12 @@ export const heroPalettes: Record<'light' | 'dark', HeroPalette> = {
     terrainHigh: 0xd8f8f2,
     terrainRock: 0x2b4a50,
     terrainSnow: 0xe5fffc,
-    wire: 0x38e8c6,
-    wireOpacity: 0.07,
     contour: 0x8ff8e8,
     contourOpacity: 0.2,
     waterDeep: 0x073942,
     waterShallow: 0x2aa79f,
     waterHighlight: 0xb9fff4,
     bird: 0xc9eee7,
-    observer: 0xa6fff0,
-    axisX: 0xffb86b,
-    axisY: 0x38e8c6,
-    axisZ: 0x6da8ff,
-    ring: 0x38e8c6,
     starOpacity: 0.85,
   },
 };

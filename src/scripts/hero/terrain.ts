@@ -2,9 +2,9 @@ import {
   BufferAttribute,
   BufferGeometry,
   Color,
+  DoubleSide,
   Group,
   Mesh,
-  MeshBasicMaterial,
   MeshStandardMaterial,
   ShaderMaterial,
 } from 'three';
@@ -22,7 +22,7 @@ export function valleyCenter(z: number): number {
 export function terrainHeight(x: number, z: number): number {
   const center = valleyCenter(z);
   const distance = Math.abs(x - center);
-  const valley = smoothstep(0.7, 5.2, distance);
+  const valley = smoothstep(2.0, 14, distance);
   const far = 1 - smoothstep(-26, 8, z);
 
   const base = fbm(x * 0.05 + 10, z * 0.05 + 3, 4) * 3.4;
@@ -32,9 +32,14 @@ export function terrainHeight(x: number, z: number): number {
   const massif = Math.exp(-(((x - 7) ** 2) / 90 + ((z + 14) ** 2) / 180)) * 4.4;
   const massif2 = Math.exp(-(((x + 11) ** 2) / 130 + ((z + 23) ** 2) / 210)) * 3.2;
 
-  let height = (base + detail + ridge + massif + massif2) * (0.28 + 0.72 * valley);
+  let height = (base + detail + ridge + massif + massif2) * (0.1 + 0.9 * valley);
   height *= 0.72 + 0.55 * far;
-  height -= (1 - valley) * 2.8;
+  // Keep the valley mouth (nearest the camera) low and open; let distant
+  // ridges stay tall so the snow peaks still read as a skyline.
+  height *= 1 - 0.55 * smoothstep(6, 26, z);
+  height -= (1 - valley) * 1.2;
+  // River channel: guarantee the bed sits below the water plane.
+  height -= Math.exp(-((distance / 1.5) ** 2)) * 1.15;
   height += 0.25 * Math.sin(x * 0.35) * Math.cos(z * 0.3);
 
   return height - 0.35;
@@ -119,22 +124,12 @@ export function createTerrain(quality: HeroQuality): Terrain {
     vertexColors: true,
     roughness: 1,
     metalness: 0,
-    flatShading: true,
+    flatShading: false,
+    side: DoubleSide,
   });
 
   const mesh = new Mesh(geometry, material);
   mesh.frustumCulled = false;
-
-  const wireMaterial = new MeshBasicMaterial({
-    color: heroPalettes.light.wire,
-    wireframe: true,
-    transparent: true,
-    opacity: heroPalettes.light.wireOpacity,
-    depthWrite: false,
-  });
-  const wire = new Mesh(geometry, wireMaterial);
-  wire.frustumCulled = false;
-  wire.renderOrder = 1;
 
   const contourMaterial = new ShaderMaterial({
     uniforms: {
@@ -175,7 +170,7 @@ export function createTerrain(quality: HeroQuality): Terrain {
   contour.renderOrder = 2;
 
   const group = new Group();
-  group.add(mesh, wire, contour);
+  group.add(mesh, contour);
 
   const colorAttribute = geometry.getAttribute('color') as BufferAttribute;
   const positionAttribute = geometry.getAttribute('position') as BufferAttribute;
@@ -185,8 +180,6 @@ export function createTerrain(quality: HeroQuality): Terrain {
     mid.setHex(palette.terrainMid);
     rock.setHex(palette.terrainRock);
     snow.setHex(palette.terrainSnow);
-    wireMaterial.color.setHex(palette.wire);
-    wireMaterial.opacity = palette.wireOpacity;
     (contourMaterial.uniforms.uColor.value as Color).setHex(palette.contour);
     contourMaterial.uniforms.uOpacity.value = palette.contourOpacity;
 

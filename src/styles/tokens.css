@@ -61,14 +61,11 @@
     90deg,
     #eef2f5 0%,
     rgba(238, 242, 245, 0.96) 28%,
-    rgba(238, 242, 245, 0.72) 48%,
-    rgba(238, 242, 245, 0.24) 68%,
-    transparent 84%
+    rgba(238, 242, 245, 0.72) 46%,
+    rgba(238, 242, 245, 0.34) 62%,
+    rgba(238, 242, 245, 0.08) 78%,
+    transparent 90%
   );
-  --hero-label-bg: rgba(247, 248, 250, 0.82);
-  --hero-label-border: rgba(17, 24, 39, 0.14);
-  --hero-label-text: #0b1220;
-  --hero-label-muted: #4b5563;
 
   /* Type */
   --font-display: "Avenir Next", "Futura", "Helvetica Neue", "PingFang SC",
@@ -142,14 +139,11 @@ html[data-theme="dark"] {
     90deg,
     #070b12 0%,
     rgba(7, 11, 18, 0.96) 28%,
-    rgba(7, 11, 18, 0.7) 48%,
-    rgba(7, 11, 18, 0.2) 68%,
-    transparent 84%
+    rgba(7, 11, 18, 0.7) 46%,
+    rgba(7, 11, 18, 0.3) 62%,
+    rgba(7, 11, 18, 0.06) 78%,
+    transparent 90%
   );
-  --hero-label-bg: rgba(7, 11, 18, 0.72);
-  --hero-label-border: rgba(148, 163, 184, 0.3);
-  --hero-label-text: #e6edf7;
-  --hero-label-muted: #9fb0c9;
 }
 
 @media (prefers-reduced-motion: reduce) {

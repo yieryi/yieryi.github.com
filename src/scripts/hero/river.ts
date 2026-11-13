@@ -24,9 +24,9 @@ export function createRiver(): River {
 
   for (let i = 0; i <= steps; i += 1) {
     const t = i / steps;
-    const z = -36 + t * 48;
+    const z = -38 + t * 62;
     const center = valleyCenter(z);
-    const width = 0.72 + 0.3 * Math.sin(z * 0.2 + 1.2) + 0.15 * Math.sin(z * 0.06);
+    const width = 0.95 + 0.35 * Math.sin(z * 0.2 + 1.2) + 0.18 * Math.sin(z * 0.06);
 
     positions.push(center - width, waterLevel, z);
     positions.push(center + width, waterLevel, z);
@@ -73,7 +73,7 @@ export function createRiver(): River {
         float crossFlow = sin(vUv.y * 9.0 + uTime * 0.35) * 0.5 + 0.5;
         vec3 color = mix(uDeep, uShallow, 0.18 + crossFlow * 0.3);
         color = mix(color, uHighlight, band * 0.1);
-        gl_FragColor = vec4(color, 0.9);
+        gl_FragColor = vec4(color, 0.94);
       }
     `,
     transparent: true,
