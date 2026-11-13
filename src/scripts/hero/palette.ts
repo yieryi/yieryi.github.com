@@ -15,6 +15,8 @@ export interface HeroPalette {
   terrainSnow: number;
   wire: number;
   wireOpacity: number;
+  contour: number;
+  contourOpacity: number;
   waterDeep: number;
   waterShallow: number;
   waterHighlight: number;
@@ -38,13 +40,15 @@ export const heroPalettes: Record<'light' | 'dark', HeroPalette> = {
     hemiGround: 0x58706d,
     light: 0xfff4dd,
     lightIntensity: 2.6,
-    terrainLow: 0x35544f,
-    terrainMid: 0x6f847f,
+    terrainLow: 0x2f4a45,
+    terrainMid: 0x5c706d,
     terrainHigh: 0xf7fdff,
-    terrainRock: 0x5b6b6e,
+    terrainRock: 0x46595d,
     terrainSnow: 0xf9fdff,
     wire: 0x0a7f70,
-    wireOpacity: 0.12,
+    wireOpacity: 0.09,
+    contour: 0x0a6f63,
+    contourOpacity: 0.23,
     waterDeep: 0x1d5f70,
     waterShallow: 0x6cc9c4,
     waterHighlight: 0xe7fffb,
@@ -72,7 +76,9 @@ export const heroPalettes: Record<'light' | 'dark', HeroPalette> = {
     terrainRock: 0x2b4a50,
     terrainSnow: 0xe5fffc,
     wire: 0x38e8c6,
-    wireOpacity: 0.09,
+    wireOpacity: 0.07,
+    contour: 0x8ff8e8,
+    contourOpacity: 0.2,
     waterDeep: 0x073942,
     waterShallow: 0x2aa79f,
     waterHighlight: 0xb9fff4,

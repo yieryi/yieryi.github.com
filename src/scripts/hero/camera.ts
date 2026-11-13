@@ -5,8 +5,8 @@ const UP = new Vector3(0, 1, 0);
 const DURATION = 14;
 
 export function createCameraController(camera: PerspectiveCamera, quality: HeroQuality) {
-  const base = new Vector3(0, quality.isMobile ? 13 : 11.8, quality.cameraDistance + 14);
-  const focus = new Vector3(quality.isMobile ? 2.5 : 3.0, quality.isMobile ? 1.5 : 1.0, quality.isMobile ? -8 : -10);
+  const base = new Vector3(0, quality.isMobile ? 8.4 : 7.4, quality.cameraDistance + 14);
+  const focus = new Vector3(quality.isMobile ? 2.5 : 3.0, quality.isMobile ? 3.0 : 2.4, quality.isMobile ? -9 : -12);
   const forward = focus.clone().sub(base).normalize();
   const right = new Vector3().crossVectors(forward, UP).normalize();
   const amplitudeX = quality.isMobile ? 1.3 : 2.2;

@@ -350,10 +350,10 @@ bun run check:links
 - 容器：`src/components/HeroScene.astro`
 - 入口：`src/scripts/hero/index.ts`
 - 模块：
-  - `terrain.ts`：程序化 heightfield、雪线/岩石/雪地颜色、淡网格
+  - `terrain.ts`：程序化 heightfield、雪线/岩石/雪地颜色、淡网格、世界高度等高线
   - `river.ts`：河谷水面与流动高光
   - `sky.ts`：渐变天空、日/月、星点
-  - `birds.ts`：3–5 只低多边形鸟
+  - `birds.ts`：桌面端 14 只 V 字鸟群，移动端不显示
   - `observer.ts`：世界空间火柴人 + 坐标轴
   - `camera.ts`：`rotate_forward` 固定循环
   - `trail.ts`：鼠标等高线拖尾

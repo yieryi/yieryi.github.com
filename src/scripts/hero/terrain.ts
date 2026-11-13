@@ -6,8 +6,9 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
+  ShaderMaterial,
 } from 'three';
-import { clamp, fbm, smoothstep, valueNoise } from './utils';
+import { clamp, fbm, smoothstep } from './utils';
 import { heroPalettes, type HeroPalette } from './palette';
 import type { HeroQuality } from './quality';
 
@@ -24,12 +25,14 @@ export function terrainHeight(x: number, z: number): number {
   const valley = smoothstep(0.7, 5.2, distance);
   const far = 1 - smoothstep(-26, 8, z);
 
-  const base = fbm(x * 0.055 + 10, z * 0.055 + 3, 4) * 3.6;
-  const detail = fbm(x * 0.14 + 1, z * 0.14 + 8, 3) * 1.1;
-  const ridge =
-    Math.pow(1 - Math.abs(valueNoise(x * 0.07 + 2, z * 0.07 + 9) * 2 - 1), 1.7) * 7.2;
+  const base = fbm(x * 0.05 + 10, z * 0.05 + 3, 4) * 3.4;
+  const detail = fbm(x * 0.15 + 1, z * 0.15 + 8, 3) * 1.2;
+  const ridgeNoise = fbm(x * 0.045 + 2, z * 0.045 + 5, 5);
+  const ridge = Math.pow(1 - Math.abs(ridgeNoise * 2 - 1), 2.1) * 10.5;
+  const massif = Math.exp(-(((x - 7) ** 2) / 90 + ((z + 14) ** 2) / 180)) * 4.4;
+  const massif2 = Math.exp(-(((x + 11) ** 2) / 130 + ((z + 23) ** 2) / 210)) * 3.2;
 
-  let height = (base + detail + ridge) * (0.32 + 0.68 * valley);
+  let height = (base + detail + ridge + massif + massif2) * (0.28 + 0.72 * valley);
   height *= 0.72 + 0.55 * far;
   height -= (1 - valley) * 2.8;
   height += 0.25 * Math.sin(x * 0.35) * Math.cos(z * 0.3);
@@ -133,8 +136,46 @@ export function createTerrain(quality: HeroQuality): Terrain {
   wire.frustumCulled = false;
   wire.renderOrder = 1;
 
+  const contourMaterial = new ShaderMaterial({
+    uniforms: {
+      uColor: { value: new Color(heroPalettes.light.contour) },
+      uOpacity: { value: heroPalettes.light.contourOpacity },
+      uInterval: { value: 1.3 },
+    },
+    vertexShader: `
+      varying vec3 vWorldPosition;
+      void main() {
+        vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+        vWorldPosition = worldPosition.xyz;
+        gl_Position = projectionMatrix * viewMatrix * worldPosition;
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 uColor;
+      uniform float uOpacity;
+      uniform float uInterval;
+      varying vec3 vWorldPosition;
+      void main() {
+        float f = vWorldPosition.y / uInterval;
+        float v = fract(f);
+        float d = min(v, 1.0 - v);
+        float w = fwidth(f) * 1.35;
+        float alpha = 1.0 - smoothstep(0.0, w, d);
+        gl_FragColor = vec4(uColor, alpha * uOpacity);
+      }
+    `,
+    transparent: true,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
+  const contour = new Mesh(geometry, contourMaterial);
+  contour.frustumCulled = false;
+  contour.renderOrder = 2;
+
   const group = new Group();
-  group.add(mesh, wire);
+  group.add(mesh, wire, contour);
 
   const colorAttribute = geometry.getAttribute('color') as BufferAttribute;
   const positionAttribute = geometry.getAttribute('position') as BufferAttribute;
@@ -146,6 +187,8 @@ export function createTerrain(quality: HeroQuality): Terrain {
     snow.setHex(palette.terrainSnow);
     wireMaterial.color.setHex(palette.wire);
     wireMaterial.opacity = palette.wireOpacity;
+    (contourMaterial.uniforms.uColor.value as Color).setHex(palette.contour);
+    contourMaterial.uniforms.uOpacity.value = palette.contourOpacity;
 
     for (let index = 0; index < colorAttribute.count; index += 1) {
       const x = positionAttribute.getX(index);
