@@ -63,7 +63,7 @@ src/
   styles/              全局样式
 public/
   assets/images/       文章图片
-  assets/videos/       演示视频
+  assets/videos/       演示视频（Cesium 示例录屏在 Cesium/）
   downloads/           可下载文件
   favicon.svg          站点图标
 docs/                  方案与使用说明
@@ -142,17 +142,39 @@ featured: false
 - 大图不要直接放仓库根目录
 - 单张图建议压到 300KB 以内
 
-### 4.4 插入视频
+### 4.4 插入视频与示例录屏
 
-把视频放到 `public/assets/videos/<分类>/`，用 HTML：
+把视频放到 `public/assets/videos/<分类>/`，封面放到 `public/assets/images/<分类>/`，用 HTML：
 
 ```html
-<video controls preload="metadata" poster="/assets/images/Cesium/cover.webp">
-  <source src="/assets/videos/Cesium/demo.mp4" type="video/mp4" />
+<figure class="demo-figure">
+<video class="demo-video" controls preload="none" playsinline controlslist="nodownload" disablepictureinpicture poster="/assets/images/Cesium/draw-polygon-poster.webp">
+<source src="/assets/videos/Cesium/draw-polygon.mp4" type="video/mp4" />
 </video>
+<figcaption><span class="demo-meta">54 秒 · 0.9 MB</span>示例说明。</figcaption>
+</figure>
 ```
 
-不要用 `autoplay`，避免首屏流量和性能问题。
+约定：
+
+- 浏览器不能直接播放 MKV，演示视频统一转 **H.264 MP4**，并加 `-movflags +faststart` 支持边下边播。
+- 屏幕录制去掉音轨；宽度不超过 1280；CRF 22–25，兼顾 UI 文字清晰度和体积。
+- 封面从视频抽帧转 WebP，宽度 1280 左右，尽量控制在 100KB 以内。
+- 列表/录屏索引页用 `preload="none"`，点击播放后再加载；单篇正文可以用 `metadata`。
+- 不提供下载入口：使用 `controlslist="nodownload"`，不要加 `<a download>` 或额外的直链下载。
+- 文件名用英文短横线，例如 `draw-polygon.mp4`、`draw-polygon-poster.webp`，避免中文和空格。
+- 不要用 `autoplay`，避免首屏流量和性能问题。
+
+压缩命令：
+
+```bash
+ffmpeg -i input.mkv -map 0:v:0 -an \
+  -vf "scale='if(gt(iw,1280),1280,iw)':-2" \
+  -c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p \
+  -movflags +faststart output.mp4
+```
+
+Cesium 示例录屏的归档文章是 `src/content/blog/cesium-demo-index.md`，视频在 `public/assets/videos/Cesium/`，封面在 `public/assets/images/Cesium/`。
 
 ### 4.5 删除文章
 

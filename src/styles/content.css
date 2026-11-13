@@ -428,6 +428,43 @@
   text-align: center;
 }
 
+.prose .demo-figure {
+  margin: 2.2em 0;
+  padding: 12px;
+  border: 1px solid var(--line-light);
+  border-radius: var(--radius);
+  background: var(--paper-2);
+}
+
+.prose .demo-figure video {
+  margin: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: #05070b;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+
+.prose .demo-figure figcaption {
+  margin-top: 12px;
+  padding: 0 2px;
+  text-align: left;
+  line-height: 1.7;
+}
+
+.demo-meta {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--paper-3);
+  color: var(--ink-mute);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  vertical-align: 1px;
+}
+
 .prose table {
   display: block;
   width: 100%;
