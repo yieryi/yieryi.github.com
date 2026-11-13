@@ -1222,6 +1222,7 @@ html[data-theme="dark"] .theme-icon-moon {
   z-index: 0;
   overflow: hidden;
   background: linear-gradient(180deg, #c4dcec 0%, #e8f1f5 58%, #dce8ed 100%);
+  transition: opacity 700ms var(--ease), filter 700ms var(--ease);
 }
 
 .hero-fallback-sun {
@@ -1264,6 +1265,22 @@ html[data-theme="dark"] .theme-icon-moon {
 
 .hero-canvas.is-ready {
   opacity: 1;
+}
+
+/* Once the WebGL scene has painted, the static ridges stay out of the way.
+   If the context drops, a blurred version of them stands in as distant haze
+   until the scene is restored or rebuilt. */
+.hero-ready .hero-scene-fallback {
+  opacity: 0;
+}
+
+.hero-context-lost .hero-scene-fallback {
+  opacity: 0.9;
+  filter: blur(18px) saturate(0.85);
+}
+
+.hero-context-lost .hero-canvas {
+  opacity: 0;
 }
 
 .hero-scrim {
@@ -1315,6 +1332,8 @@ html[data-theme="dark"] .hero-fallback-ridge-front {
 
 .hero-no-webgl .hero-scene-fallback {
   display: block;
+  opacity: 1;
+  filter: none;
 }
 
 @media (max-width: 900px) {

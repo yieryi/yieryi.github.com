@@ -13,31 +13,103 @@
 </div>
 
 <script>
-  const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
-  const trailCanvas = document.querySelector<HTMLCanvasElement>('[data-hero-trail]');
-  const hero = canvas?.closest<HTMLElement>('.hero') ?? null;
+  const hero = document.querySelector<HTMLElement>('.hero');
 
-  if (canvas && trailCanvas && hero) {
-    let started = false;
+  if (hero) {
+    const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+    const RELOAD_KEY = 'hero-scene-reloaded';
+
+    let handle: { destroy: () => void } | null = null;
+    let booting = false;
+    let rebuilds = 0;
+
+    const getCanvas = (selector: string, className: string, reset: boolean) => {
+      const current = hero.querySelector<HTMLCanvasElement>(selector);
+      if (current && !reset) return current;
+
+      const next = document.createElement('canvas');
+      next.className = className;
+      next.setAttribute('aria-hidden', 'true');
+      if (selector === '[data-hero-canvas]') {
+        next.dataset.heroCanvas = '';
+      } else {
+        next.dataset.heroTrail = '';
+      }
+      if (current) {
+        current.replaceWith(next);
+      } else {
+        hero.prepend(next);
+      }
+      return next;
+    };
+
+    const showFallback = () => {
+      handle?.destroy();
+      handle = null;
+      hero.querySelector('[data-hero-canvas]')?.remove();
+      hero.querySelector('[data-hero-trail]')?.remove();
+      hero.classList.remove('hero-ready', 'hero-context-lost');
+      hero.classList.add('hero-no-webgl');
+    };
+
+    const mount = async (reset: boolean) => {
+      const canvas = getCanvas('[data-hero-canvas]', 'hero-canvas', reset);
+      const trailCanvas = getCanvas('[data-hero-trail]', 'hero-trail', reset);
+      const { initHeroScene } = await import('../scripts/hero/index');
+
+      handle = initHeroScene({
+        canvas,
+        trailCanvas,
+        hero,
+        onFatal: () => {
+          handle = null;
+          if (rebuilds >= 2) {
+            showFallback();
+            return;
+          }
+          rebuilds += 1;
+          window.setTimeout(() => {
+            void mount(true).catch(showFallback);
+          }, 400 * rebuilds);
+        },
+      });
+      hero.classList.remove('hero-no-webgl');
+    };
 
     const boot = async () => {
-      if (started) return;
-      started = true;
+      if (booting) return;
+      booting = true;
 
       try {
-        const { initHeroScene } = await import('../scripts/hero/index');
-        initHeroScene({ canvas, trailCanvas, hero });
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+          try {
+            await mount(attempt > 0);
+            return;
+          } catch {
+            if (attempt === 2) throw new Error('hero scene failed to mount');
+            // Transient context creation failures (GPU pressure, driver reset)
+            // usually succeed on the next try with a fresh canvas.
+            await wait(500 * (attempt + 1));
+          }
+        }
       } catch {
-        canvas.remove();
-        trailCanvas.remove();
-        hero.classList.add('hero-no-webgl');
+        // A missing chunk right after a redeploy is transient: reload once per
+        // session so the browser picks up the new HTML and asset hashes.
+        if (import.meta.env.PROD && !sessionStorage.getItem(RELOAD_KEY)) {
+          sessionStorage.setItem(RELOAD_KEY, '1');
+          window.location.reload();
+          return;
+        }
+        showFallback();
+      } finally {
+        booting = false;
       }
     };
 
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(boot, { timeout: 1600 });
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(() => void boot(), { timeout: 1600 });
     } else {
-      setTimeout(boot, 400);
+      setTimeout(() => void boot(), 400);
     }
   }
 </script>
