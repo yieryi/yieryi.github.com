@@ -5,6 +5,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://yieryi.github.io',
   trailingSlash: 'always',
+  devToolbar: {
+    enabled: false,
+  },
   integrations: [
     mdx(),
     sitemap({

@@ -44,6 +44,8 @@ bun run check:links # 先 build，再检查内部链接
 
 开发地址通常是 `http://localhost:4321`。
 
+Astro Dev Toolbar 已在 `astro.config.mjs` 中显式关闭（`devToolbar.enabled: false`），本地和线上都不会显示调试面板。
+
 ## 3. 目录速查
 
 ```
