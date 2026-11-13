@@ -121,7 +121,7 @@ export function initHeroScene({ canvas, trailCanvas, hero }: HeroSceneOptions): 
 
     cameraController.update(elapsed, reducedMotion);
     river.updateTime(elapsed);
-    birds.update(elapsed, delta);
+    birds.update(elapsed, delta, camera);
     trail.update(now, getTheme());
 
     renderer.render(scene, camera);
