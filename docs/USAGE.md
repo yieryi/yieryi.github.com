@@ -55,7 +55,7 @@ src/
   data/site.ts         主标识、当前角色、联系方式、导航
   data/downloads.ts    下载资源注册表
   data/legacy.ts       旧站 URL 重定向（补充项）
-  scripts/globe.ts     首屏 Three.js 场景
+  scripts/hero/        首屏数字地形场景（模块化）
   pages/               路由
   components/          组件
   styles/              全局样式
@@ -314,9 +314,9 @@ seriesEn: Frontend Fundamentals
 - 首次访问跟随系统 `prefers-color-scheme`。
 - Header 的月亮/太阳按钮切换日夜主题，选择会写入 `localStorage` 的 `wangkang-theme`，刷新后保持。
 - 日间：浅色纸面 + 深色文字，首屏/页面 Hero 也是浅色技术图。
-- 夜间：深空墨蓝 + 浅色文字，首屏/页面 Hero 为深色数字地球。
+- 夜间：深空墨蓝 + 浅色文字，首屏/页面 Hero 为深色数字地形。
 - 颜色令牌在 `src/styles/tokens.css`：`--paper`、`--ink`、`--hero-bg`、`--hero-text` 等。
-- 3D 场景配色在 `src/scripts/globe.ts` 的 `palette` 中，通过 `MutationObserver` 监听 `data-theme` 自动切换。
+- 3D 场景配色在 `src/scripts/hero/palette.ts` 中，通过 `MutationObserver` 监听 `data-theme` 自动切换。
 - 新增组件时不要写死白色/黑色，优先使用现有 token。
 
 ### 8.3 检查两种模式
@@ -345,16 +345,35 @@ bun run check:links
 
 ## 10. 首页 3D 说明
 
-- 3D 容器在 `src/components/HeroGlobe.astro`，场景逻辑在 `src/scripts/globe.ts`。
-- 视觉由稀疏点云、经纬网曲面、三条曲线彗尾、轨道节点和 Fresnel 边缘光组成。
-- 使用 Three.js 动态加载，不阻塞首屏文字。
-- 入场有约 2.4s 的镜头推拉，之后是轻微呼吸缩放；移动端会自动降低点数量与 DPR。
-- 页面隐藏、离开视口、`prefers-reduced-motion` 时会暂停或只渲染一帧。
-- 如果后续觉得太重，可以：
-  1. 降低点数量 / 降低 DPR 上限；
-  2. 移动端直接显示静态图；
-  3. 替换为视频或纯 CSS 视觉。
-- **不要**在 3D 里加后处理、外部模型、大贴图，除非重新评估性能预算。
+> 首屏已升级为「全屏数字地形」。详细方案、决策和待验证问题见 [`HERO_3D_PLAN.md`](./HERO_3D_PLAN.md)。
+
+- 容器：`src/components/HeroScene.astro`
+- 入口：`src/scripts/hero/index.ts`
+- 模块：
+  - `terrain.ts`：程序化 heightfield、雪线/岩石/雪地颜色、淡网格
+  - `river.ts`：河谷水面与流动高光
+  - `sky.ts`：渐变天空、日/月、星点
+  - `birds.ts`：3–5 只低多边形鸟
+  - `observer.ts`：世界空间火柴人 + 坐标轴
+  - `camera.ts`：`rotate_forward` 固定循环
+  - `trail.ts`：鼠标等高线拖尾
+  - `palette.ts`：日/夜配色
+  - `quality.ts`：桌面/移动端画质档
+- 视觉：风格化数字地形，不是写实喜马拉雅；首屏全屏铺满，文字在左侧渐变遮罩上。
+- 相机：约 22 秒 `rotate_forward` 循环，固定注视点，无用户相机控制。
+- 交互：桌面端鼠标移动产生等高线笔触，约 1 秒消散；触屏不启用。
+- 移动端：仍然渲染 3D，但降低地形精度、鸟数量、星点和 DPR；观测者标签与火柴人在移动端隐藏，避免压住按钮/文字。
+- 主题：日/夜共享同一场景，只切换光照、天空、地形、水面和鸟/观测者颜色。
+- 性能：动态加载、离开视口暂停、DPR 上限、低多边形、无后处理。
+- WebGL 不可用时显示 CSS 山脊兜底。
+
+可调参数：
+
+- 相机幅度/周期：`src/scripts/hero/camera.ts`
+- 地形高度/雪线：`src/scripts/hero/terrain.ts`
+- 配色：`src/scripts/hero/palette.ts`
+- 画质：`src/scripts/hero/quality.ts`
+- 拖尾寿命/线宽：`src/scripts/hero/trail.ts`
 
 ## 11. 站内搜索
 

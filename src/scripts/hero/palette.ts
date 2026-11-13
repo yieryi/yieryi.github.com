@@ -1,0 +1,87 @@
+export interface HeroPalette {
+  skyTop: number;
+  skyBottom: number;
+  fog: number;
+  sun: number;
+  sunOpacity: number;
+  hemiSky: number;
+  hemiGround: number;
+  light: number;
+  lightIntensity: number;
+  terrainLow: number;
+  terrainMid: number;
+  terrainHigh: number;
+  terrainRock: number;
+  terrainSnow: number;
+  wire: number;
+  wireOpacity: number;
+  waterDeep: number;
+  waterShallow: number;
+  waterHighlight: number;
+  bird: number;
+  observer: number;
+  axisX: number;
+  axisY: number;
+  axisZ: number;
+  ring: number;
+  starOpacity: number;
+}
+
+export const heroPalettes: Record<'light' | 'dark', HeroPalette> = {
+  light: {
+    skyTop: 0x8fbfd8,
+    skyBottom: 0xf2f6f8,
+    fog: 0xe4edf3,
+    sun: 0xfff3d6,
+    sunOpacity: 0.85,
+    hemiSky: 0xe7f2f8,
+    hemiGround: 0x58706d,
+    light: 0xfff4dd,
+    lightIntensity: 2.6,
+    terrainLow: 0x35544f,
+    terrainMid: 0x6f847f,
+    terrainHigh: 0xf7fdff,
+    terrainRock: 0x5b6b6e,
+    terrainSnow: 0xf9fdff,
+    wire: 0x0a7f70,
+    wireOpacity: 0.12,
+    waterDeep: 0x1d5f70,
+    waterShallow: 0x6cc9c4,
+    waterHighlight: 0xe7fffb,
+    bird: 0x26363d,
+    observer: 0x083f39,
+    axisX: 0xb85c38,
+    axisY: 0x087b6b,
+    axisZ: 0x2f628c,
+    ring: 0x087b6b,
+    starOpacity: 0,
+  },
+  dark: {
+    skyTop: 0x02050a,
+    skyBottom: 0x0b1b2b,
+    fog: 0x0b1724,
+    sun: 0xd9fbff,
+    sunOpacity: 0.7,
+    hemiSky: 0x1a3440,
+    hemiGround: 0x07100f,
+    light: 0xc9fff4,
+    lightIntensity: 2.2,
+    terrainLow: 0x0a1e22,
+    terrainMid: 0x1e3a40,
+    terrainHigh: 0xd8f8f2,
+    terrainRock: 0x2b4a50,
+    terrainSnow: 0xe5fffc,
+    wire: 0x38e8c6,
+    wireOpacity: 0.09,
+    waterDeep: 0x073942,
+    waterShallow: 0x2aa79f,
+    waterHighlight: 0xb9fff4,
+    bird: 0xc9eee7,
+    observer: 0xa6fff0,
+    axisX: 0xffb86b,
+    axisY: 0x38e8c6,
+    axisZ: 0x6da8ff,
+    ring: 0x38e8c6,
+    starOpacity: 0.85,
+  },
+};

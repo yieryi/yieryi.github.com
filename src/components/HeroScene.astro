@@ -1,0 +1,51 @@
+<canvas class="hero-canvas" data-hero-canvas aria-hidden="true"></canvas>
+<div class="hero-scene-fallback" aria-hidden="true">
+  <div class="hero-fallback-sun"></div>
+  <div class="hero-fallback-ridge hero-fallback-ridge-back"></div>
+  <div class="hero-fallback-ridge hero-fallback-ridge-front"></div>
+</div>
+<div class="hero-scrim" aria-hidden="true"></div>
+<canvas class="hero-trail" data-hero-trail aria-hidden="true"></canvas>
+
+<div class="hero-observer-label" data-hero-label aria-hidden="true">
+  <span class="hero-label-kicker">OBSERVER / 01</span>
+  <span class="hero-label-main">DIGITAL TERRAIN</span>
+  <span class="hero-label-meta">ALT 4,820m · N 27°59′</span>
+</div>
+
+<div class="hero-coordinate" aria-hidden="true">
+  <div><strong>SCENE</strong> 01 / HIMALAYA</div>
+  <div><strong>CAM</strong> ROTATE_FORWARD</div>
+</div>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
+  const trailCanvas = document.querySelector<HTMLCanvasElement>('[data-hero-trail]');
+  const label = document.querySelector<HTMLElement>('[data-hero-label]');
+  const hero = canvas?.closest<HTMLElement>('.hero') ?? null;
+
+  if (canvas && trailCanvas && label && hero) {
+    let started = false;
+
+    const boot = async () => {
+      if (started) return;
+      started = true;
+
+      try {
+        const { initHeroScene } = await import('../scripts/hero/index');
+        initHeroScene({ canvas, trailCanvas, label, hero });
+      } catch {
+        canvas.remove();
+        trailCanvas.remove();
+        label.style.display = 'none';
+        hero.classList.add('hero-no-webgl');
+      }
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(boot, { timeout: 1600 });
+    } else {
+      setTimeout(boot, 400);
+    }
+  }
+</script>

@@ -57,6 +57,18 @@
   --hero-cta-bg: #086b5e;
   --hero-cta-text: #ffffff;
   --hero-cta-hover: #0a7f70;
+  --hero-scrim: linear-gradient(
+    90deg,
+    #eef2f5 0%,
+    rgba(238, 242, 245, 0.96) 28%,
+    rgba(238, 242, 245, 0.72) 48%,
+    rgba(238, 242, 245, 0.24) 68%,
+    transparent 84%
+  );
+  --hero-label-bg: rgba(247, 248, 250, 0.82);
+  --hero-label-border: rgba(17, 24, 39, 0.14);
+  --hero-label-text: #0b1220;
+  --hero-label-muted: #4b5563;
 
   /* Type */
   --font-display: "Avenir Next", "Futura", "Helvetica Neue", "PingFang SC",
@@ -126,6 +138,18 @@ html[data-theme="dark"] {
   --hero-cta-bg: #38e8c6;
   --hero-cta-text: #04110e;
   --hero-cta-hover: #6df3d9;
+  --hero-scrim: linear-gradient(
+    90deg,
+    #070b12 0%,
+    rgba(7, 11, 18, 0.96) 28%,
+    rgba(7, 11, 18, 0.7) 48%,
+    rgba(7, 11, 18, 0.2) 68%,
+    transparent 84%
+  );
+  --hero-label-bg: rgba(7, 11, 18, 0.72);
+  --hero-label-border: rgba(148, 163, 184, 0.3);
+  --hero-label-text: #e6edf7;
+  --hero-label-muted: #9fb0c9;
 }
 
 @media (prefers-reduced-motion: reduce) {
