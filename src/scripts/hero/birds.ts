@@ -47,20 +47,21 @@ export function createBirds(quality: HeroQuality): Birds {
     );
 
     birdGroup.add(leftWing, rightWing, body);
-    birdGroup.scale.setScalar(0.45);
+    birdGroup.scale.setScalar(0.36 + Math.random() * 0.24);
     birdGroup.frustumCulled = false;
     group.add(birdGroup);
 
+    const near = i < 2;
     birds.push({
       group: birdGroup,
       leftWing,
       rightWing,
-      centerX: -8 + Math.random() * 18,
-      centerZ: -20 + Math.random() * 14,
-      radiusX: 4 + Math.random() * 5,
-      radiusZ: 2 + Math.random() * 3,
-      height: 8 + Math.random() * 4,
-      speed: 0.045 + Math.random() * 0.02,
+      centerX: near ? (i === 0 ? 6 : -2) : -8 + Math.random() * 18,
+      centerZ: near ? (i === 0 ? 1 : -3) : -20 + Math.random() * 14,
+      radiusX: near ? 2.2 + i * 0.6 : 4 + Math.random() * 5,
+      radiusZ: near ? 1.2 + i * 0.4 : 2 + Math.random() * 3,
+      height: near ? 8.2 + i * 0.8 : 8 + Math.random() * 4,
+      speed: near ? 0.055 + i * 0.005 : 0.045 + Math.random() * 0.02,
       phase: Math.random() * Math.PI * 2,
     });
   }
