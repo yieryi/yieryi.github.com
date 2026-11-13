@@ -155,7 +155,7 @@ export function initHeroScene({ canvas, trailCanvas, hero }: HeroSceneOptions): 
     if (!document.hidden) start();
   });
 
-  scene.fog = new Fog(heroPalettes.light.fog, 22, 100);
+  scene.fog = new Fog(heroPalettes.light.fog, 30, 150);
   applyTheme();
   resize();
   cameraController.update(0, reducedMotion);

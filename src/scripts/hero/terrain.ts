@@ -12,8 +12,8 @@ import { clamp, fbm, smoothstep } from './utils';
 import { heroPalettes, type HeroPalette } from './palette';
 import type { HeroQuality } from './quality';
 
-const TERRAIN_SIZE = 64;
-const TERRAIN_CENTER_Z = -8;
+const TERRAIN_SIZE = 120;
+const TERRAIN_CENTER_Z = -36;
 
 export function valleyCenter(z: number): number {
   return 1.0 + Math.sin(z * 0.1) * 1.8 + Math.sin(z * 0.032 + 1.4) * 2.4;

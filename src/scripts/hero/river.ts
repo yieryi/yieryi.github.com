@@ -16,7 +16,7 @@ export interface River {
 }
 
 export function createRiver(): River {
-  const steps = 180;
+  const steps = 300;
   const positions: number[] = [];
   const uvs: number[] = [];
   const indices: number[] = [];
@@ -24,7 +24,7 @@ export function createRiver(): River {
 
   for (let i = 0; i <= steps; i += 1) {
     const t = i / steps;
-    const z = -38 + t * 62;
+    const z = -96 + t * 120;
     const center = valleyCenter(z);
     const width = 0.95 + 0.35 * Math.sin(z * 0.2 + 1.2) + 0.18 * Math.sin(z * 0.06);
 
@@ -52,6 +52,7 @@ export function createRiver(): River {
       uDeep: { value: new Color(heroPalettes.light.waterDeep) },
       uShallow: { value: new Color(heroPalettes.light.waterShallow) },
       uHighlight: { value: new Color(heroPalettes.light.waterHighlight) },
+      uHaze: { value: new Color(heroPalettes.light.fog) },
     },
     vertexShader: `
       varying vec2 vUv;
@@ -65,6 +66,7 @@ export function createRiver(): River {
       uniform vec3 uDeep;
       uniform vec3 uShallow;
       uniform vec3 uHighlight;
+      uniform vec3 uHaze;
       varying vec2 vUv;
 
       void main() {
@@ -73,6 +75,9 @@ export function createRiver(): River {
         float crossFlow = sin(vUv.y * 9.0 + uTime * 0.35) * 0.5 + 0.5;
         vec3 color = mix(uDeep, uShallow, 0.18 + crossFlow * 0.3);
         color = mix(color, uHighlight, band * 0.1);
+        // Dissolve into haze where the river runs past the terrain edge.
+        float fade = smoothstep(0.1, 0.45, vUv.y);
+        color = mix(uHaze, color, fade);
         gl_FragColor = vec4(color, 0.94);
       }
     `,
@@ -93,6 +98,7 @@ export function createRiver(): River {
       (material.uniforms.uDeep.value as Color).setHex(palette.waterDeep);
       (material.uniforms.uShallow.value as Color).setHex(palette.waterShallow);
       (material.uniforms.uHighlight.value as Color).setHex(palette.waterHighlight);
+      (material.uniforms.uHaze.value as Color).setHex(palette.fog);
     },
   };
 }
