@@ -32,19 +32,21 @@ const copy = {
     invalidTile: '请输入有效参数：经度 -180 ~ 180，纬度 -85.0511 ~ 85.0511，层级 1 ~ 22。',
     demosEyebrow: '01 · Cesium Demos',
     demosTitle: '示例索引',
-    demosDesc: '早期三维引擎 / Cesium 示例的一部分。原演示环境已下线，完整索引可以在下载中心获取。',
-    downloadIndex: '下载完整索引',
+    demosDesc:
+      '早期三维引擎 / Cesium 示例的一部分。原演示环境已下线；“可看录屏”的示例已经整理成站内录屏，可以直接在线播放。',
+    viewVideos: '查看示例录屏',
     table: { demo: '示例', group: '方向', note: '说明', status: '状态' },
-    offline: '已下线',
+    offline: '仅存档',
+    recorded: '可看录屏',
     noteTitle: '说明：',
-    note: '坐标转换使用常用公开算法，BD09 与 GCJ02 的逆向为近似解，精度足够日常核对，但不建议用于高精度测绘成果。瓦片计算采用 Web Mercator（EPSG:3857）标准公式。',
+    note: '“仅存档”表示原始交互演示已无法访问，只保留标题和方向；“可看录屏”会跳到录屏索引在线播放。坐标转换使用常用公开算法，BD09 与 GCJ02 的逆向为近似解，精度足够日常核对，但不建议用于高精度测绘成果。瓦片计算采用 Web Mercator（EPSG:3857）标准公式。',
     demoRows: [
-      { title: '第一人称视角交互漫游', group: '交互与场景', note: '相机碰撞、贴地行走' },
-      { title: '几何编辑', group: '交互与场景', note: '点/线/面编辑与实时更新' },
-      { title: '天际线', group: '渲染与特效', note: '个人实现' },
-      { title: '管线流向可视化', group: '业务管线', note: '箭头样式与流向动画' },
-      { title: '城市内涝模拟', group: '业务管线', note: '热力图、降雨与河流联动' },
-      { title: '北斗卫星运行轨迹', group: '业务管线', note: '轨道、时间轴与位置推演' },
+      { title: '第一人称视角交互漫游', group: '交互与场景', note: '相机碰撞、贴地行走', video: false },
+      { title: '几何编辑', group: '交互与场景', note: '点/线/面编辑与实时更新', video: true },
+      { title: '天际线', group: '渲染与特效', note: '个人实现', video: false },
+      { title: '管线流向可视化', group: '业务管线', note: '箭头样式与流向动画', video: true },
+      { title: '城市内涝模拟', group: '业务管线', note: '热力图、降雨与河流联动', video: true },
+      { title: '北斗卫星运行轨迹', group: '业务管线', note: '轨道、时间轴与位置推演', video: false },
     ],
   },
   en: {
@@ -69,24 +71,27 @@ const copy = {
     invalidTile: 'Enter valid values: longitude -180 to 180, latitude -85.0511 to 85.0511, zoom 1 to 22.',
     demosEyebrow: '01 · Cesium Demos',
     demosTitle: 'Demo index',
-    demosDesc: 'A subset of early 3D engine / Cesium demos. The original environment is offline; the full index is available in Downloads.',
-    downloadIndex: 'Download full index',
+    demosDesc:
+      'A subset of early 3D engine / Cesium demos. The original environment is offline; demos marked “Video available” are archived as on-site recordings you can play.',
+    viewVideos: 'Watch demo reels',
     table: { demo: 'Demo', group: 'Area', note: 'Notes', status: 'Status' },
-    offline: 'Offline',
+    offline: 'Archive only',
+    recorded: 'Video available',
     noteTitle: 'Note: ',
-    note: 'The coordinate conversion uses common public algorithms. The inverse of BD09/GCJ02 is approximate — good enough for daily checks, not for high-precision surveying. Tile math uses the standard Web Mercator (EPSG:3857) formula.',
+    note: '“Archive only” means the original interactive demo is no longer reachable and only the title and direction remain. “Video available” opens the on-site demo reel. The coordinate conversion uses common public algorithms. The inverse of BD09/GCJ02 is approximate — good enough for daily checks, not for high-precision surveying. Tile math uses the standard Web Mercator (EPSG:3857) formula.',
     demoRows: [
-      { title: 'First-person navigation', group: 'Interaction', note: 'Camera collision and ground-following' },
-      { title: 'Geometry editing', group: 'Interaction', note: 'Point/line/polygon editing in real time' },
-      { title: 'Skyline', group: 'Rendering', note: 'Individual implementation' },
-      { title: 'Pipeline flow visualization', group: 'Pipelines', note: 'Arrow styling and flow animation' },
-      { title: 'Urban flood simulation', group: 'Pipelines', note: 'Heatmap, rainfall and river coupling' },
-      { title: 'BeiDou satellite trajectory', group: 'Pipelines', note: 'Orbit, timeline and position propagation' },
+      { title: 'First-person navigation', group: 'Interaction', note: 'Camera collision and ground-following', video: false },
+      { title: 'Geometry editing', group: 'Interaction', note: 'Point/line/polygon editing in real time', video: true },
+      { title: 'Skyline', group: 'Rendering', note: 'Individual implementation', video: false },
+      { title: 'Pipeline flow visualization', group: 'Pipelines', note: 'Arrow styling and flow animation', video: true },
+      { title: 'Urban flood simulation', group: 'Pipelines', note: 'Heatmap, rainfall and river coupling', video: true },
+      { title: 'BeiDou satellite trajectory', group: 'Pipelines', note: 'Orbit, timeline and position propagation', video: false },
     ],
   },
 } as const;
 
 const c = copy[lang];
+const demoLink = localizePath('/writing/cesium-demo-index/', lang);
 const messages = {
   coordHint: c.coordHint,
   tileHint: c.tileHint,
@@ -183,9 +188,9 @@ const messages = {
           <h2 class="section-title">{c.demosTitle}</h2>
           <p class="section-desc">{c.demosDesc}</p>
         </div>
-        <a class="text-link" href={localizePath('/downloads/', lang)}>
-          {c.downloadIndex}
-          <Icon name="download" size={14} />
+        <a class="text-link" href={demoLink}>
+          {c.viewVideos}
+          <Icon name="arrow-up-right" size={14} />
         </a>
       </div>
 
@@ -205,7 +210,13 @@ const messages = {
                 <td>{row.title}</td>
                 <td>{row.group}</td>
                 <td>{row.note}</td>
-                <td><span class="status status-offline">{c.offline}</span></td>
+                <td>
+                  {row.video ? (
+                    <a class="status status-online" href={demoLink}>{c.recorded}</a>
+                  ) : (
+                    <span class="status status-offline">{c.offline}</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
